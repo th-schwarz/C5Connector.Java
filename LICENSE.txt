@@ -1,4 +1,4 @@
-C5Connector.Java - The Java backend for the filemanager of corefive - http://th-schwarz.github.com/C5Connector.Java
+C5Connector.Java - The Java backend for the filemanager of corefive (http://github.com/simogeo/Filemanager).
 Copyright (C) Thilo Schwarz
 Licensed under the terms of any of the following licenses at your
 choice:
