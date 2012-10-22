@@ -1,0 +1,4 @@
+After line 30 in the filemanger.config.js:
+var relPath = window.location.protocol + '//' + document.domain;
+Add this line.
+if (window.location.port != "80") relPath = relPath + ":" + window.location.port;
