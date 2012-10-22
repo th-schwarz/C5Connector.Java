@@ -7,6 +7,25 @@
 	<name>C5Connector.Java</name>
 	<inceptionYear>2012</inceptionYear>
 
+	<url>https://github.com/th-schwarz/C5Connector.Java</url>
+	<licenses>
+		<license>
+			<name>GPL, MIT</name>
+			<url>LICENSE.txt</url>
+		</license>
+	</licenses>
+  
+	<issueManagement>
+		<url>https://github.com/th-schwarz/C5Connector.Java/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/th-schwarz/C5Connector.Java</url>
+		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
+		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
+	</scm>
+
 	<properties>
 		<project.source.version>1.6</project.source.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,6 +78,8 @@
 			<artifactId>jackson-jaxrs</artifactId>
 			<version>1.8.5</version>
 		</dependency>
+		
+		<!-- just for testing image rendering implementations -->
 		<dependency>
 			<groupId>net.coobird</groupId>
 			<artifactId>thumbnailator</artifactId>
