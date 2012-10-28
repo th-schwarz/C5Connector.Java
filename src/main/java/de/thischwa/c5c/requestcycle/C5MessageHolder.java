@@ -30,9 +30,10 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.resource.PropertiesLoader;

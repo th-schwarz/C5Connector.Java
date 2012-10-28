@@ -24,8 +24,8 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.C5FileCapability;

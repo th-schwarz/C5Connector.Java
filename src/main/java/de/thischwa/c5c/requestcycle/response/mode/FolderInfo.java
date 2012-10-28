@@ -24,7 +24,7 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.thischwa.c5c.requestcycle.response.AResponse;
 

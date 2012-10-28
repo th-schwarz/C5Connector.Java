@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.requestcycle.C5FileCapability;
 import de.thischwa.c5c.requestcycle.C5MessageHolder;
+import de.thischwa.c5c.requestcycle.C5UserAction;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.C5UserAction;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
