@@ -58,7 +58,7 @@ public class ContextGetRequestsTest {
 		response.parse(responseStr);
 		
 		assertEquals(200, response.getStatus());
-		assertEquals("{\"/userfiles/folder/\":{\"Filename\":\"folder\",\"File Type\":\"dir\",\"Path\":\"/userfiles/folder/\",\"Preview\":\"/filemanager/images/fileicons/_Open.png\",\"Properties\":{\"Size\":null,\"Height\":null,\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Width\":null},\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Code\":0,\"Error\":\"\"},\"/userfiles/pic01.png\":{\"Filename\":\"pic01.png\",\"File Type\":\"png\",\"Path\":\"/userfiles/pic01.png\",\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Properties\":{\"Size\":2250,\"Height\":110,\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Width\":70},\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Code\":0,\"Error\":\"\"}}", response.getContent());
+		assertEquals("{\"/userfiles/folder/\":{\"Filename\":\"folder\",\"File Type\":\"dir\",\"Path\":\"/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/_Open.png\",\"Properties\":{\"Size\":null,\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Height\":null,\"Width\":null},\"Error\":\"\",\"Code\":0},\"/userfiles/pic01.png\":{\"Filename\":\"pic01.png\",\"File Type\":\"png\",\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/png.png\",\"Properties\":{\"Size\":2250,\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":110,\"Width\":70},\"Error\":\"\",\"Code\":0}}", response.getContent());
 	}
 
 	@Test
@@ -72,6 +72,6 @@ public class ContextGetRequestsTest {
 		response.parse(responseStr);
 		
 		assertEquals(200, response.getStatus());
-		assertEquals("{\"Filename\":\"pic01.png\",\"File Type\":\"png\",\"Path\":\"/userfiles/pic01.png\",\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Properties\":{\"Size\":2250,\"Height\":110,\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Width\":70},\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Code\":0,\"Error\":\"\"}", response.getContent());
+		assertEquals("{\"Filename\":\"pic01.png\",\"File Type\":\"png\",\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/png.png\",\"Properties\":{\"Size\":2250,\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":110,\"Width\":70},\"Error\":\"\",\"Code\":0}", response.getContent());
 	}
 }

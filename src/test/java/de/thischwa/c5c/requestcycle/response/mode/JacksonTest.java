@@ -54,7 +54,7 @@ public class JacksonTest {
 		FileInfo fileInfo = new FileInfo("/tmp/img.png", false);
 		fileInfo.setError("Test Error", 5);
 		fileInfo.setFileProperties(100, 200, 30024, null);
-		String actual = "{\"Filename\":\"img.png\",\"File Type\":\"png\",\"Path\":\"/tmp/img.png\",\"Preview\":null,\"Properties\":{\"Size\":30024,\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200},\"Error\":\"Test Error\",\"Code\":5}";
+		String actual = "{\"Filename\":\"img.png\",\"File Type\":\"png\",\"Path\":\"/tmp/img.png\",\"Capabilities\":[],\"Preview\":null,\"Properties\":{\"Size\":30024,\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200},\"Error\":\"Test Error\",\"Code\":5}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }
