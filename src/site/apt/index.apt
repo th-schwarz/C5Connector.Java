@@ -1,0 +1,18 @@
+                                    ----------------------------
+												About
+                                    ----------------------------
+                                    
+C5Connector.Java
+
+  ... the Java backend for the {{{http://github.com/simogeo/Filemanager}filemanager of corefive}}. 
+  It's like bridge between the filemanager and a storage backend and works like a transparent VFS or proxy.
+  C5Connector.Java includes a default implementation to access the (server side) local filesystem.
+    
+  [Hint:] It's an early-state project and should not to be used in a productive environment! The API can be changed radical! 
+          
+          This project is managed by the author avocational. He is aware of the lack of documentation and tries to extend it constantly.
+          For this reason please be patient.
+          
+Call to Action
+
+  Help me to improve C5Connector.Java. If you find a bug or you miss certain features, don't hesitate to file a {{{https://github.com/th-schwarz/c5connector.java/issues}ticket}}.  
