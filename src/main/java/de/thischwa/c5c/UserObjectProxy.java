@@ -125,7 +125,7 @@ public class UserObjectProxy {
 	 * Returns <code>true</code> if user is allowed to upload files. The behavior is specified by the current C5UserAction instance.
 	 * 
 	 * @return true if user is allowed to upload files, false otherwise
-	 * @see C5UserAction#isEnabledForFileUpload(HttpServletRequest)
+	 * @see C5UserAction#isFileUploadEnabled(HttpServletRequest)
 	 */
 	public static boolean isFileUploadEnabled() {
 		return userAction.isFileUploadEnabled(RequestData.getRequest());
@@ -135,7 +135,7 @@ public class UserObjectProxy {
 	 * Returns <code>true</code> if user is allowed to create folders. The behavior is specified by the current C5UserAction instance.
 	 * 
 	 * @return true if user is allowed to create folders, false otherwise
-	 * @see C5UserAction#isGetResourcesEnabled(HttpServletRequest)
+	 * @see C5UserAction#isCreateFolderEnabled(HttpServletRequest)
 	 */
 	public static boolean isCreateFolderEnabled() {
 		return userAction.isCreateFolderEnabled(RequestData.getRequest());
