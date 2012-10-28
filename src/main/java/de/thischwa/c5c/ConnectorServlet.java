@@ -49,7 +49,7 @@ import de.thischwa.c5c.resource.PropertiesLoader;
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<url-pattern>/filemanager/connectors/java/*</url-pattern> 	
  * </servlet-mapping>
- * </pre>}
+ * }</pre>
  */
 public class ConnectorServlet extends HttpServlet {
 	

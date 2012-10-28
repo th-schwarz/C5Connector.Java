@@ -1,0 +1,11 @@
+#bannerLeft, #bannerRight {
+    font-size: xx-large;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.source {
+	background-color: whitesmoke;
+	font-family: Fixed, monospace;
+	border-style: solid 1px gray;
+}

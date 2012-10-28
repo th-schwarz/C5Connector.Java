@@ -23,10 +23,7 @@ package de.thischwa.c5c.resource;
 
 import static org.junit.Assert.*;
 
-
 import org.junit.Test;
-
-import de.thischwa.c5c.resource.Extension;
 
 public class ExtensionTest {
 	

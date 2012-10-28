@@ -26,8 +26,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import de.thischwa.c5c.requestcycle.response.AResponse;
-import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
-import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 
 public class FolderInfoTest {
 	
@@ -44,7 +42,7 @@ public class FolderInfoTest {
 		fileInfo.setFolderProperties(null);
 		((FolderInfo)resp).add(fileInfo);
 
-		String expected = "{\"/tmp/img01.png\":{\"Filename\":\"img01.png\",\"File Type\":\"png\",\"Path\":\"/tmp/img01.png\",\"Capabilities\":[],\"Preview\":null,\"Properties\":{\"Size\":30024,\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200},\"Error\":\"\",\"Code\":0},\"/tmp/folder/\":{\"Filename\":\"folder\",\"File Type\":\"dir\",\"Path\":\"/tmp/folder/\",\"Capabilities\":[],\"Preview\":null,\"Properties\":{\"Size\":null,\"Date Created\":null,\"Date Modified\":null,\"Height\":null,\"Width\":null},\"Error\":\"\",\"Code\":0}}";
+		String expected = "{\"/tmp/img01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"/tmp/img01.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img01.png\",\"File Type\":\"png\"},\"/tmp/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/tmp/folder/\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"folder\",\"File Type\":\"dir\"}}";
 		assertEquals(expected, resp.toString());
 	}
 

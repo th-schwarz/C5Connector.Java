@@ -25,8 +25,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.thischwa.c5c.util.VirtualFile;
-
 public class VirtualFileTest {
 
 	@Test

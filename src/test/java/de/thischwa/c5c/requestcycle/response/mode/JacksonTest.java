@@ -27,15 +27,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 
-import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonTest {
 
@@ -54,7 +52,7 @@ public class JacksonTest {
 		FileInfo fileInfo = new FileInfo("/tmp/img.png", false);
 		fileInfo.setError("Test Error", 5);
 		fileInfo.setFileProperties(100, 200, 30024, null);
-		String actual = "{\"Filename\":\"img.png\",\"File Type\":\"png\",\"Path\":\"/tmp/img.png\",\"Capabilities\":[],\"Preview\":null,\"Properties\":{\"Size\":30024,\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200},\"Error\":\"Test Error\",\"Code\":5}";
+		String actual = "{\"Error\":\"Test Error\",\"Code\":5,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"/tmp/img.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img.png\",\"File Type\":\"png\"}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }

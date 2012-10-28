@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
@@ -45,18 +47,10 @@ import de.thischwa.c5c.util.Path;
 public class C5MessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(C5MessageHolder.class);
 
-	/** The script path inside the filemanager directory. */
 	private static String scriptPath = "scripts/languages";
-	
-	/** The message store. */
+
 	private Map<String, Map<String, String>> messageStore;
 
-	/**
-	 * Instantiates a new c5 message holder.
-	 *
-	 * @param servletContext the servlet context
-	 * @throws RuntimeException the runtime exception
-	 */
 	public C5MessageHolder(ServletContext servletContext) throws RuntimeException {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
@@ -73,8 +67,8 @@ public class C5MessageHolder {
 				}
 			})) {
 				String lang = FilenameUtils.getBaseName(file.getName());
-				Map<String, String> langData = new HashMap<String, String>();
-				langData = mapper.readValue(file, Map.class);
+		        @SuppressWarnings("unchecked")
+				Map<String, String> langData = mapper.readValue(file, Map.class);
 				messageStore.put(lang, langData);
 			}
 		} catch (Exception e) {
@@ -84,12 +78,13 @@ public class C5MessageHolder {
 	}
 	
 	/**
-	 * Gets the message.
-	 *
-	 * @param locale the locale
-	 * @param key the key
-	 * @return the message
-	 * @throws IllegalArgumentException the illegal argument exception
+	 * Gets the message for the desired 'locale' and 'key'. 
+	 * 
+	 * @param locale The {@link Locale} of desired message.
+	 * @param key The key for the message.
+	 * 
+	 * @return The message for the desired 'locale' and 'key'. If the locale is unknown the default locale is taken.
+	 * @throws IllegalArgumentException If the 'key is unknown.
 	 */
 	public String getMessage(Locale locale, String key) throws IllegalArgumentException {
 		String lang = locale.getLanguage().toLowerCase();
