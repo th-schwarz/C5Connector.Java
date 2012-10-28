@@ -21,7 +21,7 @@
  */
 package de.thischwa.c5c.requestcycle.response.mode;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.requestcycle.response.AResponse;
 import de.thischwa.c5c.util.Path;

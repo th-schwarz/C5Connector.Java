@@ -22,8 +22,8 @@
 package de.thischwa.c5c.requestcycle.response;
 
 import de.thischwa.c5c.exception.ConnectorException;
-import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.exception.UserActionException;
 
 
 public class ErrorResponseFactory {
