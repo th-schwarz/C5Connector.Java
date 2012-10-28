@@ -29,14 +29,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestContextGetRequests {
+public class RootGetRequestsTest {
 	
 	private ServletTester tester;
 
 	@Before
 	public void setUp() throws Exception {
 		tester = new ServletTester();
-		tester.setContextPath("/context");
+		tester.setContextPath("/");
 		tester.setResourceBase("src/test/resources/requesttest");
 		tester.addServlet(ConnectorServlet.class, "/filemanager/connectors/java/*");
 		tester.start();
@@ -50,7 +50,7 @@ public class TestContextGetRequests {
 	@Test
 	public void testGetFolder() throws Exception {
 		HttpTester request = HttpTestFactory.buildInitialRequest();
-		request.setURI("/context/filemanager/connectors/java/filemanager.java?path=%2Fuserfiles%2F&mode=getfolder&showThumbs=true&time=258");
+		request.setURI("/filemanager/connectors/java/filemanager.java?path=%2Fuserfiles%2F&mode=getfolder&showThumbs=true&time=258");
 		String requestStr = request.generate();
 		
 		String responseStr = tester.getResponses(requestStr);
@@ -64,7 +64,7 @@ public class TestContextGetRequests {
 	@Test
 	public void testGetInfo() throws Exception {
 		HttpTester request = HttpTestFactory.buildInitialRequest(); 
-		request.setURI("/context/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Fuserfiles%2Fpic01.png&time=244");
+		request.setURI("/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Fuserfiles%2Fpic01.png&time=244");
 		String requestStr = request.generate();
 		
 		String responseStr = tester.getResponses(requestStr);
