@@ -37,38 +37,20 @@ public class StringUtils {
 	/** The empty string {@code ""}. */
 	public static final String EMPTY_STRING = "";
 
-	/**
-	 * Checks if is null or empty.
-	 *
-	 * @param strings the strings
-	 * @return true, if is null or empty
-	 */
 	public static final boolean isNullOrEmpty(final String... strings) {
 		for (String string : strings) {
-			if (!isNullOrEmpty(string))
+			if (!_isNullOrEmpty(string))
 				return false;
 		}
 		return true;
 	}
 
-	/**
-	 * Checks if is null or empty.
-	 *
-	 * @param str the str
-	 * @return true, if is null or empty
-	 */
-	private static boolean isNullOrEmpty(final String str) {
+	private static boolean _isNullOrEmpty(final String str) {
 		return (str == null || str.length() == 0);
 	}
 
-	/**
-	 * Checks if is null or empty or blank.
-	 *
-	 * @param str the str
-	 * @return true, if is null or empty or blank
-	 */
 	public static final boolean isNullOrEmptyOrBlank(final String str) {
-		if (isNullOrEmpty(str))
+		if (_isNullOrEmpty(str))
 			return true;
 		for (int i = 0; i < str.length(); i++) {
 			if (!Character.isWhitespace(str.charAt(i)))
@@ -77,12 +59,6 @@ public class StringUtils {
 		return true;
 	}
 
-	/**
-	 * Encode.
-	 *
-	 * @param str the str
-	 * @return the string
-	 */
 	public static final String encode(final String str) {
 		try {
 			return URLEncoder.encode(str, PropertiesLoader.getDefaultEncoding());
@@ -91,12 +67,6 @@ public class StringUtils {
 		}
 	}
 
-	/**
-	 * Decode.
-	 *
-	 * @param str the str
-	 * @return the string
-	 */
 	public static String decode(String str) {
 		try {
 			return URLDecoder.decode(str, PropertiesLoader.getDefaultEncoding());
@@ -104,13 +74,7 @@ public class StringUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/**
-	 * Divide and decode query string.
-	 *
-	 * @param query the query
-	 * @return the map
-	 */
+
 	public static Map<String, String> divideAndDecodeQueryString(String query) {
 		Map<String, String> params = new HashMap<String, String>();
 		if(isNullOrEmptyOrBlank(query))

@@ -30,27 +30,16 @@ public class VirtualFile {
 
 	public enum Type { directory, file }
 
-	/** The type. */
 	private Type type;
 
-	/** The folder. */
 	private String folder;
 
-	/** The full path. */
 	private String fullPath;
 
-	/** The extension. */
 	private String extension;
 
-	/** The name. */
 	private String name;
 
-	/**
-	 * Instantiates a new virtual file.
-	 *
-	 * @param fullPath the full path
-	 * @param isDir the is dir
-	 */
 	public VirtualFile(String fullPath, boolean isDir) {
 		this.fullPath = fullPath;
 		if(!fullPath.startsWith(Constants.separator))
@@ -80,56 +69,26 @@ public class VirtualFile {
 		}
 	}
 
-	/**
-	 * Instantiates a new virtual file.
-	 *
-	 * @param fullPath the full path
-	 */
 	public VirtualFile(String fullPath) {
 		this(fullPath, false);
 	}
 
-	/**
-	 * Gets the full path.
-	 *
-	 * @return the full path
-	 */
 	public String getFullPath() {
 		return fullPath;
 	}
 
-	/**
-	 * Gets the folder.
-	 *
-	 * @return the folder
-	 */
 	public String getFolder() {
 		return folder;
 	}
 
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Gets the extension.
-	 *
-	 * @return the extension
-	 */
 	public String getExtension() {
 		return extension;
 	}
 
-	/**
-	 * Gets the type.
-	 *
-	 * @return the type
-	 */
 	public Type getType() {
 		return type;
 	}
