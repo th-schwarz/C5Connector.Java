@@ -53,7 +53,7 @@ public class C5MessageHolder {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
-			throw new RuntimeException("C5 file scripts folder couldn't be found!");
+			throw new RuntimeException("C5 FILE scripts folder couldn't be found!");
 
 		messageStore = new HashMap<String, Map<String,String>>();		
 		ObjectMapper mapper = new ObjectMapper();

@@ -31,24 +31,11 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  */
 public interface IconResolver {
 
-	/** The Constant key_directory. */
-	public static final String key_directory = Type.directory.toString().toLowerCase();
+	public static final String key_directory = Type.DIRECTORY.toString().toLowerCase();
 	
-	/** The Constant key_unknown. */
 	public static final String key_unknown = "unknown";
 
-	/**
-	 * Sets the servlet context.
-	 *
-	 * @param servletContext the new servlet context
-	 */
 	public void setServletContext(ServletContext servletContext);
 	
-	/**
-	 * Gets the icon path.
-	 *
-	 * @param vf the vf
-	 * @return the icon path
-	 */
 	public String getIconPath(VirtualFile vf);
 }

@@ -24,11 +24,11 @@ package de.thischwa.c5c.util;
 import de.thischwa.c5c.Constants;
 
 /**
- * Util object to encapsulate the handling of folder, name and the extension of a file path.
+ * Util object to encapsulate the handling of folder, name and the extension of a FILE path.
  */
 public class VirtualFile {
 
-	public enum Type { directory, file }
+	public enum Type { DIRECTORY, FILE }
 
 	private Type type;
 
@@ -47,13 +47,13 @@ public class VirtualFile {
 		if (isDir && !fullPath.endsWith(Constants.separator)) // simple normalization
 			fullPath += Constants.separator;
 		
-		type = Type.file;
+		type = Type.FILE;
 		String cleanPath = fullPath;
 		if(cleanPath.endsWith(Constants.separator))
 			cleanPath = cleanPath.substring(0, cleanPath.length()-1);
 		if (fullPath.endsWith(Constants.separator)) {
 			folder = fullPath;
-			type = Type.directory;
+			type = Type.DIRECTORY;
 		} else {
 			int extPos = fullPath.lastIndexOf(".");
 			if (extPos == -1)

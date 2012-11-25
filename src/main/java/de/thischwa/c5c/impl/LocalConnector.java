@@ -61,7 +61,7 @@ import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
 
 /**
- * Real local filesystem backend connector. The file access is translated as-is
+ * Real local filesystem backend connector. The FILE access is translated as-is
  * to the local filesystem. A servlet context is respected, if it exists.
  */
 public class LocalConnector implements Connector {
@@ -85,7 +85,7 @@ public class LocalConnector implements Connector {
 	public AResponse getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
-			logger.error("Requested file not exits: {}", file.getAbsolutePath());
+			logger.error("Requested FILE not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(RequestMode.INFO, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
 		}
 		return constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
@@ -95,14 +95,14 @@ public class LocalConnector implements Connector {
 	public AResponse rename(String oldPath, String sanitizedName) throws ConnectorException {
 		File src = buildRealFile(oldPath);
 		if(!src.exists()) {
-			logger.error("Source file not found: {}", src.getAbsolutePath());
+			logger.error("Source FILE not found: {}", src.getAbsolutePath());
 			String key = (src.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
 			throw new FilemanagerException(RequestMode.RENAME, key, oldPath);
 		}
 	
 		File dest = new File(src.getParentFile(), sanitizedName);
 		if(dest.exists()) {
-			logger.warn("Destination file already exists: {}", dest.getAbsolutePath());
+			logger.warn("Destination FILE already exists: {}", dest.getAbsolutePath());
 			String key = (dest.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_ALREADY_EXISTS : FilemanagerException.KEY_FILE_ALREADY_EXISTS;
 			throw new FilemanagerException(RequestMode.RENAME, key, sanitizedName);
 		}
@@ -125,7 +125,7 @@ public class LocalConnector implements Connector {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File newFolder = new File(parentFolder, sanitizedFolderName);
 		if(newFolder.exists()) {
-			logger.warn("Destination file already exists: {}", newFolder.getAbsolutePath());
+			logger.warn("Destination FILE already exists: {}", newFolder.getAbsolutePath());
 			String key = (newFolder.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_ALREADY_EXISTS : FilemanagerException.KEY_FILE_ALREADY_EXISTS;
 			throw new FilemanagerException(RequestMode.CREATEFOLDER, key, sanitizedFolderName);
 		}
@@ -146,13 +146,13 @@ public class LocalConnector implements Connector {
 	 * Builds the and check folder.
 	 *
 	 * @param urlPath the url path
-	 * @return the file
+	 * @return the FILE
 	 * @throws FilemanagerException the known exception
 	 */
 	private File buildAndCheckFolder(String urlPath) throws FilemanagerException {
 		File parentFolder = buildRealFile(urlPath);
 		if(!parentFolder.exists()) {
-			logger.error("Source file nont found: {}", parentFolder.getAbsolutePath());
+			logger.error("Source FILE nont found: {}", parentFolder.getAbsolutePath());
 			String key = (parentFolder.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
 			throw new FilemanagerException(RequestMode.CREATEFOLDER, key, urlPath);
 		}		
@@ -163,7 +163,7 @@ public class LocalConnector implements Connector {
 	public AResponse delete(String urlPath) throws ConnectorException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
-			logger.error("Requested file not exits: {}", file.getAbsolutePath());
+			logger.error("Requested FILE not exits: {}", file.getAbsolutePath());
 			String key = (file.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
 			throw new FilemanagerException(RequestMode.DELETE, key, urlPath);
 		}
@@ -175,10 +175,10 @@ public class LocalConnector implements Connector {
 	}
 	
 	/**
-	 * Builds the real file.
+	 * Builds the real FILE.
 	 *
 	 * @param urlPath the url path
-	 * @return the file
+	 * @return the FILE
 	 */
 	private File buildRealFile(String urlPath) {
 		String path = servletContext.getRealPath(urlPath);
@@ -186,14 +186,14 @@ public class LocalConnector implements Connector {
 	}
 	
 	/**
-	 * Construct file info.
+	 * Construct FILE info.
 	 *
 	 * @param isDirRequest the is dir request
 	 * @param urlPath the url path
-	 * @param file the file
+	 * @param FILE the FILE
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
-	 * @return the file info
+	 * @return the FILE info
 	 * @throws ConnectorException the connector exception
 	 */
 	private FileInfo constructFileInfo(boolean isDirRequest, String urlPath, File file, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
@@ -203,13 +203,13 @@ public class LocalConnector implements Connector {
 			fixedUrlPath = urlPath;
 			Path p = new Path(fixedUrlPath);
 			if(!file.isDirectory())
-				throw new IllegalArgumentException(String.format("It's a folder request, but requested folder isn't a directory: %s", file.getName()));
+				throw new IllegalArgumentException(String.format("It's a folder request, but requested folder isn't a DIRECTORY: %s", file.getName()));
 			fi = ModeResponseFactory.buildFileInfo(p.addFile(file.getName()), true);
 		} else {
 			fixedUrlPath = (urlPath.contains(Constants.separator)) ? urlPath.substring(0, urlPath.lastIndexOf(Constants.separatorChar)) : urlPath;
 			Path p = new Path(fixedUrlPath);
 			if(file.isDirectory())
-				throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
+				throw new IllegalArgumentException(String.format("It's a FILE request, but requested FILE is a DIRECTORY: %s", file.getName()));
 			fi = ModeResponseFactory.buildFileInfo(p.addFile(file.getName()), false);
 		}
 		fi.setPreviewPath(UserObjectProxy.getIconPath(fi.getVirtualFile()));
@@ -290,7 +290,7 @@ public class LocalConnector implements Connector {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
 			return ModeResponseFactory.buildDownload(urlPath, file.length(), in);
 		} catch (FileNotFoundException e) {
-			logger.error("Requested file not exits: {}", file.getAbsolutePath());
+			logger.error("Requested FILE not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(RequestMode.DOWNLOAD, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
 		}
 	}

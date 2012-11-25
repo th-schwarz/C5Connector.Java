@@ -73,10 +73,10 @@ public class FileUtils {
 	}
 
 	/**
-	 * Checks a directory for existence and creates it if non-existent.
+	 * Checks a DIRECTORY for existence and creates it if non-existent.
 	 * 
 	 * @param dir
-	 *            directory to check/create
+	 *            DIRECTORY to check/create
 	 */
 	public static void checkDirAndCreate(File dir) {
 		if (!dir.exists())
@@ -84,14 +84,14 @@ public class FileUtils {
 	}
 
 	/**
-	 * Iterates over a base name and returns the first non-existent file.<br />
-	 * This method extracts a file's base name, iterates over it until the first
+	 * Iterates over a base name and returns the first non-existent FILE.<br />
+	 * This method extracts a FILE's base name, iterates over it until the first
 	 * non-existent appearance with <code>basename(n).ext</code>. Where n is a
 	 * positive integer starting from one.
 	 * 
-	 * @param file
-	 *            base file
-	 * @return first non-existent file
+	 * @param FILE
+	 *            base FILE
+	 * @return first non-existent FILE
 	 */
 	public static File getUniqueFile(final File file) {
 		if (!file.exists())

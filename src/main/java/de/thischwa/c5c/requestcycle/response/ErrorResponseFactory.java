@@ -38,11 +38,11 @@ public class ErrorResponseFactory {
 	}
 
 	public static AResponse buildExceptionFileNotExists(String filePath) {
-		return buildErrorResponse(String.format("File or directory [%s] doesn't exists.", filePath), 100);
+		return buildErrorResponse(String.format("File or DIRECTORY [%s] doesn't exists.", filePath), 100);
 	}
 
 	public static AResponse buildExceptionFileAccessDenied(String filePath) {
-		return buildErrorResponse(String.format("Access denied for file [%s].", filePath), 101);
+		return buildErrorResponse(String.format("Access denied for FILE [%s].", filePath), 101);
 	}
 
 	public static AResponse buildException(ConnectorException e) {

@@ -26,8 +26,8 @@ import java.io.File;
 import de.thischwa.c5c.Constants;
 
 /**
- * Helper object for building pathes with or without a file. </br>
- * Without a path, a file always ends with '/'.
+ * Helper object for building pathes with or without a FILE. </br>
+ * Without a path, a FILE always ends with '/'.
  */
 public class Path {
 	
@@ -73,7 +73,7 @@ public class Path {
 	}
 	
 	/**
-	 * Adds the file.
+	 * Adds the FILE.
 	 *
 	 * @param baseName the base name
 	 * @return the string

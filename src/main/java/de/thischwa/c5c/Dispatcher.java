@@ -157,7 +157,7 @@ class Dispatcher {
 	}
 
 	/**
-	 * Do post, just for file upload.
+	 * Do post, just for FILE upload.
 	 *
 	 * @return the response
 	 */
@@ -178,7 +178,7 @@ class Dispatcher {
 			for(FileItem item : items) {
 				if(item.isFormField()) {
 					params.put(item.getFieldName(), item.getString(PropertiesLoader.getDefaultEncoding()));
-				} else if(uplFile == null) // We upload just one file at the same time.
+				} else if(uplFile == null) // We upload just one FILE at the same time.
 					uplFile = item;
 			}
 			

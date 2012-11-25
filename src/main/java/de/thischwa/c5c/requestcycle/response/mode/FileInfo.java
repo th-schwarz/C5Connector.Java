@@ -73,7 +73,7 @@ public class FileInfo extends AResponse {
 
 	@JsonProperty("File Type")
 	public String getType() {
-		if (virtualFile.getType() == Type.directory)
+		if (virtualFile.getType() == Type.DIRECTORY)
 			return type_dir;
 		if (!StringUtils.isNullOrEmptyOrBlank(virtualFile.getExtension()))
 			return virtualFile.getExtension();
@@ -112,7 +112,7 @@ public class FileInfo extends AResponse {
 
 	@JsonIgnore
 	public boolean isDir() {
-		return (virtualFile.getType() == Type.directory);
+		return (virtualFile.getType() == Type.DIRECTORY);
 	}
 
 	@JsonIgnore

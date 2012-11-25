@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 public interface C5UserAction {
 
 	/**
-	 * Checks if file upload is enabled/allowed.
+	 * Checks if FILE upload is enabled/allowed.
 	 * 
 	 * @param request
 	 *            current user request instance
-	 * @return {@code true} if file upload is enabled/allowed, else {@code
+	 * @return {@code true} if FILE upload is enabled/allowed, else {@code
 	 *         false}
 	 */
 	public boolean isFileUploadEnabled(final HttpServletRequest request);
