@@ -33,7 +33,7 @@ public class VirtualFileTest {
 		assertEquals("/tmp/folder/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
-		assertEquals(VirtualFile.Type.file, vf.getType());
+		assertEquals(VirtualFile.Type.FILE, vf.getType());
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class VirtualFileTest {
 		assertEquals("/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
-		assertEquals(VirtualFile.Type.file, vf.getType());
+		assertEquals(VirtualFile.Type.FILE, vf.getType());
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class VirtualFileTest {
 		assertEquals("/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
-		assertEquals(VirtualFile.Type.file, vf.getType());
+		assertEquals(VirtualFile.Type.FILE, vf.getType());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class VirtualFileTest {
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder", vf.getName());
 		assertNull(vf.getExtension());
-		assertEquals(VirtualFile.Type.directory, vf.getType());
+		assertEquals(VirtualFile.Type.DIRECTORY, vf.getType());
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class VirtualFileTest {
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder", vf.getName());
 		assertNull(vf.getExtension());
-		assertEquals(VirtualFile.Type.directory, vf.getType());
+		assertEquals(VirtualFile.Type.DIRECTORY, vf.getType());
 	}
 	
 	@Test
@@ -78,6 +78,6 @@ public class VirtualFileTest {
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder.sub", vf.getName());
 		assertNull(vf.getExtension());
-		assertEquals(VirtualFile.Type.directory, vf.getType());
+		assertEquals(VirtualFile.Type.DIRECTORY, vf.getType());
 	}
 }
