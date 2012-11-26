@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -213,6 +213,25 @@
 						<phase>site</phase>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<!-- builds the distribution zip / it's bind to the package phase -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+		        <configuration>
+		          <descriptors>
+		            <descriptor>src/main/assembly/dist.xml</descriptor>
+		          </descriptors>
+		        </configuration>
+		        <executions>
+		        	<execution>
+		        		<id>dist</id>
+		        		<phase>package</phase>
+		        		<goals>
+		        			<goal>single</goal>
+		        		</goals>
+		        	</execution>
+		        </executions>
 			</plugin>
 		</plugins>
 	</build>
