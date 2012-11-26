@@ -26,7 +26,7 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * The Class FileUtils.
+ * General utilities.
  */
 public class FileUtils {
 
@@ -73,10 +73,10 @@ public class FileUtils {
 	}
 
 	/**
-	 * Checks a DIRECTORY for existence and creates it if non-existent.
+	 * Checks a directory for existence and creates it if non-existent.
 	 * 
 	 * @param dir
-	 *            DIRECTORY to check/create
+	 *            directory to check/create
 	 */
 	public static void checkDirAndCreate(File dir) {
 		if (!dir.exists())
@@ -89,9 +89,8 @@ public class FileUtils {
 	 * non-existent appearance with <code>basename(n).ext</code>. Where n is a
 	 * positive integer starting from one.
 	 * 
-	 * @param FILE
-	 *            base FILE
-	 * @return first non-existent FILE
+	 * @param file the base file
+	 * @return the first non-existent file
 	 */
 	public static File getUniqueFile(final File file) {
 		if (!file.exists())
