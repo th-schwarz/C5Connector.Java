@@ -1,0 +1,64 @@
+   ----------------------------
+   Installation 
+   ----------------------------
+
+Installation Guide
+
+  Please read the topics in this guide from top to bottom.
+  
+  [Hint:] C5Connector.Java uses the state-of-the-art logging facade {{{http://http://www.slf4j.org}SLF4J}}.
+          Read the corresponding manual, if you are not familiar with it.
+          
+* Prepare the Installation
+
+  There isn't any download provided at the moment. But the desired jar file can be easily build with maven2. 
+  Just download the source, declare a preferred SLF4J binding in the dependencies section of your POM within 
+  the runtime scope and call the following command:
+  
++------------------------------------------------------------------------------+
+mvn clean package
++------------------------------------------------------------------------------+
+
+  It creates a zip file like <<<c5connector-java-[version]-SNAPSHOT-bin.zip>>> which contains all binaries
+  of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
+
+* Activation of the Connector Servlet
+
+  [Hint:] The declaration of the servlet is mandatory, it is disabled by default for security reasons!
+  
+  []
+   
+  It takes three steps to enabled it.
+  
+  [[1]]  Declare the ConnectorServlet in your <<<web.xml>>>:
+
++------------------------------------------------------------------------------+
+  <servlet>
+  	<servlet-name>ConnectorServlet</servlet-name>
+  	<servlet-class>de.thischwa.c5c.ConnectorServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ConnectorServlet</servlet-name>
+  	<url-pattern>/filemanager/connectors/java/*</url-pattern> 	
+  </servlet-mapping>
++------------------------------------------------------------------------------+
+
+  Assuming you installed the editor in the <<</filemanager>>> folder in your webapp.\
+  The Connector Servlet is now declared but <still> disabled. 
+
+  [[2]] Create a <<<c5connector.properties>>> file in your classpath and add:
+  
++------------------------------------------------------------------------------+
+connector.userActionImpl = de.thischwa.c5c.requestcycle.impl.EnabledUserAction
++------------------------------------------------------------------------------+
+
+  [[3]] The following variables need to be changed in <<<filemanager.config.js>>>:
+  
++------------------------------------------------------------------------------+
+var lang = 'java';
++------------------------------------------------------------------------------+
+
+  Be sure, that <<<imagesExt>>> is equivalent to the C5Connector properties for the allowed
+  image extensions!

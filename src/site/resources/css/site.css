@@ -1,11 +1,57 @@
+
 #bannerLeft, #bannerRight {
     font-size: xx-large;
     font-weight: bold;
     margin: 5px;
 }
-
+#breadcrumbs {
+	background-color: whitesmoke;
+	border-top: 1px solid #990000;
+	border-bottom: 1px solid #990000;
+}
+dl {
+	margin-left: 40px;
+}
 .source {
 	background-color: whitesmoke;
 	font-family: Fixed, monospace;
 	border-style: solid 1px gray;
+}
+
+h1 h2 h3 {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+body {
+    background-color: #e4e4e4;
+}
+
+#footer .xright {
+    text-shadow: none;
+	border-color: #990000;
+}
+#leftColumn {
+    background-color: #e4e4e4;
+    border: 0 none;
+    float: left;
+    margin: 0;
+    overflow: auto;
+    width: 200px;
+}
+#navcolumn {
+    margin: 15px 0 0 30px;
+    background-color: white;
+    border: 2px solid #990000;
+    padding: 8px 4px 0 8px;
+}
+#bodyColumn {
+    background-color: white;
+    border: 2px solid #990000;
+    margin: 15px 30px 15px 230px;
+	padding: 0 10px 10px;
+}
+.section {
+    margin-bottom: 35px;
+    padding: 0;
 }

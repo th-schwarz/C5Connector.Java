@@ -1,0 +1,18 @@
+   ----------------------------
+   Extending the Library
+   ----------------------------
+
+Overview
+
+  [Hint:] This section is just for those who want to extend the library.
+  
+  The C5Connector library provides you several interfaces to extend and
+  adapt it to your needs. 
+  
+  * <<Connector>>: Gives you the ability to handle server-side connector requests
+    the way you want.    
+  
+  * <<C5UserAction>>: Gives you full control over any action the user can do in the filemanager.
+  
+  * <<C5FileCapability>>: Gives you the ability which capabilities are set in 
+    an info request.  

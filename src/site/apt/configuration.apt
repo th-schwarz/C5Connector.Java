@@ -1,0 +1,100 @@
+   ----------------------------
+   Configuration
+   ----------------------------
+   
+Configuration setting
+   
+   In the meaning of 'convention over configuration' all properties are predefined. Change only those you intend 
+   to override for the <entire> web application.
+   
+  There are two ways to override the default properties permanently:
+
+  * By creating a <<<c5connector.properties>>> file in the classpath (usually
+    <<<WEB-INF/classes>>>):
+
++------------------------------------------------------------------------------+
+  ...
+  connector.userActionImpl = de.thischwa.c5c.requestcycle.impl.EnabledUserAction
+  ...
++------------------------------------------------------------------------------+
+
+  * By calling dynamically the <<<PropertiesLoader>>> class:
+
++------------------------------------------------------------------------------+
+  ...
+  import de.thischwa.c5c.resource.PropertiesLoader;
+  ...
+  PropertiesLoader.setProperty("connector.userActionImpl", "de.thischwa.c5c.requestcycle.impl.EnabledUserAction");
+  ...
++------------------------------------------------------------------------------+
+
+    [Attention:] It is essential to know how to use the <<<PropertiesLoader>>>.
+                 Like the common properties usage, you should use it only at the
+                 start of your web application. If you don't have a kind of
+                 an 'initialization' servlet, where you could place the
+                 <<<PropertiesLoader>>> calls, I suggest writing your own
+                 <<<ServletContextListener>>>. Thus you guarantee, you call the
+                 <<<PropertiesLoader>>> <before> the <<<ConnectorServlet>>> is
+                 initialized.
+
+  []
+
+  As you can see, setting a property is equal in both ways. The tables below
+  list all configurable properties for the C5Connector.Java.
+  
+Configuration properties
+
+   The library supports different resource types: <archive>, <doc>, <image> and <other>.
+   Replace the <typeName> with "archive", "doc", "image" or "other".
+   For all types a allowed <<or>> a denied list can be defined. If an allowed list 
+   is pre-defined overwrite it with an empty list and define your denied list as you wish.
+
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+|| Property                          || Default                  	      || Valid Values               					 || Description                     ||
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.resourceType			 | 									  | any extension									 | List with extensions which should be denied. |
+| .<typeName>.extensions.denied 	 |									  |													 | Separate extensions with a &#124 (pipe symbol). |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.resourceType			 | gz&#124gzip&#124rar&#124tar&#124tgz&#124zip	| any extension									 | List with extensions which should be allowed. |
+| .archive.extensions.allowed 		 |									  |													 | Separate extensions with a &#124 (pipe symbol). |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.resourceType			 | cvs&#124doc&#124odt&#124pdf&#124rtf&#124txt	| any extension									 | see above |
+| .doc.extensions.allowed 			 |									  |													 |  |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.resourceType			 | gif&#124jpeg&#124jpg&#124png		  | any extension									 | see above |
+| .image.extensions.allowed 		 |									  |													 |  |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.resourceType			 | mov&#124mp3&#124mp4&#124wav		  | any extension									 | see above |
+| .other.extensions.allowed 		 |									  |													 |  |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| default.encoding 				 	 | UTF-8                			  | any string				      					 |  The general character encoding. <<Should be untouched!>> |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 |  Checks uploaded images for validity. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.imagePreview		  	 | false	               			  | true, false (boolean)	  						 |  Enables/disables previewing of images. <<Not yet implemented!>> |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.forceSingleExtension  	 | true		               			  | true, false (boolean)	    					 |  Indicates whether filenames with multiple extensions are sanitized. <<Not yet implemented!>> |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.filemanagerPath          | /filemanager					      | any path                   						 | The path of the editor installation resides within your webapp. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
+|									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.impl 					 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. |
+|									 | .LocalConnector					  | {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}} implementation. | 		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.userActionImpl	         | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5UserAction>>>}}. |
+| 									 | .DisabledUserAction				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle
+|									 |									  |.C5UserAction>>>}} implementation. 				 | 		|				
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5IconResolver>>>}}. |
+| 									 | .C5IconResolver 					  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
+|									 | 									  | .IconResolver>>>}} implementation. 				 | 		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.fileCapabilityImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/impl/C5FileCapabiltiy.html}<<<de.thischwa.c5c.requestcycle. |
+|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5FileCapability.html}<<<de.thischwa.c5c.requestcycle | impl.DefaultCapability>>>}}. |
+|									 | 									  | .C5FileCapability>>>}} implementation.  | 		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle |
+|                                    |									  | select,delete,rename,download					 | .impl.DefaultCapability>>>}}. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
