@@ -26,7 +26,7 @@ import java.io.InputStream;
 import de.thischwa.c5c.RequestMode;
 import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.resource.UserActionMessageHolder;
+import de.thischwa.c5c.resource.C5UserActionMessageHolder;
 
 public class ModeResponseFactory {
 
@@ -41,7 +41,7 @@ public class ModeResponseFactory {
 
 	public static UploadFile buildUploadFileForError(String path, String sanitizedName) {
 		UploadFile uploadFile = new UploadFile(path, sanitizedName);
-		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.KEY_UPLOAD_NOT_ALLOWED), 200);
+		uploadFile.setError(C5UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.KEY_UPLOAD_NOT_ALLOWED), 200);
 		uploadFile.setMode(RequestMode.UPLOAD);
 		return uploadFile;
 	}

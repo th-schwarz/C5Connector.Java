@@ -46,6 +46,13 @@ public class C5MessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(C5MessageHolder.class);
 
 	private static String scriptPath = "scripts/languages";
+	
+	private FilenameFilter jsFilter = new FilenameFilter() {
+		@Override
+		public boolean accept(File dir, String name) {
+			return name.endsWith(".js");
+		}
+	};
 
 	private Map<String, Map<String, String>> messageStore;
 
@@ -53,17 +60,12 @@ public class C5MessageHolder {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
-			throw new RuntimeException("C5 FILE scripts folder couldn't be found!");
+			throw new RuntimeException("C5 scripts folder couldn't be found!");
 
 		messageStore = new HashMap<String, Map<String,String>>();		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			for(File file: msgFolder.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".js");
-				}
-			})) {
+			for(File file: msgFolder.listFiles(jsFilter)) {
 				String lang = FilenameUtils.getBaseName(file.getName());
 		        @SuppressWarnings("unchecked")
 				Map<String, String> langData = mapper.readValue(file, Map.class);

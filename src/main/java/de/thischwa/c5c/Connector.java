@@ -48,7 +48,7 @@ public interface Connector {
 
 	public AResponse getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException;
 	
-	public AResponse rename(String oldPath, String newName) throws ConnectorException;
+	public AResponse rename(String oldPath, String santizedNewName) throws ConnectorException;
 	
 	public AResponse createFolder(String urlPath, String sanitizedName) throws ConnectorException;
 	
