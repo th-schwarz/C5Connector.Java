@@ -1,0 +1,37 @@
+   ----------------------------
+   C5UserAction
+   ----------------------------
+
+C5UserAction
+
+  Through the live cycle of the filemanager, several commands are sent to retrieve and create objects on the server.
+  The Connector Servlet retrieves this commands and responses as necessary to them. With an implementation of the
+  interface {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5UserAction>>>}}
+  you are able to intercept the commands and tell the Connector Servlet if the current request is allowed to achieve or not.
+  
+  There are two ready-to-go implementations:
+  
+  * {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DisabledUserAction.html}<<<de.thischwa.c5c.requestcycle.impl.DisabledUserAction>>>}}
+    The default one. It disallows all commands.
+    
+  * {{{./apidocs/de/thischwa/c5c/requestcycle/impl/EnabledUserAction.html}<<<de.thischwa.c5c.requestcycle.impl.EnabledUserAction>>>}}
+    It allows all commands. 
+    
+* Custom implementation
+
+  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5UserAction>>>}}.
+  Consult the javadoc and see how it works.
+  
+  And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
+
++------------------------------------------------------------------------------+
+connector.userActionImpl = <desired implementation>
++------------------------------------------------------------------------------+  
+
+* Error messages for user actions
+
+  There are two error messages for the C5UserAction implementation. One for 'file upload is disallowed' and one for 'create a folder is disallowed'.
+  Two translations are currently provided: English (the default one) and German.
+  
+  If you want to contribute other translations, don't hesitate to contact me. An example for a properties file can be found here:
+  {{{https://github.com/th-schwarz/C5Connector.Java/blob/master/src/main/resources/de/thischwa/c5c/resource/actionMessages_en.properties}<<<actionMessages_en.properties>>>}} 

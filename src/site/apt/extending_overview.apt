@@ -4,7 +4,11 @@
 
 Overview
 
-  [Hint:] This section is just for those who want to extend the library.
+  [Hint:] This section is just for those who want to extend the library. 
+          It is necessary to understand the request cycle of {{{http://github.com/simogeo/Filemanager}filemanager of corefive}} 
+          completely. If not, refer corresponding documentation!
+  
+  []
   
   The C5Connector library provides you several interfaces to extend and
   adapt it to your needs. 

@@ -1,0 +1,34 @@
+   ----------------------------
+   Connector
+   ----------------------------
+
+Connector
+
+  The connector is a bridge between the filemanager and a file storage backend.
+  It works like a proxy or a virtual file system. 
+
+  There is a ready-to-go implementation which serves all files from any local path:
+  {{{./apidocs/de/thischwa/c5c/impl/LocalConnector.html}<<<de.thischwa.c5c.impl.LocalConnector>>>}} \
+  The default setting.
+
+* Custom implementation
+  
+  In many situations it isn't enough or not possible at all to store files within
+  the context or local file system. Therefore C5Connector.Java provides a way to create
+  your own one. 
+  
+  Just implement the interface {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}.
+  Consult the javadoc and see how it works.
+  
+  [Hint:] Use the factory {{{./apidocs/de/thischwa/c5c/requestcycle/response/mode/ModeResponseFactory.html}<<<de.thischwa.c5c.requestcycle.response.mode.ModeRespanseFactory>>>}}
+          to build the desired response. To handle exceptions you have to use {{{./apidocs/de/thischwa/c5c/exception/FilemanageException.html}<<<de.thischwa.c5c.exception.FilemanagerException>>>}}
+          and {{{./apidocs/de/thischwa/c5c/exception/UserActionException.html}<<<de.thischwa.c5c.exception.UserActionException>>>}}. 
+          Consult the javadoc for details please!
+          
+          []
+          
+  And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
+
++------------------------------------------------------------------------------+
+connector.userActionImpl = <desired implementation>
++------------------------------------------------------------------------------+

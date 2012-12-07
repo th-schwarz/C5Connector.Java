@@ -85,7 +85,7 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.userActionImpl	         | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5UserAction>>>}}. |
 | 									 | .DisabledUserAction				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle
-|									 |									  |.C5UserAction>>>}} implementation. 				 | 		|				
+|									 |									  | .C5UserAction>>>}} implementation. 				 | 		|				
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5IconResolver>>>}}. |
 | 									 | .C5IconResolver 					  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
@@ -95,6 +95,6 @@ Configuration properties
 |									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5FileCapability.html}<<<de.thischwa.c5c.requestcycle | impl.DefaultCapability>>>}}. |
 |									 | 									  | .C5FileCapability>>>}} implementation.  | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle |
-|                                    |									  | select,delete,rename,download					 | .impl.DefaultCapability>>>}}. |
+| connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
+|                                    |									  | select,delete,rename,download					 | {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

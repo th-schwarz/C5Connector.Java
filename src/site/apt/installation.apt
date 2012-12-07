@@ -60,5 +60,5 @@ connector.userActionImpl = de.thischwa.c5c.requestcycle.impl.EnabledUserAction
 var lang = 'java';
 +------------------------------------------------------------------------------+
 
-  Be sure, that <<<imagesExt>>> is equivalent to the C5Connector properties for the allowed
+  Be sure, that the variable <<<imagesExt>>> is equivalent to the C5Connector property for the allowed
   image extensions!

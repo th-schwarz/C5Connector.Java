@@ -1,0 +1,29 @@
+   ----------------------------
+   C5FileCapability
+   ----------------------------
+
+C5FileCapability
+
+  Through the live cycle of the filemanager there are two <get> commands. To determine which action is allowed 
+  for a specific file, capabilities can be defined for each one.
+  
+  The available capabilities are 'select', 'delete', 'rename', 'download'.
+  
+  There is ready-to-go implementation: {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapabilty.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapabilty>>>}},
+  the default one. It just sends all capabilities defined in the property <connector.capabilities> for each file.
+  
+  If you want to change the capabilities for all <get> commands you just have to set the property <connector.capabilities> in your
+  <<<c5connector.properties>>> file.
+  
+  If this doesn't meets your requirements, you have to write a custom one.
+      
+* Custom implementation
+
+  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/C5FfileCapability.html}<<<de.thischwa.c5c.requestcycle.C5FfileCapability>>>}}.
+  Consult the javadoc and see how it works.
+  
+  And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
+
++------------------------------------------------------------------------------+
+connector.capabilities = <desired implementation>
++------------------------------------------------------------------------------+  
