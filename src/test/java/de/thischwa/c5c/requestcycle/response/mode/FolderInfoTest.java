@@ -25,13 +25,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 
 public class FolderInfoTest {
 	
 	@Test
 	public void testToString() {
-		AResponse resp = new FolderInfo();
+		Response resp = new FolderInfo();
 		
 		FileInfo fileInfo = new FileInfo("/tmp/img01.png", false);
 		fileInfo.setFileProperties(100, 200, 30024, null);

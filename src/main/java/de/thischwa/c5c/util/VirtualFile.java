@@ -24,10 +24,12 @@ package de.thischwa.c5c.util;
 import de.thischwa.c5c.Constants;
 
 /**
- * Util object to encapsulate the handling of folder, name and the extension of a FILE path.
+ * A virtual file object which represents a file from the filemanager. 
+ * It provides methods to get basic information like name, extension and so on.  
  */
 public class VirtualFile {
 
+	/** Type of the virtual file object. */
 	public enum Type { DIRECTORY, FILE }
 
 	private Type type;

@@ -24,13 +24,13 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.util.StringUtils;
 
 /**
  * TODO document me
  */
-public class UploadFile extends AResponse {
+public class UploadFile extends Response {
 
 	/** The path. */
 	private String path;

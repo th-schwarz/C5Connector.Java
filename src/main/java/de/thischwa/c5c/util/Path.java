@@ -26,12 +26,11 @@ import java.io.File;
 import de.thischwa.c5c.Constants;
 
 /**
- * Helper object for building pathes with or without a FILE. </br>
+ * Helper object for building paths with or without a file. </br>
  * Without a path, a FILE always ends with '/'.
  */
 public class Path {
 	
-	/** The sb. */
 	private StringBuilder sb;
 
 	/**
@@ -42,7 +41,7 @@ public class Path {
 	}
 	
 	/**
-	 * Instantiates a new path.
+	 * Instantiates a new path with a pre-set folder.
 	 *
 	 * @param folder the folder
 	 */

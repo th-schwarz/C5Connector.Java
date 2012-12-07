@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.exception.ConnectorException;
 import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.ModeResponseFactory;
 import de.thischwa.c5c.resource.PropertiesLoader;
@@ -97,11 +97,11 @@ class Dispatcher {
 	 *
 	 * @return the response 
 	 */
-	AResponse doGet() {
+	Response doGet() {
 		logger.debug("Entering Dispatcher#doGet");
 		HttpServletRequest req = RequestData.getRequest();
 		try {
-			AResponse resp = null;
+			Response resp = null;
 			RequestMode mode = resolveMode(req.getParameter("mode"));
 			switch (mode) {
 			case FOLDER: {
@@ -161,12 +161,12 @@ class Dispatcher {
 	 *
 	 * @return the response
 	 */
-	AResponse doPost() {
+	Response doPost() {
 		logger.debug("Entering Dispatcher#doPost");
 		HttpServletRequest req = RequestData.getRequest();
 
 		try {
-			AResponse resp = null;
+			Response resp = null;
 			Map<String, String> params = new HashMap<String, String>();
 			FileItemFactory factory = new DiskFileItemFactory();
 			ServletFileUpload upload = new ServletFileUpload(factory);

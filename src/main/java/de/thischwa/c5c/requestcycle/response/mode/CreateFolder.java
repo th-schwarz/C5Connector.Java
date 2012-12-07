@@ -23,12 +23,12 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
  * TODO document me
  */
-public class CreateFolder extends AResponse {
+public class CreateFolder extends Response {
 
 	private String parentUrlPath;
 	

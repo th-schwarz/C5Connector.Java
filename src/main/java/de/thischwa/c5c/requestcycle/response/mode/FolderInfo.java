@@ -26,12 +26,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
  * TODO document me
  */
-public class FolderInfo extends AResponse {
+public class FolderInfo extends Response {
 
 	private Map<String, FileInfo> folderItems;
 

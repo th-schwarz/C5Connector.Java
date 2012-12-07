@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.resource.PropertiesLoader;
 
 /**
@@ -105,7 +105,7 @@ public class ConnectorServlet extends HttpServlet {
 		resp.setContentType("application/json");
 		resp.setHeader("Cache-Control", "no-cache");
 		
-		AResponse response;
+		Response response;
 		try {
 			RequestData.beginRequest(req);
 			if(isGetRequest)

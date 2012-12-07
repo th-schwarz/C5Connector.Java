@@ -49,7 +49,7 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.ConnectorException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ModeResponseFactory;
@@ -76,13 +76,13 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
+	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
 		File folder = buildAndCheckFolder(urlPath);
 		return constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
-	public AResponse getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
+	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
@@ -92,7 +92,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse rename(String oldPath, String sanitizedName) throws ConnectorException {
+	public Response rename(String oldPath, String sanitizedName) throws ConnectorException {
 		File src = buildRealFile(oldPath);
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
@@ -121,7 +121,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse createFolder(String urlPath, String sanitizedFolderName) throws ConnectorException {
+	public Response createFolder(String urlPath, String sanitizedFolderName) throws ConnectorException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File newFolder = new File(parentFolder, sanitizedFolderName);
 		if(newFolder.exists()) {
@@ -160,7 +160,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse delete(String urlPath) throws ConnectorException {
+	public Response delete(String urlPath) throws ConnectorException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
@@ -269,7 +269,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse upload(String urlPath, String sanitizedName, InputStream fileIn) throws ConnectorException {
+	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws ConnectorException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
@@ -284,7 +284,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public AResponse downlad(String urlPath) throws ConnectorException {
+	public Response downlad(String urlPath) throws ConnectorException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));

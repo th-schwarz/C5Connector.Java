@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.C5FileCapability;
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
@@ -37,7 +37,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
 /**
  * TODO document me
  */
-public class FileInfo extends AResponse {
+public class FileInfo extends Response {
 	
 	private static final String type_unknown = "txt";
 	

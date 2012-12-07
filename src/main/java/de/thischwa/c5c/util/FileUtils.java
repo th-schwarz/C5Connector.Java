@@ -26,7 +26,7 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * General utilities.
+ * General file-based utilities.
  */
 public class FileUtils {
 

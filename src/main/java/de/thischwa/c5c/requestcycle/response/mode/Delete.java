@@ -23,12 +23,12 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
  * TODO document me
  */
-public class Delete extends AResponse {
+public class Delete extends Response {
 
 	private String fullPath;
 

@@ -32,12 +32,12 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
  * TODO document me
  */
-public class Download extends AResponse {
+public class Download extends Response {
 
 	private String fullPath;
 	

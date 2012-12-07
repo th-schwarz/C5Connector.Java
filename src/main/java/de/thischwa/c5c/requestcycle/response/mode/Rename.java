@@ -23,14 +23,14 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.AResponse;
+import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
  * TODO document me
  */
-public class Rename extends AResponse {
+public class Rename extends Response {
 	
 	private String oldFullPath;
 	

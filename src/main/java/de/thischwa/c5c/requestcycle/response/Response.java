@@ -35,9 +35,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.RequestMode;
 
 /**
- * The Class AResponse.
+ * Base class for each response objects.
  */
-public abstract class AResponse {
+public abstract class Response {
 	
 	/** Default code for no errors. */
 	public final static int DEFAULT_NO_ERROR_CODE = 0;

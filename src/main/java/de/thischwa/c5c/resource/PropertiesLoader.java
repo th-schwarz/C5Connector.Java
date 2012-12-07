@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Static object for managing the properties files.<br/>
+ * Static object for managing the default and user-defined properties files.<br/>
  * The files are loaded in the following order:
  * <ol>
  * <li>The default properties.</li>
