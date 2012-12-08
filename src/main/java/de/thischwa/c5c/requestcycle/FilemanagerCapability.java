@@ -31,16 +31,16 @@ public interface FilemanagerCapability {
 
 	/** All available capabilities. */
 	public enum CAPABILITY {
-		/* The selection of the file is allowed. */
+		/** The selection of the file is allowed. */
 		select,
 
-		/* The deletion of the file is allowed. */
+		/** The deletion of the file is allowed. */
 		delete,
 
-		/* The renaming of the file is allowed. */
+		/** The renaming of the file is allowed. */
 		rename,
 
-		/* The download of the file is allowed. */
+		/** The download of the file is allowed. */
 		download
 	};
 
