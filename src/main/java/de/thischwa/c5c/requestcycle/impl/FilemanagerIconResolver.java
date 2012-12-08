@@ -42,7 +42,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  * Implementation of {@link IconResolver} which resolves the icons from the c5 FILE manager. It respects the FILE manager 
  * path settings from the properties.
  */
-public class C5IconResolver implements IconResolver {
+public class FilemanagerIconResolver implements IconResolver {
 	
 	/** The icon path inside the filemanager. */
 	private static String iconPath = "images/fileicons";

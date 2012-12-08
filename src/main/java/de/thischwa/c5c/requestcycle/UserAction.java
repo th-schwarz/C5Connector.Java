@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import de.thischwa.c5c.resource.UserActionMessageHolder;
 
 /**
- * An interface for user action control. In particular, this interface gives
- * you fine-grained control over the file manager commands. <br/>
- * The equivalent error messages are managed by the {@link UserActionMessageHolder}.
+ * An interface for user action control which aren't cover by the capabilities if 
+ * the filemanager. <br/>
+ * The equivalent error messages are managed by the {@link UserActionMessageHolder}.<br/>
  * <p>
  * <strong>Note:</strong> You are free to implement this interface the way you
  * need it, in other words your return values can be global, regardless of the
