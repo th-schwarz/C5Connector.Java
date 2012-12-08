@@ -1,3 +1,6 @@
+filemanager:
+------------
+
 After line 30 in the filemanger.config.js:
 var relPath = window.location.protocol + '//' + document.domain;
 Add this line.
