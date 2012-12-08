@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.thischwa.c5c.requestcycle.C5FileCapability;
+import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 
 public class UserObjectProxyTest {
 
@@ -34,10 +34,10 @@ public class UserObjectProxyTest {
 		assertNull(UserObjectProxy.buildDefaultCapabilities(null));
 		assertNull(UserObjectProxy.buildDefaultCapabilities(" "));
 		
-		assertArrayEquals(new C5FileCapability.CAPABILITY[] { C5FileCapability.CAPABILITY.select }, 
+		assertArrayEquals(new FilemanagerCapability.CAPABILITY[] { FilemanagerCapability.CAPABILITY.select }, 
 				UserObjectProxy.buildDefaultCapabilities("select"));
 
-		assertArrayEquals(new C5FileCapability.CAPABILITY[] { C5FileCapability.CAPABILITY.select, C5FileCapability.CAPABILITY.delete }, 
+		assertArrayEquals(new FilemanagerCapability.CAPABILITY[] { FilemanagerCapability.CAPABILITY.select, FilemanagerCapability.CAPABILITY.delete }, 
 				UserObjectProxy.buildDefaultCapabilities("select, dElEtE"));
 	}
 
