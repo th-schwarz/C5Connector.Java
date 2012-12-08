@@ -1,6 +1,7 @@
 /*
  * C5Connector.Java - The Java backend for the filemanager of corefive.
- * It provides a simple object for creating an editor instance.
+ * It's a bridge between the filemanager and a storage backend and 
+ * works like a transparent VFS or proxy.
  * Copyright (C) Thilo Schwarz
  * 
  * == BEGIN LICENSE ==
