@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface FilemanagerCapability {
 
-	/** All available capabilities. */
-	public enum CAPABILITY {
+	/** Available capabilities. */
+	public enum Capability {
 		/** The selection of the file is allowed. */
 		select,
 
@@ -53,5 +53,5 @@ public interface FilemanagerCapability {
 	 *            the url path
 	 * @return the capabilities for the desired url-path
 	 */
-	public CAPABILITY[] getCapabilities(final HttpServletRequest req, final String urlPath);
+	public Capability[] getCapabilities(final HttpServletRequest req, final String urlPath);
 }

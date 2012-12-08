@@ -153,7 +153,7 @@ public class LocalConnector implements Connector {
 	private File buildAndCheckFolder(String urlPath) throws FilemanagerException {
 		File parentFolder = buildRealFile(urlPath);
 		if(!parentFolder.exists()) {
-			logger.error("Source FILE nont found: {}", parentFolder.getAbsolutePath());
+			logger.error("Source file nont found: {}", parentFolder.getAbsolutePath());
 			String key = (parentFolder.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
 			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, urlPath);
 		}		

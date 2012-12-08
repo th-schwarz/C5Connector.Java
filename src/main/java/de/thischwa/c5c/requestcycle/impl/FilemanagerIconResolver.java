@@ -39,7 +39,7 @@ import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
- * Implementation of {@link IconResolver} which resolves the icons from the c5 FILE manager. It respects the FILE manager 
+ * Implementation of {@link IconResolver} which resolves the icons from the c5 file manager. It respects the file manager 
  * path settings from the properties.
  */
 public class FilemanagerIconResolver implements IconResolver {
@@ -57,7 +57,7 @@ public class FilemanagerIconResolver implements IconResolver {
 
 		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
 		if(!iconFolder.exists())
-			throw new RuntimeException("C5 FILE icons folder couldn't be found!");
+			throw new RuntimeException("C5 file icons folder couldn't be found!");
 		
 		Path urlPath;
 		if(!StringUtils.isNullOrEmpty(servletContext.getContextPath())) {
@@ -78,7 +78,7 @@ public class FilemanagerIconResolver implements IconResolver {
 	
 	@Override
 	public String getIconPath(VirtualFile vf) {
-		if(vf.getType() == Type.DIRECTORY)
+		if(vf.getType() == Type.directory)
 			return iconsPerType.get(IconResolver.key_directory);
 		if(vf.getExtension() == null || !iconsPerType.containsKey(vf.getExtension().toLowerCase()))
 			return iconsPerType.get(IconResolver.key_unknown);

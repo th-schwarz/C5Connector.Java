@@ -74,7 +74,7 @@ public class FileInfo extends Response {
 
 	@JsonProperty("File Type")
 	public String getType() {
-		if (virtualFile.getType() == Type.DIRECTORY)
+		if (virtualFile.getType() == Type.directory)
 			return type_dir;
 		if (!StringUtils.isNullOrEmptyOrBlank(virtualFile.getExtension()))
 			return virtualFile.getExtension();
@@ -113,7 +113,7 @@ public class FileInfo extends Response {
 
 	@JsonIgnore
 	public boolean isDir() {
-		return (virtualFile.getType() == Type.DIRECTORY);
+		return (virtualFile.getType() == Type.directory);
 	}
 
 	@JsonIgnore
@@ -122,10 +122,10 @@ public class FileInfo extends Response {
 	}
 
 	@JsonIgnore
-	public void setCapabilities(FilemanagerCapability.CAPABILITY[] capabilities) {
+	public void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
 		if (capabilities != null && capabilities.length > 0) {
 			this.capabilities = new ArrayList<String>(capabilities.length);
-			for (FilemanagerCapability.CAPABILITY capability : capabilities) {
+			for (FilemanagerCapability.Capability capability : capabilities) {
 				this.capabilities.add(capability.toString().toLowerCase());
 			}
 		}

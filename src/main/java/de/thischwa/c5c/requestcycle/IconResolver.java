@@ -32,7 +32,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  */
 public interface IconResolver {
 
-	public static final String key_directory = Type.DIRECTORY.toString().toLowerCase();
+	public static final String key_directory = Type.directory.toString().toLowerCase();
 	
 	public static final String key_unknown = "unknown";
 

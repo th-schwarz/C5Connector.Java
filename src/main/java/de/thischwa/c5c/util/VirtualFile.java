@@ -31,7 +31,12 @@ import de.thischwa.c5c.Constants;
 public class VirtualFile {
 
 	/** Type of the virtual file object. */
-	public enum Type { DIRECTORY, FILE }
+	public enum Type { 
+		/** Indicates a directory. */
+		directory, 
+
+		/** Indicates a file. */
+		file }
 
 	private Type type;
 
@@ -50,13 +55,13 @@ public class VirtualFile {
 		if (isDir && !fullPath.endsWith(Constants.separator)) // simple normalization
 			fullPath += Constants.separator;
 		
-		type = Type.FILE;
+		type = Type.file;
 		String cleanPath = fullPath;
 		if(cleanPath.endsWith(Constants.separator))
 			cleanPath = cleanPath.substring(0, cleanPath.length()-1);
 		if (fullPath.endsWith(Constants.separator)) {
 			folder = fullPath;
-			type = Type.DIRECTORY;
+			type = Type.directory;
 		} else {
 			int extPos = fullPath.lastIndexOf(".");
 			if (extPos == -1)

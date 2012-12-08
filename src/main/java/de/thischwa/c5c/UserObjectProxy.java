@@ -56,7 +56,7 @@ public class UserObjectProxy {
 	
 	private static FilemanagerCapability fileCapability;
 	
-	private static FilemanagerCapability.CAPABILITY[] defaultC5FileCapability;
+	private static FilemanagerCapability.Capability[] defaultC5FileCapability;
 
 	/**
 	 * Initialization of the {@link UserObjectProxy}.
@@ -150,31 +150,31 @@ public class UserObjectProxy {
 		return c5messageHolder.getMessage(RequestData.getLocale(), key);
 	}
 
-	public static FilemanagerCapability.CAPABILITY[] getC5FileCapabilities(String filePath) {
+	public static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
 		return fileCapability.getCapabilities(RequestData.getRequest(), filePath);
 	}
 
-	public static FilemanagerCapability.CAPABILITY[] getDefaultC5FileCapabilities() {
+	public static FilemanagerCapability.Capability[] getDefaultC5FileCapabilities() {
 		return defaultC5FileCapability;
 	}
 	
 	/**
 	 * Builds the default capabilities.
 	 */
-	static FilemanagerCapability.CAPABILITY[] buildDefaultCapabilities(String capabilitiesStr) {
+	static FilemanagerCapability.Capability[] buildDefaultCapabilities(String capabilitiesStr) {
 		if(StringUtils.isNullOrEmptyOrBlank(capabilitiesStr)) 
 			return null;
 		
 		String[] caps = capabilitiesStr.split(",");
-		List<FilemanagerCapability.CAPABILITY> capList = new ArrayList<FilemanagerCapability.CAPABILITY>(caps.length);
+		List<FilemanagerCapability.Capability> capList = new ArrayList<FilemanagerCapability.Capability>(caps.length);
 		for (String cap : caps) {
-			FilemanagerCapability.CAPABILITY capability = FilemanagerCapability.CAPABILITY.valueOf(cap.trim().toLowerCase());
+			FilemanagerCapability.Capability capability = FilemanagerCapability.Capability.valueOf(cap.trim().toLowerCase());
 			if(capability == null) {
 				logger.warn("Couldn't interprete [{}] as FilemanagerCapability!", cap);
 			} else {
 				capList.add(capability);
 			}
 		}
-		return (capList.isEmpty()) ? null : capList.toArray(new FilemanagerCapability.CAPABILITY[capList.size()]);
+		return (capList.isEmpty()) ? null : capList.toArray(new FilemanagerCapability.Capability[capList.size()]);
 	}
 }

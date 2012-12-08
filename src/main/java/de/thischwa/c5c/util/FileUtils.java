@@ -85,8 +85,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * Iterates over a base name and returns the first non-existent FILE.<br />
-	 * This method extracts a FILE's base name, iterates over it until the first
+	 * Iterates over a base name and returns the first non-existent file.<br />
+	 * This method extracts a file's base name, iterates over it until the first
 	 * non-existent appearance with <code>basename(n).ext</code>. Where n is a
 	 * positive integer starting from one.
 	 * 

@@ -28,7 +28,7 @@ import de.thischwa.c5c.Constants;
 
 /**
  * Helper object for building paths with or without a file. </br>
- * Without a path, a FILE always ends with '/'.
+ * Without a path, a file always ends with '/'.
  */
 public class Path {
 	
@@ -73,7 +73,7 @@ public class Path {
 	}
 	
 	/**
-	 * Adds the FILE.
+	 * Adds the file.
 	 *
 	 * @param baseName the base name
 	 * @return the string

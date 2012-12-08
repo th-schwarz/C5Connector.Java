@@ -322,7 +322,7 @@ public class PropertiesLoader {
 	} 
 	
 	/**
-	 * Gets the FILE capability impl.
+	 * Gets the file capability impl.
 	 *
 	 * @return <code>connector.fileCapabilityImpl</code> property
 	 */
