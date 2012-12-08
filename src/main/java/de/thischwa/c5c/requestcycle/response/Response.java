@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.thischwa.c5c.RequestMode;
+import de.thischwa.c5c.FilemanagerAction;
 
 /**
  * Base class for each response objects.
@@ -50,7 +50,7 @@ public abstract class Response {
 	
 	private int errorCode = DEFAULT_NO_ERROR_CODE;
 	
-	private RequestMode mode = null;
+	private FilemanagerAction mode = null;
 	
 	public void setError(String error, int errorCode) {
 		this.error = error;
@@ -78,12 +78,12 @@ public abstract class Response {
 	}
 
 	@JsonIgnore
-	public RequestMode getMode() {
+	public FilemanagerAction getMode() {
 		return mode;
 	}
 	
 	@JsonIgnore
-	public void setMode(RequestMode mode) {
+	public void setMode(FilemanagerAction mode) {
 		this.mode = mode;
 	}
 

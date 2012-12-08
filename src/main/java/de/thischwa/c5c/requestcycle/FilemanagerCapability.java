@@ -24,21 +24,33 @@ package de.thischwa.c5c.requestcycle;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * TODO document me
+ * An interface to control the capabilities used in a response of an info-request of the filemanager.
  */
-public interface C5FileCapability {
-	
+public interface FilemanagerCapability {
+
+	/** All available capabilities. */
+	public enum CAPABILITY {
+		/* The selection of the file is allowed. */
+		select,
+
+		/* The deletion of the file is allowed. */
+		delete,
+
+		/* The renaming of the file is allowed. */
+		rename,
+
+		/* The download of the file is allowed. */
+		download
+	};
+
 	/**
-	 * The Enum CAPABILITY.
-	 */
-	public enum CAPABILITY {select, delete, rename, download};
-	
-	/**
-	 * Gets the capabilities.
-	 *
-	 * @param req the req
-	 * @param urlPath the url path
-	 * @return the capabilities
+	 * Gets the capabilities for a desired url-path.
+	 * 
+	 * @param req
+	 *            the {@link HttpServletRequest} of the request
+	 * @param urlPath
+	 *            the url path
+	 * @return the capabilities for the desired url-path
 	 */
 	public CAPABILITY[] getCapabilities(final HttpServletRequest req, final String urlPath);
 }

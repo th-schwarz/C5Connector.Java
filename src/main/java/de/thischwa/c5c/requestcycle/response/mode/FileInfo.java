@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
-import de.thischwa.c5c.requestcycle.C5FileCapability;
+import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -121,10 +121,10 @@ public class FileInfo extends Response {
 	}
 
 	@JsonIgnore
-	public void setCapabilities(C5FileCapability.CAPABILITY[] capabilities) {
+	public void setCapabilities(FilemanagerCapability.CAPABILITY[] capabilities) {
 		if (capabilities != null && capabilities.length > 0) {
 			this.capabilities = new ArrayList<String>(capabilities.length);
-			for (C5FileCapability.CAPABILITY capability : capabilities) {
+			for (FilemanagerCapability.CAPABILITY capability : capabilities) {
 				this.capabilities.add(capability.toString().toLowerCase());
 			}
 		}

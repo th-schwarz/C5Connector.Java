@@ -21,7 +21,7 @@
  */
 package de.thischwa.c5c.exception;
 
-import de.thischwa.c5c.RequestMode;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.util.StringUtils;
 
@@ -69,7 +69,7 @@ public class FilemanagerException extends ConnectorException {
 	
 	public final static String KEY_LANGUAGE_FILE_NOT_FOUND = "LANGUAGE_FILE_NOT_FOUND";
 
-	public FilemanagerException(RequestMode mode, String key, String... params) {
+	public FilemanagerException(FilemanagerAction mode, String key, String... params) {
 		super(mode, buildMessage(key, params));
 	}
 

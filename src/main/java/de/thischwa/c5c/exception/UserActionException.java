@@ -22,7 +22,7 @@
 package de.thischwa.c5c.exception;
 
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.resource.C5UserActionMessageHolder;
+import de.thischwa.c5c.resource.UserActionMessageHolder;
 
 
 /**
@@ -35,7 +35,7 @@ public class UserActionException extends ConnectorException {
 	public static final String KEY_CREATEFOLDER_NOT_ALLOWED = "createfolder.notallowed";
 
 	public UserActionException(String key) {
-		super(C5UserActionMessageHolder.get(RequestData.getLocale(), key));
+		super(UserActionMessageHolder.get(RequestData.getLocale(), key));
 	}
 
 }

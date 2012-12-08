@@ -21,7 +21,7 @@
  */
 package de.thischwa.c5c.exception;
 
-import de.thischwa.c5c.RequestMode;
+import de.thischwa.c5c.FilemanagerAction;
 
 /**
  * TODO document me
@@ -30,9 +30,9 @@ public class ConnectorException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	private RequestMode mode = null;
+	private FilemanagerAction mode = null;
 	
-	public ConnectorException(RequestMode mode, String msg) {
+	public ConnectorException(FilemanagerAction mode, String msg) {
 		this(msg);
 		this.mode = mode;
 	}
@@ -41,7 +41,7 @@ public class ConnectorException extends Exception {
 		super(msg);
 	}
 	
-	public RequestMode getMode() {
+	public FilemanagerAction getMode() {
 		return mode;
 	}
 }

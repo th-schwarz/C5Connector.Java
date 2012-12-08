@@ -24,26 +24,26 @@ package de.thischwa.c5c;
 import java.util.Arrays;
 
 /**
- * TODO document me
+ * Handles the content-type and parameter names for each action of the filemanager.
  */
-public enum RequestMode {
+public enum FilemanagerAction {
 	
-	INFO(RequestMode.CONTENTTYPE_JSON, "getinfo"),
+	INFO(FilemanagerAction.CONTENTTYPE_JSON, "getinfo"),
 	
-	FOLDER(RequestMode.CONTENTTYPE_JSON, "getfolder"),
+	FOLDER(FilemanagerAction.CONTENTTYPE_JSON, "getfolder"),
 	
-	RENAME(RequestMode.CONTENTTYPE_JSON, "rename"),
+	RENAME(FilemanagerAction.CONTENTTYPE_JSON, "rename"),
 	
-	DELETE(RequestMode.CONTENTTYPE_JSON, "delete"),
+	DELETE(FilemanagerAction.CONTENTTYPE_JSON, "delete"),
 	
-	CREATEFOLDER(RequestMode.CONTENTTYPE_JSON, "addfolder"),
+	CREATEFOLDER(FilemanagerAction.CONTENTTYPE_JSON, "addfolder"),
 	
-	UPLOAD(RequestMode.CONTENTTYPE_HTML, "add"),
+	UPLOAD(FilemanagerAction.CONTENTTYPE_HTML, "add"),
 
-	DOWNLOAD(RequestMode.CONTENTTYPE_DOWNLOAD, "download");
+	DOWNLOAD(FilemanagerAction.CONTENTTYPE_DOWNLOAD, "download");
 	
 	/** The allowed get request modes. */
-	private static RequestMode[] allowedGetRequestModes = new RequestMode[] {INFO,FOLDER,RENAME,DELETE,CREATEFOLDER}; 
+	private static FilemanagerAction[] allowedGetRequestModes = new FilemanagerAction[] {INFO,FOLDER,RENAME,DELETE,CREATEFOLDER}; 
 	
 	private String contentType;
 	
@@ -55,7 +55,7 @@ public enum RequestMode {
 
 	private static final String CONTENTTYPE_JSON = "application/json";
 	
-	private RequestMode(String contentType, String parameterName) {
+	private FilemanagerAction(String contentType, String parameterName) {
 		this.contentType = contentType;
 		this.parameterName = parameterName;
 	}
@@ -68,8 +68,8 @@ public enum RequestMode {
 		return parameterName;
 	}
 	
-	public static RequestMode valueOfIgnoreCase(String mode) throws IllegalArgumentException {
-		for(RequestMode rm : RequestMode.values()) {
+	public static FilemanagerAction valueOfIgnoreCase(String mode) throws IllegalArgumentException {
+		for(FilemanagerAction rm : FilemanagerAction.values()) {
 			if(rm.getParameterName().equalsIgnoreCase(mode))
 				return rm;
 		}
@@ -82,7 +82,7 @@ public enum RequestMode {
 	 * @param mode the mode
 	 * @return true, if it is a get request
 	 */
-	public static boolean isGetRequest(RequestMode mode) {
+	public static boolean isGetRequest(FilemanagerAction mode) {
 		return Arrays.asList(allowedGetRequestModes).contains(mode);
 	}
 }

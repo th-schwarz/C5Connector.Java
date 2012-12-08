@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.Constants;
-import de.thischwa.c5c.RequestMode;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.ConnectorException;
 import de.thischwa.c5c.exception.FilemanagerException;
@@ -86,7 +86,7 @@ public class LocalConnector implements Connector {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
-			throw new FilemanagerException(RequestMode.INFO, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
+			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
 		}
 		return constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
 	}
@@ -97,14 +97,14 @@ public class LocalConnector implements Connector {
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
 			String key = (src.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
-			throw new FilemanagerException(RequestMode.RENAME, key, oldPath);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath);
 		}
 	
 		File dest = new File(src.getParentFile(), sanitizedName);
 		if(dest.exists()) {
 			logger.warn("Destination file already exists: {}", dest.getAbsolutePath());
 			String key = (dest.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_ALREADY_EXISTS : FilemanagerException.KEY_FILE_ALREADY_EXISTS;
-			throw new FilemanagerException(RequestMode.RENAME, key, sanitizedName);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, sanitizedName);
 		}
 		
 		boolean success = false;
@@ -115,7 +115,7 @@ public class LocalConnector implements Connector {
 		}
 		if(!success) {
 			String key = (src.isDirectory()) ? FilemanagerException.KEY_ERROR_RENAMING_DIRECTORY : FilemanagerException.KEY_ERROR_RENAMING_FILE;
-			throw new FilemanagerException(RequestMode.RENAME, key, oldPath, sanitizedName);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath, sanitizedName);
 		}
 		return ModeResponseFactory.buildRenameFile(oldPath, sanitizedName);
 	}
@@ -127,7 +127,7 @@ public class LocalConnector implements Connector {
 		if(newFolder.exists()) {
 			logger.warn("Destination file already exists: {}", newFolder.getAbsolutePath());
 			String key = (newFolder.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_ALREADY_EXISTS : FilemanagerException.KEY_FILE_ALREADY_EXISTS;
-			throw new FilemanagerException(RequestMode.CREATEFOLDER, key, sanitizedFolderName);
+			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, sanitizedFolderName);
 		}
 
 		boolean success = false;
@@ -137,7 +137,7 @@ public class LocalConnector implements Connector {
 			logger.warn(String.format("Error while creating folder [%s]", newFolder.getAbsolutePath()), e);
 		}
 		if(!success) {
-			throw new FilemanagerException(RequestMode.RENAME, FilemanagerException.KEY_UNABLE_TO_CREATE_DIRECTORY, sanitizedFolderName);
+			throw new FilemanagerException(FilemanagerAction.RENAME, FilemanagerException.KEY_UNABLE_TO_CREATE_DIRECTORY, sanitizedFolderName);
 		}
 		return ModeResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
 	}
@@ -154,7 +154,7 @@ public class LocalConnector implements Connector {
 		if(!parentFolder.exists()) {
 			logger.error("Source FILE nont found: {}", parentFolder.getAbsolutePath());
 			String key = (parentFolder.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
-			throw new FilemanagerException(RequestMode.CREATEFOLDER, key, urlPath);
+			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, urlPath);
 		}		
 		return parentFolder;
 	}
@@ -165,11 +165,11 @@ public class LocalConnector implements Connector {
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			String key = (file.isDirectory()) ? FilemanagerException.KEY_DIRECTORY_NOT_EXIST : FilemanagerException.KEY_FILE_NOT_EXIST;
-			throw new FilemanagerException(RequestMode.DELETE, key, urlPath);
+			throw new FilemanagerException(FilemanagerAction.DELETE, key, urlPath);
 		}
 		boolean success = org.apache.commons.io.FileUtils.deleteQuietly(file);
 		if(!success) {
-			throw new FilemanagerException(RequestMode.DELETE, FilemanagerException.KEY_INVALID_DIRECTORY_OR_FILE, urlPath);
+			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.KEY_INVALID_DIRECTORY_OR_FILE, urlPath);
 		}
 		return ModeResponseFactory.buildDelete(urlPath);
 	}
@@ -279,7 +279,7 @@ public class LocalConnector implements Connector {
 			UploadFile uf = ModeResponseFactory.buildUploadFile(urlPath, sanitizedName, size);
 			return uf;
 		} catch (IOException e) {
-			throw new FilemanagerException(RequestMode.UPLOAD, FilemanagerException.KEY_INVALID_FILE_UPLOAD, urlPath);
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.KEY_INVALID_FILE_UPLOAD, urlPath);
 		}
 	}
 	
@@ -291,7 +291,7 @@ public class LocalConnector implements Connector {
 			return ModeResponseFactory.buildDownload(urlPath, file.length(), in);
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
-			throw new FilemanagerException(RequestMode.DOWNLOAD, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
+			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
 		}
 	}
 }

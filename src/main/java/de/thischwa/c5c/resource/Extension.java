@@ -28,18 +28,29 @@ import de.thischwa.c5c.util.StringUtils;
 
 
 /**
- * Extension.java - TODO DOCUMENTME!
+ * Handles the extensions of different file types. <br/>
+ * The file types are:
+ * <ul>
+ * <li>Archive</li>
+ * <li>Doc</li>
+ * <li>Image</li>
+ * <li>Other</li>
+ * </ul>
+ * <b>Important:</b> For all types a allowed or a denied list can be defined. 
+ * If an allowed list is pre-defined overwrite it with an empty list and define a denied list as required.
  */
 public enum Extension {
 	
+	/** Handles the extensions for archives. */
 	ARCHIVE(PropertiesLoader.getArchiveResourceTypeAllowedExtensions(), PropertiesLoader.getArchiveResourceTypeDeniedExtensions()),
-	
+
+	/** Handles the extensions for documents. */
 	DOC(PropertiesLoader.getDocResourceTypeAllowedExtensions(), PropertiesLoader.getDocResourceTypeDeniedExtensions()),
-	
-	FILE(PropertiesLoader.getFileResourceTypeAllowedExtensions(), PropertiesLoader.getFileResourceTypeDeniedExtensions()),
-	
+
+	/** Handles the extensions for images. */
 	IMAGE(PropertiesLoader.getImageResourceTypeAllowedExtensions(), PropertiesLoader.getImageResourceTypeDeniedExtensions()),
 	
+	/** Handles the extensions for all file types other than archive, documents and images. */
 	OTHER(PropertiesLoader.getOtherResourceTypeAllowedExtensions(), PropertiesLoader.getOherResourceTypeDeniedExtensions());
 	
 	private static final String string_list_delimter = "\\|";

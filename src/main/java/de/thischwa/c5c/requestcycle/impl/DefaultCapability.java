@@ -24,12 +24,12 @@ package de.thischwa.c5c.requestcycle.impl;
 import javax.servlet.http.HttpServletRequest;
 
 import de.thischwa.c5c.UserObjectProxy;
-import de.thischwa.c5c.requestcycle.C5FileCapability;
+import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 
 /**
- * The default {@link C5FileCapability} implementation. All {@link C5FileCapability}s will be set for all files. 
+ * The default {@link FilemanagerCapability} implementation. All {@link FilemanagerCapability}s will be set for all files. 
  */
-public class DefaultCapability implements C5FileCapability {
+public class DefaultCapability implements FilemanagerCapability {
 
 	@Override
 	public CAPABILITY[] getCapabilities(HttpServletRequest req, final String urlPath) {

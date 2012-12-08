@@ -52,7 +52,7 @@ import de.thischwa.c5c.util.StringUtils;
  * Dispatch the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
  * {@link Connector} interface.
  */
-class Dispatcher {
+final class Dispatcher {
 	private static Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 	
 	private Connector connector;
@@ -81,11 +81,11 @@ class Dispatcher {
 		logger.info("Dispatcher successful initialized.");
 	}
 
-	private RequestMode resolveMode(String mode) throws ConnectorException { 
+	private FilemanagerAction resolveMode(String mode) throws ConnectorException { 
 		if(mode == null)
 			throw new IllegalArgumentException("Missing 'mode' parameter.");
 		try {
-			return RequestMode.valueOfIgnoreCase(mode);
+			return FilemanagerAction.valueOfIgnoreCase(mode);
 		} catch (IllegalArgumentException e) {
 			logger.error("'mode' not found: {}", mode);
 			throw new ConnectorException(UserObjectProxy.getFilemanagerErrorMessage("MODE_ERROR"));
@@ -102,7 +102,7 @@ class Dispatcher {
 		HttpServletRequest req = RequestData.getRequest();
 		try {
 			Response resp = null;
-			RequestMode mode = resolveMode(req.getParameter("mode"));
+			FilemanagerAction mode = resolveMode(req.getParameter("mode"));
 			switch (mode) {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
@@ -182,7 +182,7 @@ class Dispatcher {
 					uplFile = item;
 			}
 			
-			RequestMode mode = resolveMode(params.get("mode"));
+			FilemanagerAction mode = resolveMode(params.get("mode"));
 			switch (mode) {
 			case UPLOAD: {
 				String urlPath = params.get("currentpath");
@@ -196,7 +196,7 @@ class Dispatcher {
 				} else {
 					resp = connector.upload(urlPath, sanitizedName, uplFile.getInputStream());
 				}
-				resp.setMode(RequestMode.UPLOAD);
+				resp.setMode(FilemanagerAction.UPLOAD);
 				return resp;
 				}
 			default: {

@@ -42,8 +42,8 @@ import de.thischwa.c5c.util.Path;
 /**
  * TODO document me
  */
-public class C5MessageHolder {
-	private static Logger logger = LoggerFactory.getLogger(C5MessageHolder.class);
+public class FilemanagerMessageHolder {
+	private static Logger logger = LoggerFactory.getLogger(FilemanagerMessageHolder.class);
 
 	private static String scriptPath = "scripts/languages";
 	
@@ -56,7 +56,7 @@ public class C5MessageHolder {
 
 	private Map<String, Map<String, String>> messageStore;
 
-	public C5MessageHolder(ServletContext servletContext) throws RuntimeException {
+	public FilemanagerMessageHolder(ServletContext servletContext) throws RuntimeException {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())

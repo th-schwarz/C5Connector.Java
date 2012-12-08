@@ -30,18 +30,18 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.thischwa.c5c.requestcycle.C5UserAction;
+import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
- * It provides localized messages for failed user actions of the {@link C5UserAction} implementation. <br/>
+ * It provides localized messages for failed user actions of the {@link UserAction} implementation. <br/>
  * In the backend it utilizes the regular {@link ResourceBundle} class.
  */
-public class C5UserActionMessageHolder {
-	private static Logger logger = LoggerFactory.getLogger(C5UserActionMessageHolder.class);
+public class UserActionMessageHolder {
+	private static Logger logger = LoggerFactory.getLogger(UserActionMessageHolder.class);
 
 	private static Map<String, ResourceBundle> cache = new HashMap<String, ResourceBundle>();
 
-	private static String baseName = String.format("%s/%s", C5UserActionMessageHolder.class.getPackage().getName(), "actionMessages");
+	private static String baseName = String.format("%s/%s", UserActionMessageHolder.class.getPackage().getName(), "actionMessages");
 	
 	private static Locale defaultLocale = Locale.ENGLISH;
 	

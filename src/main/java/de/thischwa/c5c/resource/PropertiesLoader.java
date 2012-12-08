@@ -195,24 +195,6 @@ public class PropertiesLoader {
 	}
 	
 	/**
-	 * Returns <code>connector.resourceType.file.extensions.allowed</code> property
-	 *
-	 * @return the FILE resource type allowed extensions
-	 */
-	public static String getFileResourceTypeAllowedExtensions() {
-		return properties.getProperty("connector.resourceType.file.extensions.allowed");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.file.extensions.denied</code> property
-	 *
-	 * @return the FILE resource type denied extensions
-	 */
-	public static String getFileResourceTypeDeniedExtensions() {
-		return properties.getProperty("connector.resourceType.file.extensions.denied");
-	}
-
-	/**
 	 * Returns <code>connector.resourceType.doc.extensions.allowed</code> property
 	 *
 	 * @return the doc resource type allowed extensions

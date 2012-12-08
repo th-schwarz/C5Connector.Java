@@ -23,12 +23,12 @@ package de.thischwa.c5c.requestcycle.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import de.thischwa.c5c.requestcycle.C5UserAction;
+import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
- * The implementation of {@link C5UserAction}, which always returns {@code false}.
+ * The implementation of {@link UserAction}, which always returns {@code false}.
  */
-public class DisabledUserAction implements C5UserAction {
+public class DisabledUserAction implements UserAction {
 
 	public boolean isFileUploadEnabled(final HttpServletRequest request) {
 		return false;
