@@ -34,10 +34,10 @@ public class UserObjectProxyTest {
 		assertNull(UserObjectProxy.buildDefaultCapabilities(null));
 		assertNull(UserObjectProxy.buildDefaultCapabilities(" "));
 		
-		assertArrayEquals(new FilemanagerCapability.CAPABILITY[] { FilemanagerCapability.CAPABILITY.select }, 
+		assertArrayEquals(new FilemanagerCapability.Capability[] { FilemanagerCapability.Capability.select }, 
 				UserObjectProxy.buildDefaultCapabilities("select"));
 
-		assertArrayEquals(new FilemanagerCapability.CAPABILITY[] { FilemanagerCapability.CAPABILITY.select, FilemanagerCapability.CAPABILITY.delete }, 
+		assertArrayEquals(new FilemanagerCapability.Capability[] { FilemanagerCapability.Capability.select, FilemanagerCapability.Capability.delete }, 
 				UserObjectProxy.buildDefaultCapabilities("select, dElEtE"));
 	}
 

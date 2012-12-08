@@ -80,7 +80,7 @@ public class StringUtilsTest {
 		query = "path=%2ffolder";
 		assertEquals("/folder", StringUtils.divideAndDecodeQueryString(query).get("path"));
 
-		query = "path=%2ffolder&FILE=img.png";
+		query = "path=%2ffolder&file=img.png";
 		assertEquals(2, StringUtils.divideAndDecodeQueryString(query).size());
 	}
 }
