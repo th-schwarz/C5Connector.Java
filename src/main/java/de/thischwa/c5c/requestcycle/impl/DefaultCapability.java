@@ -28,7 +28,8 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 
 /**
- * The default {@link FilemanagerCapability} implementation. All {@link FilemanagerCapability}s will be set for all files. 
+ * The default {@link FilemanagerCapability} implementation. All capabilities
+ * which set in the property <code>connector.capabilities</code> will be set for each files. 
  */
 public class DefaultCapability implements FilemanagerCapability {
 
