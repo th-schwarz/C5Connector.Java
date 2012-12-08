@@ -55,10 +55,10 @@ Configuration properties
 | connector.resourceType			 | 									  | any extension									 | List with extensions which should be denied. |
 | .<typeName>.extensions.denied 	 |									  |													 | Separate extensions with a &#124 (pipe symbol). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.resourceType			 | gz&#124gzip&#124rar&#124tar&#124tgz&#124zip	| any extension									 | List with extensions which should be allowed. |
+| connector.resourceType			 | gz&#124gzip&#124rar&#124tar&#124tgz&#124zip	| any extension							 | List with extensions which should be allowed. |
 | .archive.extensions.allowed 		 |									  |													 | Separate extensions with a &#124 (pipe symbol). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.resourceType			 | cvs&#124doc&#124odt&#124pdf&#124rtf&#124txt	| any extension									 | see above |
+| connector.resourceType			 | cvs&#124doc&#124odt&#124pdf&#124rtf&#124txt	| any extension							 | see above |
 | .doc.extensions.allowed 			 |									  |													 |  |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.resourceType			 | gif&#124jpeg&#124jpg&#124png		  | any extension									 | see above |
@@ -83,17 +83,17 @@ Configuration properties
 | connector.impl 					 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. |
 |									 | .LocalConnector					  | {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}} implementation. | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.userActionImpl	         | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5UserAction>>>}}. |
-| 									 | .DisabledUserAction				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle
-|									 |									  | .C5UserAction>>>}} implementation. 				 | 		|				
+| connector.userActionImpl	         | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/UserAction.html}<<<de.thischwa.c5c.requestcycle.UserAction>>>}}. |
+| 									 | .DisabledUserAction				  | {{{./apidocs/de/thischwa/c5c/requestcycle/UserAction.html}<<<de.thischwa.c5c.requestcycle
+|									 |									  | .UserAction>>>}} implementation. 				 | 		|				
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/C5UserAction.html}<<<de.thischwa.c5c.requestcycle.C5IconResolver>>>}}. |
-| 									 | .C5IconResolver 					  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
+| connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle.IconResolver>>>}}. |
+| 									 | .FilemanagerIconResolver 		  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
 |									 | 									  | .IconResolver>>>}} implementation. 				 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.fileCapabilityImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/impl/C5FileCapabiltiy.html}<<<de.thischwa.c5c.requestcycle. |
-|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/C5FileCapability.html}<<<de.thischwa.c5c.requestcycle | impl.DefaultCapability>>>}}. |
-|									 | 									  | .C5FileCapability>>>}} implementation.  | 		|
+|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle | impl.DefaultCapability>>>}}. |
+|									 | 									  | .FilemanagerCapability>>>}} implementation. 	 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
 |                                    |									  | select,delete,rename,download					 | {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |

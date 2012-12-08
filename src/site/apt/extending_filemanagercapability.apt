@@ -1,11 +1,12 @@
    ----------------------------
-   C5FileCapability
+   FilemanagerCapability
    ----------------------------
 
-C5FileCapability
+FilemanagerCapability
 
   Through the live cycle of the filemanager there are two <get> commands. To determine which action is allowed 
-  for a specific file, capabilities can be defined for each one.
+  for a specific file, capabilities can be defined for each one. These capabilities are added to each response
+  of a 'get-request'.
   
   The available capabilities are 'select', 'delete', 'rename', 'download'.
   
@@ -19,7 +20,7 @@ C5FileCapability
       
 * Custom implementation
 
-  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/C5FfileCapability.html}<<<de.thischwa.c5c.requestcycle.C5FfileCapability>>>}}.
+  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle.FilemangerCapability>>>}}.
   Consult the javadoc and see how it works.
   
   And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
@@ -27,3 +28,6 @@ C5FileCapability
 +------------------------------------------------------------------------------+
 connector.capabilities = <desired implementation>
 +------------------------------------------------------------------------------+  
+
+    [Hint:] There are two commands which are not covered by <FilemanagerCapability>: Uploading files and creating folders. \
+            These commands can be controlled by <UserAction>.

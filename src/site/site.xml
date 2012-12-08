@@ -15,8 +15,8 @@
 		<menu name="Extending the Library">
 			<item name="Overview" href="extending_overview.html"/>
 			<item name="Connector" href="extending_connector.html"/>
-			<item name="C5UserAction" href="extending_c5useraction.html"/>
-			<item name="C5Capability" href="extending_c5filecapability.html"/>
+			<item name="FilemanagerCapability" href="extending_filemanagercapability.html"/>
+			<item name="UserAction" href="extending_useraction.html"/>
 		</menu>
 		<menu ref="reports"/>
 	</body>

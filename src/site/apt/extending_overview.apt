@@ -16,7 +16,14 @@ Overview
   * <<Connector>>: Gives you the ability to handle server-side connector requests
     the way you want.    
   
-  * <<C5UserAction>>: Gives you full control over any action the user can do in the filemanager.
-  
-  * <<C5FileCapability>>: Gives you the ability which capabilities are set in 
+  * <<FilemanagerCapability>>: Gives you the ability which capabilities are set in 
     an info request.  
+    
+  * <<UserAction>>: Gives you full control over actions, which aren't covered by the
+    capabilities of the filemanager, - uploading files and creating folders.
+  
+  []
+  
+* Big picture
+  
+  It's necessary to understand the request-cycle of C5Connector.Java. 
