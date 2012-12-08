@@ -22,8 +22,18 @@ Overview
   * <<UserAction>>: Gives you full control over actions, which aren't covered by the
     capabilities of the filemanager, - uploading files and creating folders.
   
-  []
+
+Big picture
   
-* Big picture
+  If the library has to be extended, it's necessary to understand the request-cycle of C5Connector.Java. 
   
-  It's necessary to understand the request-cycle of C5Connector.Java. 
+  A request is taken from the <ConnectorServlet> and will dispatch to several other objects which
+  prepares the parameter of the request. Now, C5Connector.Java knows which action/command has to be
+  proceed. Before this action is dispatched to the implementation of the Connector, it is checked 
+  if the implementation of <UserAction> has to be called to verify the action.
+  
+  If the verification was achieved, the action with its parameters will be dispatched to the 
+  implementation of the Connector. It processes the action and builds a response with the help of
+  the <ResponseFactory>. The capabilities for the filemanager are set dependent on there configuration.
+  
+  This response will to the <ConnectorServlet>. 
