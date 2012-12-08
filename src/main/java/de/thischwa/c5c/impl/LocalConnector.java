@@ -53,7 +53,7 @@ import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
-import de.thischwa.c5c.requestcycle.response.mode.ModeResponseFactory;
+import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
 import de.thischwa.c5c.util.Path;
@@ -118,7 +118,7 @@ public class LocalConnector implements Connector {
 			String key = (src.isDirectory()) ? FilemanagerException.KEY_ERROR_RENAMING_DIRECTORY : FilemanagerException.KEY_ERROR_RENAMING_FILE;
 			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath, sanitizedName);
 		}
-		return ModeResponseFactory.buildRenameFile(oldPath, sanitizedName);
+		return ResponseFactory.buildRenameFile(oldPath, sanitizedName);
 	}
 	
 	@Override
@@ -140,7 +140,7 @@ public class LocalConnector implements Connector {
 		if(!success) {
 			throw new FilemanagerException(FilemanagerAction.RENAME, FilemanagerException.KEY_UNABLE_TO_CREATE_DIRECTORY, sanitizedFolderName);
 		}
-		return ModeResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
+		return ResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public class LocalConnector implements Connector {
 		if(!success) {
 			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.KEY_INVALID_DIRECTORY_OR_FILE, urlPath);
 		}
-		return ModeResponseFactory.buildDelete(urlPath);
+		return ResponseFactory.buildDelete(urlPath);
 	}
 	
 	/**
@@ -205,13 +205,13 @@ public class LocalConnector implements Connector {
 			Path p = new Path(fixedUrlPath);
 			if(!file.isDirectory())
 				throw new IllegalArgumentException(String.format("It's a folder request, but requested folder isn't a directory: %s", file.getName()));
-			fi = ModeResponseFactory.buildFileInfo(p.addFile(file.getName()), true);
+			fi = ResponseFactory.buildFileInfo(p.addFile(file.getName()), true);
 		} else {
 			fixedUrlPath = (urlPath.contains(Constants.separator)) ? urlPath.substring(0, urlPath.lastIndexOf(Constants.separatorChar)) : urlPath;
 			Path p = new Path(fixedUrlPath);
 			if(file.isDirectory())
 				throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
-			fi = ModeResponseFactory.buildFileInfo(p.addFile(file.getName()), false);
+			fi = ResponseFactory.buildFileInfo(p.addFile(file.getName()), false);
 		}
 		fi.setPreviewPath(UserObjectProxy.getIconPath(fi.getVirtualFile()));
 		try {
@@ -277,7 +277,7 @@ public class LocalConnector implements Connector {
 			throw new FilemanagerException(FilemanagerException.KEY_FILE_ALREADY_EXISTS, urlPath);
 		try {
 			Long size = IOUtils.copyLarge(fileIn, new FileOutputStream(fileToSave));
-			UploadFile uf = ModeResponseFactory.buildUploadFile(urlPath, sanitizedName, size);
+			UploadFile uf = ResponseFactory.buildUploadFile(urlPath, sanitizedName, size);
 			return uf;
 		} catch (IOException e) {
 			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.KEY_INVALID_FILE_UPLOAD, urlPath);
@@ -289,7 +289,7 @@ public class LocalConnector implements Connector {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
-			return ModeResponseFactory.buildDownload(urlPath, file.length(), in);
+			return ResponseFactory.buildDownload(urlPath, file.length(), in);
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);

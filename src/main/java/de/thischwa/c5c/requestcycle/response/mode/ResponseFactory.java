@@ -29,7 +29,10 @@ import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.resource.UserActionMessageHolder;
 
-public class ModeResponseFactory {
+/**
+ * ResponseFactory.java - TODO DOCUMENTME!
+ */
+public class ResponseFactory {
 
 	public static FileInfo buildFileInfo(String path, boolean isDir) {
 		return new FileInfo(path, isDir);

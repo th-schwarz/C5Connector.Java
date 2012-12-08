@@ -44,7 +44,7 @@ import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
-import de.thischwa.c5c.requestcycle.response.mode.ModeResponseFactory;
+import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
@@ -193,7 +193,7 @@ final class Dispatcher {
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
 				if(!UserObjectProxy.isFileUploadEnabled()) {
 					// we have to use explicit the UploadFile object here because of the textarea stuff
-					resp = ModeResponseFactory.buildUploadFileForError(urlPath, sanitizedName);
+					resp = ResponseFactory.buildUploadFileForError(urlPath, sanitizedName);
 				} else {
 					resp = connector.upload(urlPath, sanitizedName, uplFile.getInputStream());
 				}
