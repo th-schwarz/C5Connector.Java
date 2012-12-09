@@ -213,23 +213,23 @@ public class LocalConnector implements Connector {
 				throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
 			fi = ResponseFactory.buildFileInfo(p.addFile(file.getName()), false);
 		}
-		fi.setPreviewPath(UserObjectProxy.getIconPath(fi.getVirtualFile()));
+		ResponseFactory.setPreviewPath(fi, UserObjectProxy.getIconPath(fi.getVirtualFile()));
 		try {
 			Locale locale = RequestData.getLocale();
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 			String dateStr = df.format(file.lastModified());
-			fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(fixedUrlPath));
+			ResponseFactory.setCapabilities(fi, UserObjectProxy.getC5FileCapabilities(fixedUrlPath));
 			if(fi.isDir()) 
-				fi.setFolderProperties(dateStr);
+				ResponseFactory.setFolderProperties(fi, dateStr);
 			else {
 				// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 				if(Extension.IMAGE.isAllowedExtension(FilenameUtils.getExtension(file.getPath()))) {
 					IDimensionProvider dp = new SimpleImageInfoWrapper();
 					dp.set(file);
 					Dimension dim = dp.getDimension();
-					fi.setFileProperties(dim.width, dim.height, file.length(), dateStr);
+					ResponseFactory.setFileProperties(fi, dim.width, dim.height, file.length(), dateStr);
 				} else
-					fi.setFileProperties(file.length(), dateStr);
+					ResponseFactory.setFileProperties(fi, file.length(), dateStr);
 			}
 		} catch (SecurityException e) {
 			throw new ConnectorException(String.format("Error while analysing %s: %s", file.getPath(), e.getMessage()));

@@ -49,6 +49,7 @@ public abstract class Response {
 	/** The error message. */
 	private String error = "";
 	
+	/** The error code. */
 	private int errorCode = DEFAULT_NO_ERROR_CODE;
 	
 	private FilemanagerAction mode = null;

@@ -29,9 +29,9 @@ import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
- * TODO document me
+ * Holds the data of a Rename response.
  */
-public class Rename extends Response {
+public final class Rename extends Response {
 	
 	private String oldFullPath;
 	

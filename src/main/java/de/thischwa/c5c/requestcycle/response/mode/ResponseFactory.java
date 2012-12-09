@@ -26,6 +26,7 @@ import java.io.InputStream;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.exception.UserActionException;
+import de.thischwa.c5c.requestcycle.FilemanagerCapability.Capability;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.resource.UserActionMessageHolder;
 
@@ -36,6 +37,25 @@ public class ResponseFactory {
 
 	public static FileInfo buildFileInfo(String path, boolean isDir) {
 		return new FileInfo(path, isDir);
+	}
+	
+	public static void setPreviewPath(FileInfo fi, String previewPath) {
+		fi.setPreviewPath(previewPath);
+	}
+
+	public static void setFolderProperties(FileInfo fi, String dateStr) {
+		fi.setFolderProperties(dateStr);
+	}
+
+	public static void setFileProperties(FileInfo fi, int width, int height, long length, String dateStr) {
+		fi.setFileProperties(width, height, length, dateStr);		
+	}
+
+	public static void setFileProperties(FileInfo fi, long length, String dateStr) {
+		fi.setFileProperties(length, dateStr);
+	}
+	public static void setCapabilities(FileInfo fi, Capability[] capabilities) {
+		fi.setCapabilities(capabilities);
 	}
 	
 	public static UploadFile buildUploadFile(String path, String sanitizedName, Long size) {

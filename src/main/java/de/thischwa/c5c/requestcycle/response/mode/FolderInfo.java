@@ -30,9 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
- * TODO document me
+ * Holds the data of a FolderInfo response.
  */
-public class FolderInfo extends Response {
+public final class FolderInfo extends Response {
 
 	private Map<String, FileInfo> folderItems;
 

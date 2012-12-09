@@ -27,9 +27,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
- * TODO document me
+ * Holds the data for a Delete response.
  */
-public class Delete extends Response {
+public final class Delete extends Response {
 
 	private String fullPath;
 

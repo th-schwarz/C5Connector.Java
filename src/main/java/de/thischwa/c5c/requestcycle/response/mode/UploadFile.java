@@ -29,14 +29,12 @@ import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.util.StringUtils;
 
 /**
- * TODO document me
+ * Holds the data of an upload Response.
  */
-public class UploadFile extends Response {
+public final class UploadFile extends Response {
 
-	/** The path. */
 	private String path;
 	
-	/** The name. */
 	private String name;
 	
 	UploadFile(String path, String name) {

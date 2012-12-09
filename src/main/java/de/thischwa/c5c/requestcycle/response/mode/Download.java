@@ -36,9 +36,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
- * TODO document me
+ * Holds the data for a Download Response.
  */
-public class Download extends Response {
+public final class Download extends Response {
 
 	private String fullPath;
 	

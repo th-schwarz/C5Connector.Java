@@ -27,9 +27,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
- * TODO document me
+ * Holds the data for a CreateFolder response.
  */
-public class CreateFolder extends Response {
+public final class CreateFolder extends Response {
 
 	private String parentUrlPath;
 	

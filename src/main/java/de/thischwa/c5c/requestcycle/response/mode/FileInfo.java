@@ -36,9 +36,9 @@ import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
- * TODO document me
+ * Holds the data for a FileInfo response.
  */
-public class FileInfo extends Response {
+public final class FileInfo extends Response {
 	
 	private static final String type_unknown = "txt";
 	
@@ -86,7 +86,7 @@ public class FileInfo extends Response {
 		return previewPath;
 	}
 
-	public void setPreviewPath(String previewPath) {
+	void setPreviewPath(String previewPath) {
 		this.previewPath = previewPath;
 	}
 
@@ -95,19 +95,19 @@ public class FileInfo extends Response {
 		return fileProperties;
 	}
 
-	public void setFileProperties(FileProperties fileProperties) {
+	void setFileProperties(FileProperties fileProperties) {
 		this.fileProperties = fileProperties;
 	}
 
-	public void setFileProperties(int height, int with, long size, String modified) {
+	void setFileProperties(int height, int with, long size, String modified) {
 		this.fileProperties = new FileProperties(height, with, size, modified);
 	}
 
-	public void setFileProperties(long size, String modified) {
+	void setFileProperties(long size, String modified) {
 		this.fileProperties = new FileProperties(size, modified);
 	}
 	
-	public void setFolderProperties(String modified) {
+	void setFolderProperties(String modified) {
 		this.fileProperties = new FileProperties(modified);
 	}
 
@@ -122,7 +122,7 @@ public class FileInfo extends Response {
 	}
 
 	@JsonIgnore
-	public void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
+	void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
 		if (capabilities != null && capabilities.length > 0) {
 			this.capabilities = new ArrayList<String>(capabilities.length);
 			for (FilemanagerCapability.Capability capability : capabilities) {
@@ -137,7 +137,7 @@ public class FileInfo extends Response {
 	}
 
 	/**
-	 * TODO document me
+	 * Holds the properties of a file.
 	 */
 	public class FileProperties {
 		private String created = null;

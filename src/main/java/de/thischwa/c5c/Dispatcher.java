@@ -188,7 +188,7 @@ final class Dispatcher {
 			case UPLOAD: {
 				String urlPath = params.get("currentpath");
 				// Some browsers transfer the entire source path not just the filename
-				String fileName = FilenameUtils.getName(uplFile.getName()); // TODO check the extensions with {@link Exception}.
+				String fileName = FilenameUtils.getName(uplFile.getName()); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
 				if(!UserObjectProxy.isFileUploadEnabled()) {
