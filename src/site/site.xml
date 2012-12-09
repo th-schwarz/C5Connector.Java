@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
+<project xmlns="http://maven.apache.org/DECORATION/1.3.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd">
 
-	<publishDate position="left" format="yyyy-MM-dd" />
-	<version position="left" />
+	<publishDate position="none" />
+	<version position="right"/>
 	<body>
 		<menu name="Introduction">
 			<item name="About" href="/index.html" />
@@ -19,5 +19,6 @@
 			<item name="UserAction" href="extending_useraction.html"/>
 		</menu>
 		<menu ref="reports"/>
+		<footer>All rights reserved. &copy; by Thilo Schwarz</footer>
 	</body>
 </project>

@@ -157,7 +157,7 @@
 				<!-- build the site -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0-beta-3</version>
+				<version>3.2</version>
 				<configuration>
 					<inputEncoding>${project.reporting.inputEncoding}</inputEncoding>
 					<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>

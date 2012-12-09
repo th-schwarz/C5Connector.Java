@@ -36,4 +36,4 @@ Big picture
   implementation of the Connector. It processes the action and builds a response with the help of
   the <ResponseFactory>. The capabilities for the filemanager are set dependent on there configuration.
   
-  This response will to the <ConnectorServlet>. 
+  This response will be returned to the <ConnectorServlet>. 
