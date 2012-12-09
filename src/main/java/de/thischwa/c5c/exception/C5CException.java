@@ -25,20 +25,20 @@ package de.thischwa.c5c.exception;
 import de.thischwa.c5c.FilemanagerAction;
 
 /**
- * TODO document me
+ * Base exception of this library.
  */
-public class ConnectorException extends Exception {
+public class C5CException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
 	private FilemanagerAction mode = null;
 	
-	public ConnectorException(FilemanagerAction mode, String msg) {
+	public C5CException(FilemanagerAction mode, String msg) {
 		this(msg);
 		this.mode = mode;
 	}
 
-	public ConnectorException(String msg) {
+	public C5CException(String msg) {
 		super(msg);
 	}
 	

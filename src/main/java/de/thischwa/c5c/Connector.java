@@ -26,7 +26,7 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import de.thischwa.c5c.exception.ConnectorException;
+import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
@@ -45,17 +45,17 @@ public interface Connector {
 	 */
 	public void init(final ServletContext servletContext) throws RuntimeException;
 
-	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException;
+	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 
-	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException;
+	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 	
-	public Response rename(String oldPath, String santizedNewName) throws ConnectorException;
+	public Response rename(String oldPath, String santizedNewName) throws C5CException;
 	
-	public Response createFolder(String urlPath, String sanitizedName) throws ConnectorException;
+	public Response createFolder(String urlPath, String sanitizedName) throws C5CException;
 	
-	public Response delete(String urlPath) throws ConnectorException;
+	public Response delete(String urlPath) throws C5CException;
 
-	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws ConnectorException;
+	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException;
 
-	public Response downlad(String urlPath) throws ConnectorException;
+	public Response downlad(String urlPath) throws C5CException;
 }

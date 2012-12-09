@@ -85,4 +85,12 @@ public class ResponseFactory {
 	public static Rename buildRenameFile(String oldFullPath, String newName) { 
 		return new Rename(oldFullPath, newName);
 	}
+
+	public static FolderInfo buildFolderInfo() {
+		return new FolderInfo();
+	}
+
+	public static void add(FolderInfo folderInfo, FileInfo fileInfo) {
+		folderInfo.add(fileInfo);
+	}
 }

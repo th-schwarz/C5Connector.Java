@@ -36,11 +36,11 @@ public final class FolderInfo extends Response {
 
 	private Map<String, FileInfo> folderItems;
 
-	public FolderInfo() {
+	FolderInfo() {
 		folderItems = new HashMap<String, FileInfo>();
 	}
 
-	public void add(final FileInfo fileInfo) {
+	void add(final FileInfo fileInfo) {
 		folderItems.put(fileInfo.getPath(), fileInfo);
 	}
 

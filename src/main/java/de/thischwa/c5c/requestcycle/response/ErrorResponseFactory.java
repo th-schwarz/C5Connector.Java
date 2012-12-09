@@ -22,7 +22,7 @@
  */
 package de.thischwa.c5c.requestcycle.response;
 
-import de.thischwa.c5c.exception.ConnectorException;
+import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.UserActionException;
 
@@ -46,7 +46,7 @@ public class ErrorResponseFactory {
 		return buildErrorResponse(String.format("Access denied for file [%s].", filePath), 101);
 	}
 
-	public static Response buildException(ConnectorException e) {
+	public static Response buildException(C5CException e) {
 		if(e instanceof FilemanagerException || e instanceof UserActionException) {
 			return buildErrorResponse(e.getMessage(), Response.DEFAULT_ERROR_CODE);
 		}

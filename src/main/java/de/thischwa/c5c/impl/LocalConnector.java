@@ -47,7 +47,7 @@ import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
-import de.thischwa.c5c.exception.ConnectorException;
+import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.Response;
@@ -77,13 +77,13 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
+	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File folder = buildAndCheckFolder(urlPath);
 		return constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
-	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
+	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
@@ -93,7 +93,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response rename(String oldPath, String sanitizedName) throws ConnectorException {
+	public Response rename(String oldPath, String sanitizedName) throws C5CException {
 		File src = buildRealFile(oldPath);
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
@@ -122,7 +122,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response createFolder(String urlPath, String sanitizedFolderName) throws ConnectorException {
+	public Response createFolder(String urlPath, String sanitizedFolderName) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File newFolder = new File(parentFolder, sanitizedFolderName);
 		if(newFolder.exists()) {
@@ -161,7 +161,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response delete(String urlPath) throws ConnectorException {
+	public Response delete(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
@@ -195,9 +195,9 @@ public class LocalConnector implements Connector {
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
 	 * @return the file info
-	 * @throws ConnectorException the connector exception
+	 * @throws C5CException the connector exception
 	 */
-	private FileInfo constructFileInfo(boolean isDirRequest, String urlPath, File file, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
+	private FileInfo constructFileInfo(boolean isDirRequest, String urlPath, File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		FileInfo fi; 
 		String fixedUrlPath;
 		if(isDirRequest) {
@@ -232,11 +232,11 @@ public class LocalConnector implements Connector {
 					ResponseFactory.setFileProperties(fi, file.length(), dateStr);
 			}
 		} catch (SecurityException e) {
-			throw new ConnectorException(String.format("Error while analysing %s: %s", file.getPath(), e.getMessage()));
+			throw new C5CException(String.format("Error while analysing %s: %s", file.getPath(), e.getMessage()));
 		} catch (ReadException e) {
-			throw new ConnectorException(String.format("Error while getting the dimension of the image %s: %s", file.getPath(), e.getMessage()));			
+			throw new C5CException(String.format("Error while getting the dimension of the image %s: %s", file.getPath(), e.getMessage()));			
 		} catch (FileNotFoundException e) {
-			throw new ConnectorException(String.format("File not found: %s", file.getPath()));
+			throw new C5CException(String.format("File not found: %s", file.getPath()));
 		} 
 		return fi;
 	}
@@ -249,28 +249,28 @@ public class LocalConnector implements Connector {
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
 	 * @return the folder info
-	 * @throws ConnectorException the connector exception
+	 * @throws C5CException the connector exception
 	 */
-	private FolderInfo constructFromDirRequest(String urlPath, File dir, boolean needSize, boolean showThumbnailsInGrid) throws ConnectorException {
-		FolderInfo fi = new FolderInfo();
+	private FolderInfo constructFromDirRequest(String urlPath, File dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		FolderInfo folderInfo = ResponseFactory.buildFolderInfo();
 		// add dirs
 		File[] fileList = dir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
 		for (File file : fileList) {
-			FileInfo r = constructFileInfo(true, urlPath, file, needSize, showThumbnailsInGrid);
-			fi.add((FileInfo) r);
+			FileInfo fileInfo = constructFileInfo(true, urlPath, file, needSize, showThumbnailsInGrid);
+			ResponseFactory.add(folderInfo, fileInfo);
 		}
 
 		// add files
 		fileList = dir.listFiles((FileFilter) FileFileFilter.FILE);
 		for (File file : fileList) {
-			FileInfo r = constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
-			fi.add((FileInfo) r);
+			FileInfo fileInfo = constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
+			ResponseFactory.add(folderInfo, fileInfo);
 		}
-		return fi;
+		return folderInfo;
 	}
 	
 	@Override
-	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws ConnectorException {
+	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
@@ -285,7 +285,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response downlad(String urlPath) throws ConnectorException {
+	public Response downlad(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));

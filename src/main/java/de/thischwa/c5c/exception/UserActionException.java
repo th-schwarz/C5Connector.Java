@@ -29,7 +29,7 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
 /**
  * Thrown to indicate a user action, which isn't allowed.
  */
-public class UserActionException extends ConnectorException {
+public class UserActionException extends C5CException {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String KEY_UPLOAD_NOT_ALLOWED = "upload.notallowed";

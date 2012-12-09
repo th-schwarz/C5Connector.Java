@@ -27,10 +27,10 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.util.StringUtils;
 
 /**
- * Thrown to indicate exceptions of the filemanager. The messages based on the localized known messages provided by
+ * Thrown to indicate known exceptions of the filemanager. The messages based on the localized known messages provided by
  * {@link UserObjectProxy#getFilemanagerErrorMessage(String)}.
  */
-public class FilemanagerException extends ConnectorException {
+public class FilemanagerException extends C5CException {
 	
 	private static final long serialVersionUID = 1L;
 	
