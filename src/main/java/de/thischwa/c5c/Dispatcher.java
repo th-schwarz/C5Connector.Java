@@ -145,7 +145,8 @@ final class Dispatcher {
 			case DELETE: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* delete -> urlPath: {}", urlPath);
-				resp = connector.delete(urlPath);
+				connector.delete(urlPath);
+				resp = ResponseFactory.buildDelete(urlPath);
 				break;}
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");

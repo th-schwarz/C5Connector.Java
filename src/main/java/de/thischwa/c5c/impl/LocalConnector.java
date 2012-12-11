@@ -165,7 +165,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response delete(String urlPath) throws C5CException {
+	public void delete(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
@@ -176,7 +176,6 @@ public class LocalConnector implements Connector {
 		if(!success) {
 			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.KEY_INVALID_DIRECTORY_OR_FILE, urlPath);
 		}
-		return ResponseFactory.buildDelete(urlPath);
 	}
 	
 	/**

@@ -56,7 +56,7 @@ public interface Connector {
 	
 	public Response createFolder(String urlPath, String sanitizedName) throws C5CException;
 	
-	public Response delete(String urlPath) throws C5CException;
+	public void delete(String urlPath) throws C5CException;
 
 	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException;
 
