@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.UserActionException;
+import de.thischwa.c5c.requestcycle.DownloadInfo;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
@@ -139,9 +140,10 @@ final class Dispatcher {
 					throw new UserActionException(UserActionException.KEY_CREATEFOLDER_NOT_ALLOWED);
 				String urlPath = req.getParameter("path");
 				String folderName = req.getParameter("name");
-				String santizedFolderName = FileUtils.sanitizeName(folderName);
-				logger.debug("* createFolder -> urlPath: {}, name: {}, santized name: {}", new Object[] { urlPath, folderName, santizedFolderName });
-				resp = connector.createFolder(urlPath, santizedFolderName);
+				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
+				logger.debug("* createFolder -> urlPath: {}, name: {}, sanitized name: {}", new Object[] { urlPath, folderName, sanitizedFolderName });
+				connector.createFolder(urlPath, sanitizedFolderName);
+				resp = ResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
 				break;}
 			case DELETE: {
 				String urlPath = req.getParameter("path");
@@ -152,7 +154,8 @@ final class Dispatcher {
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* download -> urlPath: {}", urlPath);
-				resp = connector.download(urlPath);
+				DownloadInfo di = connector.download(urlPath);
+				resp = ResponseFactory.buildDownload(urlPath, di.getFileSize(), di.getInputStream());
 				break;}
 			default: {
 				logger.error("'mode' not found: {}", req.getParameter("mode"));

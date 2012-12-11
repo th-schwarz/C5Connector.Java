@@ -28,6 +28,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import de.thischwa.c5c.exception.C5CException;
+import de.thischwa.c5c.requestcycle.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 
@@ -53,11 +54,11 @@ public interface Connector {
 	
 	public void rename(String oldPath, String santizedNewName) throws C5CException;
 	
-	public Response createFolder(String urlPath, String sanitizedName) throws C5CException;
+	public void createFolder(String urlPath, String sanitizedName) throws C5CException;
 	
 	public void delete(String urlPath) throws C5CException;
 
 	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException;
 
-	public Response download(String urlPath) throws C5CException;
+	public DownloadInfo download(String urlPath) throws C5CException;
 }

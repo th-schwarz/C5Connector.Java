@@ -49,6 +49,7 @@ import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.requestcycle.DownloadInfo;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
@@ -126,7 +127,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response createFolder(String urlPath, String sanitizedFolderName) throws C5CException {
+	public void createFolder(String urlPath, String sanitizedFolderName) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File newFolder = new File(parentFolder, sanitizedFolderName);
 		if(newFolder.exists()) {
@@ -144,7 +145,6 @@ public class LocalConnector implements Connector {
 		if(!success) {
 			throw new FilemanagerException(FilemanagerAction.RENAME, FilemanagerException.KEY_UNABLE_TO_CREATE_DIRECTORY, sanitizedFolderName);
 		}
-		return ResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
 	}
 	
 	/**
@@ -272,11 +272,11 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response download(String urlPath) throws C5CException {
+	public DownloadInfo download(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
-			return ResponseFactory.buildDownload(urlPath, file.length(), in);
+			return new DownloadInfo(in, file.length());
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
