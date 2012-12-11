@@ -52,7 +52,7 @@ public interface Connector {
 
 	public FileProperties getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 	
-	public Response rename(String oldPath, String santizedNewName) throws C5CException;
+	public void rename(String oldPath, String santizedNewName) throws C5CException;
 	
 	public Response createFolder(String urlPath, String sanitizedName) throws C5CException;
 	

@@ -130,7 +130,8 @@ final class Dispatcher {
 				String newName = req.getParameter("new");
 				String sanitizedName = FileUtils.sanitizeName(newName);
 				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", new Object[] { oldUrlPath, newName, sanitizedName });
-				resp = connector.rename(oldUrlPath, sanitizedName);
+				connector.rename(oldUrlPath, sanitizedName);
+				resp = ResponseFactory.buildRenameFile(oldUrlPath, sanitizedName);
 				break;}
 			case CREATEFOLDER: {
 				if(!UserObjectProxy.isCreateFolderEnabled())

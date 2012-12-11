@@ -56,7 +56,6 @@ import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
-import de.thischwa.c5c.util.Path;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
@@ -99,7 +98,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response rename(String oldPath, String sanitizedName) throws C5CException {
+	public void rename(String oldPath, String sanitizedName) throws C5CException {
 		File src = buildRealFile(oldPath);
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
@@ -124,7 +123,6 @@ public class LocalConnector implements Connector {
 			String key = (src.isDirectory()) ? FilemanagerException.KEY_ERROR_RENAMING_DIRECTORY : FilemanagerException.KEY_ERROR_RENAMING_FILE;
 			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath, sanitizedName);
 		}
-		return ResponseFactory.buildRenameFile(oldPath, sanitizedName);
 	}
 	
 	@Override
