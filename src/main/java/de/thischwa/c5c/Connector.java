@@ -30,7 +30,6 @@ import javax.servlet.ServletContext;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
-import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
@@ -48,7 +47,7 @@ public interface Connector {
 	 */
 	public void init(final ServletContext servletContext) throws RuntimeException;
 
-	public List<FileInfo> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
+	public List<FileProperties> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 
 	public FileProperties getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 	

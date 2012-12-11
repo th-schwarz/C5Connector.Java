@@ -76,7 +76,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public List<FileInfo> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	public List<FileProperties> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File folder = buildAndCheckFolder(urlPath);
 		List<FileProperties> props = constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
 		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
@@ -84,7 +84,7 @@ public class LocalConnector implements Connector {
 			FileInfo fi = ResponseFactory.buildFileInfo(urlPath, fileProperties);
 			infos.add(fi);
 		}
-		return infos;
+		return props;
 	}
 	
 	@Override

@@ -23,6 +23,7 @@
 package de.thischwa.c5c;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,8 +115,8 @@ final class Dispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
 				logger.debug("* getFolder -> urlPath: {}, needSize: {}, showThumbnails: {}", new Object[] { urlPath, needSize, showThumbnailsInGrid });
-				List<FileInfo> infos = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
-				resp = buildFolder(urlPath, infos);
+				List<FileProperties> props = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
+				resp = buildFolder(urlPath, props);
 				break;}
 			case INFO: {
 				String urlPath = req.getParameter("path");
@@ -165,14 +166,17 @@ final class Dispatcher {
 		
 	}
 	
-	private FolderInfo buildFolder(String urlPath, List<FileInfo> fileInfos) {
+	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {
 		FolderInfo folderInfo = ResponseFactory.buildFolderInfo();
-		if(fileInfos == null)
+		if(props == null)
 			return folderInfo;
-		for (FileInfo fileInfo : fileInfos) {
+		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
+		for (FileProperties fileProperties : props) {
+			FileInfo fileInfo = ResponseFactory.buildFileInfo(urlPath, fileProperties);
 			ResponseFactory.setCapabilities(fileInfo, urlPath);
 			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
 			ResponseFactory.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
+			infos.add(fileInfo);
 			ResponseFactory.add(folderInfo, fileInfo);
 		}
 		return folderInfo;
