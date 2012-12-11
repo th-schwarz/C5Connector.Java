@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -44,15 +46,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
-import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
-import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.RequestData;
+import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
-import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
@@ -77,19 +77,25 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	public List<FileInfo> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File folder = buildAndCheckFolder(urlPath);
-		return constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
+		List<FileProperties> props = constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
+		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
+		for (FileProperties fileProperties : props) {
+			FileInfo fi = ResponseFactory.buildFileInfo(urlPath, fileProperties);
+			infos.add(fi);
+		}
+		return infos;
 	}
 	
 	@Override
-	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	public FileProperties getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.KEY_FILE_NOT_EXIST, urlPath);
 		}
-		return constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
+		return constructFileInfo(file, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
@@ -186,51 +192,34 @@ public class LocalConnector implements Connector {
 		return new File(path);
 	}
 	
+
 	/**
 	 * Construct file info.
-	 *
-	 * @param isDirRequest the is dir request
-	 * @param urlPath the url path
 	 * @param file the file
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
+	 * @param isDirRequest the is dir request
+	 *
 	 * @return the file info
 	 * @throws C5CException the connector exception
 	 */
-	private FileInfo constructFileInfo(boolean isDirRequest, String urlPath, File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		FileInfo fi; 
-		String fixedUrlPath;
-		if(isDirRequest) {
-			fixedUrlPath = urlPath;
-			Path p = new Path(fixedUrlPath);
-			if(!file.isDirectory())
-				throw new IllegalArgumentException(String.format("It's a folder request, but requested folder isn't a directory: %s", file.getName()));
-			fi = ResponseFactory.buildFileInfo(p.addFile(file.getName()), true);
-		} else {
-			fixedUrlPath = (urlPath.contains(Constants.separator)) ? urlPath.substring(0, urlPath.lastIndexOf(Constants.separatorChar)) : urlPath;
-			Path p = new Path(fixedUrlPath);
-			if(file.isDirectory())
-				throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
-			fi = ResponseFactory.buildFileInfo(p.addFile(file.getName()), false);
-		}
-		ResponseFactory.setPreviewPath(fi, UserObjectProxy.getIconPath(fi.getVirtualFile()));
+	private FileProperties constructFileInfo(File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		if (file.isDirectory())
+			throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
+			
 		try {
 			Locale locale = RequestData.getLocale();
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 			String dateStr = df.format(file.lastModified());
-			ResponseFactory.setCapabilities(fi, UserObjectProxy.getC5FileCapabilities(fixedUrlPath));
-			if(fi.isDir()) 
-				ResponseFactory.setFolderProperties(fi, dateStr);
-			else {
-				// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
-				if(Extension.IMAGE.isAllowedExtension(FilenameUtils.getExtension(file.getPath()))) {
-					IDimensionProvider dp = new SimpleImageInfoWrapper();
-					dp.set(file);
-					Dimension dim = dp.getDimension();
-					ResponseFactory.setFileProperties(fi, dim.width, dim.height, file.length(), dateStr);
-				} else
-					ResponseFactory.setFileProperties(fi, file.length(), dateStr);
+			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), dateStr);
+			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
+			if(Extension.IMAGE.isAllowedExtension(FilenameUtils.getExtension(file.getPath()))) {
+				IDimensionProvider dp = new SimpleImageInfoWrapper();
+				dp.set(file);
+				Dimension dim = dp.getDimension();
+				fileProperties.setSize(dim);
 			}
+			return fileProperties;
 		} catch (SecurityException e) {
 			throw new C5CException(String.format("Error while analysing %s: %s", file.getPath(), e.getMessage()));
 		} catch (ReadException e) {
@@ -238,12 +227,10 @@ public class LocalConnector implements Connector {
 		} catch (FileNotFoundException e) {
 			throw new C5CException(String.format("File not found: %s", file.getPath()));
 		} 
-		return fi;
 	}
-	
+
 	/**
 	 * Construct from dir request.
-	 *
 	 * @param urlPath the url path
 	 * @param dir the dir
 	 * @param needSize the need size
@@ -251,22 +238,25 @@ public class LocalConnector implements Connector {
 	 * @return the folder info
 	 * @throws C5CException the connector exception
 	 */
-	private FolderInfo constructFromDirRequest(String urlPath, File dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		FolderInfo folderInfo = ResponseFactory.buildFolderInfo();
+	private List<FileProperties> constructFromDirRequest(String urlPath, File dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		List<FileProperties> props = new ArrayList<FileProperties>();
 		// add dirs
 		File[] fileList = dir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
 		for (File file : fileList) {
-			FileInfo fileInfo = constructFileInfo(true, urlPath, file, needSize, showThumbnailsInGrid);
-			ResponseFactory.add(folderInfo, fileInfo);
+			Locale locale = RequestData.getLocale();
+			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+			String dateStr = df.format(file.lastModified());
+			FileProperties fp = new FileProperties(file.getName(), dateStr);
+			fp.setDir(true);
+			props.add(fp);
 		}
 
 		// add files
 		fileList = dir.listFiles((FileFilter) FileFileFilter.FILE);
 		for (File file : fileList) {
-			FileInfo fileInfo = constructFileInfo(false, urlPath, file, needSize, showThumbnailsInGrid);
-			ResponseFactory.add(folderInfo, fileInfo);
+			props.add(constructFileInfo(file, needSize, showThumbnailsInGrid));
 		}
-		return folderInfo;
+		return props;
 	}
 	
 	@Override
@@ -285,7 +275,7 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response downlad(String urlPath) throws C5CException {
+	public Response download(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));

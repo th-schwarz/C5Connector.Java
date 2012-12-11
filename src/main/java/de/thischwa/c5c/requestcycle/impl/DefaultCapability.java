@@ -34,7 +34,7 @@ import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 public class DefaultCapability implements FilemanagerCapability {
 
 	@Override
-	public Capability[] getCapabilities(HttpServletRequest req, final String urlPath) {
+	public Capability[] getCapabilities(HttpServletRequest req, final String urlPath) { // TODO add type based on extension
 		return UserObjectProxy.getDefaultC5FileCapabilities();
 	}
 

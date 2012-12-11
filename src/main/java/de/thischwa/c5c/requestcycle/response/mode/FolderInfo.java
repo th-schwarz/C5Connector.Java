@@ -22,11 +22,12 @@
  */
 package de.thischwa.c5c.requestcycle.response.mode;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.response.Response;
 
 /**
@@ -37,11 +38,14 @@ public final class FolderInfo extends Response {
 	private Map<String, FileInfo> folderItems;
 
 	FolderInfo() {
-		folderItems = new HashMap<String, FileInfo>();
+		folderItems = new LinkedHashMap<String, FileInfo>();
 	}
 
 	void add(final FileInfo fileInfo) {
-		folderItems.put(fileInfo.getPath(), fileInfo);
+		String path = fileInfo.getPath();
+		if(fileInfo.isDir() && !path.endsWith(Constants.separator))
+			path += Constants.separator;
+		folderItems.put(path, fileInfo);
 	}
 
 	@Override

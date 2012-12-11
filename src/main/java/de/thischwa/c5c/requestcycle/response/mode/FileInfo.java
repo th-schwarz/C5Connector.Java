@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
@@ -44,7 +45,7 @@ public final class FileInfo extends Response {
 	
 	private static final String type_dir = "dir";
 	
-	private FileProperties fileProperties;
+	private FileInfoProperties fileProperties;
 	
 	private String path;
 	
@@ -64,20 +65,36 @@ public final class FileInfo extends Response {
 
 	@JsonProperty("Path")
 	public String getPath() {
+		if(fileProperties == null)
+			throw new IllegalArgumentException("No properties are set.");
+		Path p = new Path(path);
+		String path = p.toString();
+		if(path.endsWith(Constants.separator))
+			path = path.substring(0, path.length()-1);
+		if(!path.endsWith(fileProperties.getName()))
+			path = p.addFile(fileProperties.getName());
+		if(!getType().equals(type_dir) && path.endsWith(Constants.separator))
+			path = path.substring(0, path.length()-1);
+		else if(getType().equals(type_dir) && !path.endsWith(Constants.separator))
+			path += Constants.separator;
 		return path;
 	}
 
 	@JsonProperty("Filename")
 	public String getName() {
-		return virtualFile.getName();
+		if(fileProperties == null)
+			throw new IllegalArgumentException("No properties are set.");
+		 return fileProperties.getName();
 	}
 
 	@JsonProperty("File Type")
 	public String getType() {
-		if (virtualFile.getType() == Type.directory)
+		if (fileProperties.getType() == Type.directory)
 			return type_dir;
-		if (!StringUtils.isNullOrEmptyOrBlank(virtualFile.getExtension()))
-			return virtualFile.getExtension();
+		
+		VirtualFile vf = new VirtualFile(fileProperties.getName()); 
+		if (!StringUtils.isNullOrEmptyOrBlank(vf.getExtension()))
+			return vf.getExtension();
 		return type_unknown;
 	}
 
@@ -91,29 +108,17 @@ public final class FileInfo extends Response {
 	}
 
 	@JsonProperty("Properties")
-	public FileProperties getFileProperties() {
+	public FileInfoProperties getFileProperties() {
 		return fileProperties;
 	}
 
-	void setFileProperties(FileProperties fileProperties) {
+	void setFileProperties(FileInfoProperties fileProperties) {
 		this.fileProperties = fileProperties;
-	}
-
-	void setFileProperties(int height, int with, long size, String modified) {
-		this.fileProperties = new FileProperties(height, with, size, modified);
-	}
-
-	void setFileProperties(long size, String modified) {
-		this.fileProperties = new FileProperties(size, modified);
-	}
-	
-	void setFolderProperties(String modified) {
-		this.fileProperties = new FileProperties(modified);
 	}
 
 	@JsonIgnore
 	public boolean isDir() {
-		return (virtualFile.getType() == Type.directory);
+		return (fileProperties.getType() == Type.directory);
 	}
 
 	@JsonIgnore
@@ -134,77 +139,5 @@ public final class FileInfo extends Response {
 	@JsonProperty("Capabilities")
 	public List<String> getCapabilities() {
 		return capabilities;
-	}
-
-	/**
-	 * Holds the properties of a file.
-	 */
-	public class FileProperties {
-		private String created = null;
-		private String modified;
-		private Integer height = null;
-		private Integer with = null;
-		private Long size = null;
-
-		FileProperties(int height, int with, long size, String modified) {
-			this.height = height;
-			this.with = with;
-			this.size = size;
-			this.modified = modified;
-		}
-
-		FileProperties(long size, String modified) {
-			this.size = size;
-			this.modified = modified;
-		}
-
-		FileProperties(String modified) {
-			this.modified = modified;
-		}
-
-		@JsonProperty("Date Created")
-		String getCreated() {
-			return created;
-		}
-		
-		void setCreated(String created) {
-			this.created = created;
-		}
-		
-		@JsonProperty("Date Modified")
-		String getModified() {
-			return modified;
-		}
-
-		void setModified(String modified) {
-			this.modified = modified;
-		}
-
-		@JsonProperty("Height")
-		Integer getHeight() {
-			return height;
-		}
-
-		void setHeight(int height) {
-			this.height = height;
-		}
-
-		@JsonProperty("Width")
-		Integer getWith() {
-			return with;
-		}
-
-		void setWith(int with) {
-			this.with = with;
-		}
-
-		@JsonProperty("Size")
-		Long getSize() {
-			return size;
-		}
-
-		void setSize(long size) {
-			this.size = size;
-		}
 	}
 }

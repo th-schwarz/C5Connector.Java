@@ -38,6 +38,7 @@ public class PathTest {
 	public void testAddFolder() {
 		assertEquals("folder/sub/", new Path().addFolder("folder").addFolder("sub").toString());
 		assertEquals("/folder/sub/", new Path("/folder/").addFolder("/sub").toString());
+		assertEquals("/folder/sub/", new Path("/folder").addFolder("/sub").toString());
 	}
 
 }

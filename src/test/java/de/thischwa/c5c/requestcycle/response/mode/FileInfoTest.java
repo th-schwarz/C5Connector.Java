@@ -29,8 +29,8 @@ public class FileInfoTest {
 
 	@Test
 	public void testToString() {
-		FileInfo fileInfo = new FileInfo("/tmp/img01.png", false);
-		fileInfo.setFileProperties(100, 200, 30024, null);
+		FileInfo fileInfo = new FileInfo("/tmp", false);
+		fileInfo.setFileProperties(new FileInfoProperties("img01.png", 200, 100, 30024, null));
 		String expected = "{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"/tmp/img01.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img01.png\",\"File Type\":\"png\"}";
 		assertEquals(expected, fileInfo.toString());
 	}

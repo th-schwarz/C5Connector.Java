@@ -42,12 +42,16 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
+import de.thischwa.c5c.requestcycle.response.FileProperties;
+import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
+import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
+import de.thischwa.c5c.util.VirtualFile;
 
 /**
  * Dispatch the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
@@ -110,14 +114,16 @@ final class Dispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
 				logger.debug("* getFolder -> urlPath: {}, needSize: {}, showThumbnails: {}", new Object[] { urlPath, needSize, showThumbnailsInGrid });
-				resp = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
+				List<FileInfo> infos = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
+				resp = buildFolder(urlPath, infos);
 				break;}
 			case INFO: {
 				String urlPath = req.getParameter("path");
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
 				logger.debug("* getInfo -> urlPath: {}, needSize: {}, showThumbnails: {}", new Object[] { urlPath, needSize, showThumbnailsInGrid });
-				resp = connector.getInfo(urlPath, needSize, showThumbnailsInGrid);
+				FileProperties fp = connector.getInfo(urlPath, needSize, showThumbnailsInGrid);
+				resp = buildInfo(urlPath, fp);
 				break;}
 			case RENAME: {
 				String oldUrlPath = req.getParameter("old");
@@ -143,7 +149,7 @@ final class Dispatcher {
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* download -> urlPath: {}", urlPath);
-				resp = connector.downlad(urlPath);
+				resp = connector.download(urlPath);
 				break;}
 			default: {
 				logger.error("'mode' not found: {}", req.getParameter("mode"));
@@ -155,6 +161,26 @@ final class Dispatcher {
 			return ErrorResponseFactory.buildException(e);
 		}
 		
+	}
+	
+	private FolderInfo buildFolder(String urlPath, List<FileInfo> fileInfos) {
+		FolderInfo folderInfo = ResponseFactory.buildFolderInfo();
+		if(fileInfos == null)
+			return folderInfo;
+		for (FileInfo fileInfo : fileInfos) {
+			ResponseFactory.setCapabilities(fileInfo, urlPath);
+			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
+			ResponseFactory.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
+			ResponseFactory.add(folderInfo, fileInfo);
+		}
+		return folderInfo;
+	}
+	
+	private FileInfo buildInfo(String urlPath, FileProperties props) {
+		FileInfo fileInfo = ResponseFactory.buildFileInfo(urlPath, props);
+		ResponseFactory.setCapabilities(fileInfo, urlPath);
+		ResponseFactory.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
+		return fileInfo;
 	}
 
 	/**

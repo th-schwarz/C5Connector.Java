@@ -25,9 +25,10 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import java.io.InputStream;
 
 import de.thischwa.c5c.FilemanagerAction;
+import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.UserActionException;
-import de.thischwa.c5c.requestcycle.FilemanagerCapability.Capability;
 import de.thischwa.c5c.requestcycle.RequestData;
+import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.resource.UserActionMessageHolder;
 
 /**
@@ -35,29 +36,24 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
  */
 public class ResponseFactory {
 
-	public static FileInfo buildFileInfo(String path, boolean isDir) {
-		return new FileInfo(path, isDir);
+	public static FileProperties buildFileProperties(String name, long size, String modified) {
+		return new FileProperties(name, size, modified);
+	}
+
+	public static FileInfo buildFileInfo(String urlPath, FileProperties fp) {
+		FileInfo fi = new FileInfo(urlPath, fp.isDir());
+		fi.setFileProperties(fp);
+		return fi;
 	}
 	
 	public static void setPreviewPath(FileInfo fi, String previewPath) {
 		fi.setPreviewPath(previewPath);
 	}
 
-	public static void setFolderProperties(FileInfo fi, String dateStr) {
-		fi.setFolderProperties(dateStr);
+	public static void setCapabilities(FileInfo fi, String urlPath) {
+		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
 	}
 
-	public static void setFileProperties(FileInfo fi, int width, int height, long length, String dateStr) {
-		fi.setFileProperties(width, height, length, dateStr);		
-	}
-
-	public static void setFileProperties(FileInfo fi, long length, String dateStr) {
-		fi.setFileProperties(length, dateStr);
-	}
-	public static void setCapabilities(FileInfo fi, Capability[] capabilities) {
-		fi.setCapabilities(capabilities);
-	}
-	
 	public static UploadFile buildUploadFile(String path, String sanitizedName, Long size) {
 		// TODO check a max-upload-size (to be set in the properties)
 		return new UploadFile(path, sanitizedName);
@@ -69,20 +65,20 @@ public class ResponseFactory {
 		uploadFile.setMode(FilemanagerAction.UPLOAD);
 		return uploadFile;
 	}
-	
+
 	public static Delete buildDelete(String fullPath) {
 		return new Delete(fullPath);
 	}
-	
+
 	public static Download buildDownload(String fullPath, long contentLength, InputStream in) {
 		return new Download(fullPath, contentLength, in);
 	}
-	
+
 	public static CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
-	
-	public static Rename buildRenameFile(String oldFullPath, String newName) { 
+
+	public static Rename buildRenameFile(String oldFullPath, String newName) {
 		return new Rename(oldFullPath, newName);
 	}
 

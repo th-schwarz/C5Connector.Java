@@ -23,11 +23,14 @@
 package de.thischwa.c5c;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
 import de.thischwa.c5c.exception.C5CException;
+import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
@@ -45,9 +48,9 @@ public interface Connector {
 	 */
 	public void init(final ServletContext servletContext) throws RuntimeException;
 
-	public Response getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
+	public List<FileInfo> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 
-	public Response getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
+	public FileProperties getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 	
 	public Response rename(String oldPath, String santizedNewName) throws C5CException;
 	
@@ -57,5 +60,5 @@ public interface Connector {
 
 	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException;
 
-	public Response downlad(String urlPath) throws C5CException;
+	public Response download(String urlPath) throws C5CException;
 }
