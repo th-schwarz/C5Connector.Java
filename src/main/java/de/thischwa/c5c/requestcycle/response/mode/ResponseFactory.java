@@ -73,6 +73,10 @@ public class ResponseFactory {
 	public static Download buildDownload(String fullPath, long contentLength, InputStream in) {
 		return new Download(fullPath, contentLength, in);
 	}
+	
+	public static DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
+		return new DownloadInfo(in, fileSize);
+	}
 
 	public static CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {
 		return new CreateFolder(parentUrlPath, folderName);

@@ -42,11 +42,11 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.UserActionException;
-import de.thischwa.c5c.requestcycle.DownloadInfo;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;

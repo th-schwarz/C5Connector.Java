@@ -20,7 +20,7 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.requestcycle;
+package de.thischwa.c5c.requestcycle.response.mode;
 
 import java.io.InputStream;
 
@@ -32,7 +32,7 @@ public class DownloadInfo {
 	private InputStream in;
 	private long fileSize;
 	
-	public DownloadInfo(InputStream in, long fileSize) {
+	DownloadInfo(InputStream in, long fileSize) {
 		this.in = in;
 		this.fileSize = fileSize;
 	}

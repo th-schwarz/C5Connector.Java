@@ -28,9 +28,9 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import de.thischwa.c5c.exception.C5CException;
-import de.thischwa.c5c.requestcycle.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
