@@ -33,7 +33,7 @@ Big picture
   if the implementation of <UserAction> has to be called to verify the action.
   
   If the verification was achieved, the action with its parameters will be dispatched to the 
-  implementation of the Connector. It processes the action and builds a response with the help of
+  implementation of the Connector. It processes the action and builds a response object with the help of
   the <ResponseFactory>. The capabilities for the filemanager are set dependent on there configuration.
   
-  This response will be returned to the <ConnectorServlet>. 
+  And finally this response object will be returned to the <ConnectorServlet>. 

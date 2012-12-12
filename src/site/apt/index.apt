@@ -8,8 +8,8 @@ C5Connector.Java
   It's a bridge between the filemanager and a storage backend and works like a transparent virtual file system or a proxy.
   C5Connector.Java includes a default implementation to access the (server side) local filesystem.
   
-  The API is targeted to be used within JSPs as well as template engine like {{{http://velocity.apache.org}Velocity}} or
-  {{{http://freemarker.org}FreeMarker}}.
+  The API encapsulates the building of JSON and is targeted to be used within JSPs as well as template engine like
+  {{{http://velocity.apache.org}Velocity}} or {{{http://freemarker.org}FreeMarker}}.
   
   If the API should be used with the {{{http://ckeditor.com}CKEditor}}, the author suggested to use it with {{{http://th-schwarz.github.com/CKEditor.Java/}CKEditor.Java}},
   a simple java backend of the CKEditor.
