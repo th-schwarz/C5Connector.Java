@@ -11,7 +11,7 @@ C5Connector.Java
   The API encapsulates the building of JSON and is targeted to be used within JSPs as well as template engine like
   {{{http://velocity.apache.org}Velocity}} or {{{http://freemarker.org}FreeMarker}}.
   
-  If the API should be used with the {{{http://ckeditor.com}CKEditor}}, the author suggested to use it with {{{http://th-schwarz.github.com/CKEditor.Java/}CKEditor.Java}},
+  If the API should be used with the {{{http://ckeditor.com}CKEditor}}, the I suggest to use it with {{{http://th-schwarz.github.com/CKEditor.Java/}CKEditor.Java}},
   a simple java backend of the CKEditor.
     
   [Hint:] It's an early-state project and should not to be used in a productive environment! The API can be changed radical! 

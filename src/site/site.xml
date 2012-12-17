@@ -5,7 +5,6 @@
 	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd">
 
 	<publishDate position="none" />
-	<version position="right"/>
 	<body>
 		<menu name="Introduction">
 			<item name="About" href="/index.html" />
@@ -19,6 +18,8 @@
 			<item name="UserAction" href="extending_useraction.html"/>
 		</menu>
 		<menu ref="reports"/>
-		<footer>All rights reserved. &copy; by Thilo Schwarz</footer>
+		<links>
+			<item name="C5Connector.Java github:page" href="http://github.com/th-schwarz/C5Connector.Java"/>
+		</links>
 	</body>
 </project>

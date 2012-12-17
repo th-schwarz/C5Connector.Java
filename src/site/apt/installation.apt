@@ -11,7 +11,7 @@ Installation Guide
           
 * Prepare the Installation
 
-  There isn't any download provided at the moment. But the desired jar file can be easily build with maven2. 
+  The desired jar file can be easily build with maven2. 
   Just download the source, declare a preferred SLF4J binding in the dependencies section of your POM within 
   the runtime scope and call the following command:
   
