@@ -31,7 +31,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
-		<jii.version>0.4</jii.version>
+		<jii.version>0.5</jii.version>
 	</properties>
 
 	<repositories>
