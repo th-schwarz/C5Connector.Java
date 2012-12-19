@@ -137,7 +137,7 @@ final class Dispatcher {
 				break;}
 			case CREATEFOLDER: {
 				if(!UserObjectProxy.isCreateFolderEnabled())
-					throw new UserActionException(UserActionException.KEY_CREATEFOLDER_NOT_ALLOWED);
+					throw new UserActionException(UserActionException.Key.CreateFolderNotAllowed);
 				String urlPath = req.getParameter("path");
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);

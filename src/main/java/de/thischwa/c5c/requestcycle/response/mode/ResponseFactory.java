@@ -61,7 +61,7 @@ public class ResponseFactory {
 
 	public static UploadFile buildUploadFileForError(String path, String sanitizedName) {
 		UploadFile uploadFile = new UploadFile(path, sanitizedName);
-		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.KEY_UPLOAD_NOT_ALLOWED), 200);
+		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.Key.UploadNotAllowed.getPropertyName()), 200);
 		uploadFile.setMode(FilemanagerAction.UPLOAD);
 		return uploadFile;
 	}

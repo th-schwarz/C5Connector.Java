@@ -31,12 +31,24 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
  */
 public class UserActionException extends C5CException {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String KEY_UPLOAD_NOT_ALLOWED = "upload.notallowed";
-	public static final String KEY_CREATEFOLDER_NOT_ALLOWED = "createfolder.notallowed";
 
-	public UserActionException(String key) {
-		super(UserActionMessageHolder.get(RequestData.getLocale(), key));
+	public UserActionException(Key key) {
+		super(UserActionMessageHolder.get(RequestData.getLocale(), key.propertyName));
 	}
 
+	
+	public enum Key {
+		UploadNotAllowed("upload.notallowed"),
+		CreateFolderNotAllowed("createfolder.notallowed");
+		
+		private String propertyName;
+		
+		private Key(String propertyName) {
+			this.propertyName = propertyName;
+		}
+		
+		public String getPropertyName() {
+			return propertyName;
+		}
+	}
 }
