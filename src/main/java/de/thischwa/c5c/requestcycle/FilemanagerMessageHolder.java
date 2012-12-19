@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
 
@@ -87,15 +88,15 @@ public class FilemanagerMessageHolder {
 	 * @return The message for the desired 'locale' and 'key'. If the locale is unknown the default locale is taken.
 	 * @throws IllegalArgumentException If the 'key is unknown.
 	 */
-	public String getMessage(Locale locale, String key) throws IllegalArgumentException {
+	public String getMessage(Locale locale, FilemanagerException.Key key) throws IllegalArgumentException {
 		String lang = locale.getLanguage().toLowerCase();
 		if(!messageStore.containsKey(lang)) {
 			logger.warn("Language [{}] not supported, take the default.", lang);
 			lang = Constants.DEFAULT_LOCALE.getLanguage().toLowerCase();
 		}
 		Map<String, String> messages = messageStore.get(lang);
-		if(!messages.containsKey(key))
-			throw new IllegalArgumentException("Message key not found: " + key);
+		if(!messages.containsKey(key.getPropertyName()))
+			throw new IllegalArgumentException("Message key not found: " + key.getPropertyName());
 		return messages.get(key);
 	}
 }

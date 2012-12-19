@@ -24,7 +24,6 @@ package de.thischwa.c5c.exception;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
-import de.thischwa.c5c.util.StringUtils;
 
 /**
  * Thrown to indicate known exceptions of the filemanager. The messages based on the localized known messages provided by
@@ -34,54 +33,47 @@ public class FilemanagerException extends C5CException {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public final static String KEY_AUTHORIZATION_REQUIRED = "AUTHORIZATION_REQUIRED";
-	
-	public final static String KEY_INVALID_ACTION = "INVALID_ACTION";
-	
-	public final static String KEY_MODE_ERROR = "MODE_ERROR";
-	
-	public final static String KEY_DIRECTORY_ALREADY_EXISTS = "DIRECTORY_ALREADY_EXISTS";
-	
-	public final static String KEY_FILE_ALREADY_EXISTS = "FILE_ALREADY_EXISTS";
-	
-	public final static String KEY_UNABLE_TO_CREATE_DIRECTORY = "UNABLE_TO_CREATE_DIRECTORY";
-	
-	public final static String KEY_INVALID_VAR = "INVALID_VAR";
-	
-	public final static String KEY_DIRECTORY_NOT_EXIST = "DIRECTORY_NOT_EXIST";
-	
-	public final static String KEY_UNABLE_TO_OPEN_DIRECTORY = "UNABLE_TO_OPEN_DIRECTORY";
-	
-	public final static String KEY_ERROR_RENAMING_DIRECTORY = "ERROR_RENAMING_DIRECTORY";
-	
-	public final static String KEY_ERROR_RENAMING_FILE = "ERROR_RENAMING_FILE";
-	
-	public final static String KEY_INVALID_DIRECTORY_OR_FILE = "INVALID_DIRECTORY_OR_FILE";
-	
-	public final static String KEY_INVALID_FILE_UPLOAD = "INVALID_FILE_UPLOAD";
-	
-	public final static String KEY_UPLOAD_FILES_SMALLER_THAN = "UPLOAD_FILES_SMALLER_THAN";
-	
-	public final static String KEY_UPLOAD_IMAGES_ONLY = "UPLOAD_IMAGES_ONLY";
-	
-	public final static String KEY_UPLOAD_IMAGES_TYPE_JPEG_GIF_PNG = "UPLOAD_IMAGES_TYPE_JPEG_GIF_PNG";
-	
-	public final static String KEY_FILE_NOT_EXIST = "FILE_DOES_NOT_EXIST";
-	
-	public final static String KEY_LANGUAGE_FILE_NOT_FOUND = "LANGUAGE_FILE_NOT_FOUND";
+	public enum Key {
+		AuthorizationRequired("AUTHORIZATION_REQUIRED"),
+		InvalidAction("INVALID_ACTION"),
+		ModeError("MODE_ERROR"),
+		DirectoryAlreadyExists("DIRECTORY_ALREADY_EXISTS"),
+		FileAlreadyExists("FILE_ALREADY_EXISTS"),
+		UnableToCreateDirectory("UNABLE_TO_CREATE_DIRECTORY"),
+		InvalidVar("INVALID_VAR"),
+		DirectoryNotExist("DIRECTORY_NOT_EXIST"),
+		UnableToOpenDirectory("UNABLE_TO_OPEN_DIRECTORY"),
+		ErrorRenamingDirectory("ERROR_RENAMING_DIRECTORY"),
+		ErrorRenamingFile("ERROR_RENAMING_FILE"),
+		InvalidDirectoryOrFile("INVALID_DIRECTORY_OR_FILE"),
+		InvalidFileUpload("INVALID_FILE_UPLOAD"),
+		UploadFilesSmallerThan("UPLOAD_FILES_SMALLER_THAN"),
+		UploadImagesOnly("UPLOAD_IMAGES_ONLY"),
+		UploadImagesTypeJpegGifPng("UPLOAD_IMAGES_TYPE_JPEG_GIF_PNG"),
+		FileNotExists("FILE_DOES_NOT_EXIST"),
+		LanguageFileNotFound("LANGUAGE_FILE_NOT_FOUND");
+		
+		private String propertyName;
+		
+		private Key(String propertyName) {
+			this.propertyName = propertyName;
+		}
+		
+		public String getPropertyName() {
+			return propertyName;
+		}
+	}
 
-	public FilemanagerException(FilemanagerAction mode, String key, String... params) {
+	public FilemanagerException(FilemanagerAction mode, Key key, String... params) {
 		super(mode, buildMessage(key, params));
 	}
 
-	public FilemanagerException(String key, String... params) {
+	public FilemanagerException(Key key, String... params) {
 		super(buildMessage(key, params));
 	}
 
-	private static String buildMessage(String key, String... params) {
+	private static String buildMessage(Key key, String... params) {
 		String rawMsg = UserObjectProxy.getFilemanagerErrorMessage(key);
-		if(StringUtils.isNullOrEmptyOrBlank(key))
-			rawMsg = UserObjectProxy.getFilemanagerErrorMessage(KEY_INVALID_VAR);
 		String msg = (params == null || params.length == 0) ? rawMsg : String.format(rawMsg, ((Object[]) params));
 		return msg;
 	}

@@ -24,12 +24,15 @@ package de.thischwa.c5c;
 
 import java.util.Locale;
 
+/**
+ * Global constants.
+ */
 public interface Constants {
 
-	/** The separator. */
+	/** The separator char. */
 	public final char separatorChar = '/';
 	
-	/** The separator. */
+	/** The separator string. */
 	public final String separator = String.valueOf(separatorChar);
 	
 	/** The default locale. */

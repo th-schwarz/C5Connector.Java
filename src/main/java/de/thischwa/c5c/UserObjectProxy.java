@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.FilemanagerMessageHolder;
 import de.thischwa.c5c.requestcycle.UserAction;
@@ -146,7 +147,7 @@ public class UserObjectProxy {
 		return iconResolver.getIconPath(vf);
 	}
 	
-	public static String getFilemanagerErrorMessage(String key) {
+	public static String getFilemanagerErrorMessage(FilemanagerException.Key key) {
 		return c5messageHolder.getMessage(RequestData.getLocale(), key);
 	}
 

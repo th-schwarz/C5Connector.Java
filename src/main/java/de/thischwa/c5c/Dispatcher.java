@@ -41,6 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
+import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
@@ -95,7 +97,7 @@ final class Dispatcher {
 			return FilemanagerAction.valueOfIgnoreCase(mode);
 		} catch (IllegalArgumentException e) {
 			logger.error("'mode' not found: {}", mode);
-			throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage("MODE_ERROR"));
+			throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(FilemanagerException.Key.ModeError));
 		}
 	}
 
@@ -159,7 +161,7 @@ final class Dispatcher {
 				break;}
 			default: {
 				logger.error("'mode' not found: {}", req.getParameter("mode"));
-				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage("MODE_ERROR"));}
+				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));}
 			}
 			resp.setMode(mode);
 			return resp;
@@ -237,7 +239,7 @@ final class Dispatcher {
 				}
 			default: {
 				logger.error("'mode' not found: {}", req.getParameter("mode"));
-				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage("MODE_ERROR"));
+				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));
 				}
 			}
 		} catch (C5CException e) {
