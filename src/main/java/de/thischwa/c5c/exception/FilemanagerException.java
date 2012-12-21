@@ -27,7 +27,7 @@ import de.thischwa.c5c.UserObjectProxy;
 
 /**
  * Thrown to indicate known exceptions of the filemanager. The messages based on the localized known messages provided by
- * {@link UserObjectProxy#getFilemanagerErrorMessage(String)}.
+ * {@link UserObjectProxy#getFilemanagerErrorMessage(Key)}.
  */
 public class FilemanagerException extends C5CException {
 	
