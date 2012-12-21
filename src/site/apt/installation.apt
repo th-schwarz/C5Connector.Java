@@ -45,8 +45,8 @@ mvn clean package
   </servlet-mapping>
 +------------------------------------------------------------------------------+
 
-  Assuming you installed the editor in the <<</filemanager>>> folder in your webapp.\
-  The Connector Servlet is now declared but <still> disabled. 
+  Assuming the filemanager has been installed in the <<</filemanager>>> folder in your webapp.\
+  The Connector Servlet is now declared but is <still> disabled. 
 
   [[2]] Create a <<<c5connector.properties>>> file in your classpath and add:
   

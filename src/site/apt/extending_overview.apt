@@ -6,17 +6,17 @@ Overview
 
   [Hint:] This section is just for those who want to extend the library. 
           It is necessary to understand the request cycle of {{{http://github.com/simogeo/Filemanager}filemanager of corefive}} 
-          completely. If not, refer corresponding documentation!
+          completely. If not, refer to this corresponding documentation!
   
   []
   
-  The C5Connector library provides you several interfaces to extend and
+  The C5Connector.Java library provides several interfaces to extend and
   adapt it to your needs. 
   
   * <<Connector>>: Gives you the ability to handle server-side connector requests
     the way you want.    
   
-  * <<FilemanagerCapability>>: Gives you the ability which capabilities are set in 
+  * <<FilemanagerCapability>>: Gives you the ability to decide which capabilities are set in 
     an info request.  
     
   * <<UserAction>>: Gives you full control over actions, which aren't covered by the
@@ -27,13 +27,13 @@ Big picture
   
   If the library has to be extended, it's necessary to understand the request-cycle of C5Connector.Java. 
   
-  A request is taken from the <ConnectorServlet> and will dispatch to several other objects which
-  prepares the parameter of the request. Now, C5Connector.Java knows which action/command has to be
-  proceed. Before this action is dispatched to the implementation of the Connector, it is checked 
+  A request is taken from the <ConnectorServlet> and will be dispatched to several other objects which
+  prepare the parameter of the request. Now, C5Connector.Java knows which action/command has to be
+  proceeded. Before this action is dispatched to the implementation of the Connector, it will be examined 
   if the implementation of <UserAction> has to be called to verify the action.
   
   If the verification was achieved, the action with its parameters will be dispatched to the 
   implementation of the Connector. It processes the action and builds a response object with the help of
-  the <ResponseFactory>. The capabilities for the filemanager are set dependent on there configuration.
+  the <ResponseFactory>. The capabilities for the filemanager are set dependently on there configuration.
   
   And finally this response object will be returned to the <ConnectorServlet>. 

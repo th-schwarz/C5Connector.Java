@@ -4,8 +4,8 @@
 
 UserAction
 
-  Through the live cycle of the filemanager, several commands are sent to retrieve and create objects on the server.
-  The Connector Servlet retrieves this commands and responses as necessary to them. With an implementation of the
+  Within the request-cycle of the filemanager, several commands are sent to retrieve and create objects on the server.
+  The Connector Servlet retrieves this commands and builds the corresponding responses. With an implementation of the
   interface {{{./apidocs/de/thischwa/c5c/requestcycle/UserAction.html}<<<de.thischwa.c5c.requestcycle.UserAction>>>}}
   you are able to intercept the commands and tell the Connector Servlet if the current request is allowed to achieve or not.
   

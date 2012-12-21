@@ -14,9 +14,9 @@ C5Connector.Java
   If the API should be used with the {{{http://ckeditor.com}CKEditor}}, I suggest to use it with {{{http://th-schwarz.github.com/CKEditor.Java/}CKEditor.Java}},
   a simple java backend of the CKEditor.
     
-  [Hint:] It's an early-state project and should not to be used in a productive environment! The API can be changed radical! 
+  [Hint:] It's an early-state project and should not to be used in a productive environment! The API can be changed radically! 
           
-          This project is managed avocational. I'm aware of the lack of documentation and tries to extend it constantly. \
+          This project is managed as a side job. I'm aware of the lack of documentation and try to extend it constantly. \
           Please be patient!
           
 Call to Action

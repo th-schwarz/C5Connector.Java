@@ -4,19 +4,19 @@
 
 FilemanagerCapability
 
-  Through the live cycle of the filemanager there are two <get> commands. To determine which action is allowed 
+  Within the request-cycle of the filemanager there are two <get> commands. To determine which action is allowed 
   for a specific file, capabilities can be defined for each one. These capabilities are added to each response
   of a 'get-request'.
   
   The available capabilities are 'select', 'delete', 'rename', 'download'.
   
-  There is ready-to-go implementation: {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapabilty.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapabilty>>>}},
+  There is a ready-to-go implementation: {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapabilty.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapabilty>>>}},
   the default one. It just sends all capabilities defined in the property <connector.capabilities> for each file.
   
   If you want to change the capabilities for all <get> commands you just have to set the property <connector.capabilities> in your
   <<<c5connector.properties>>> file.
   
-  If this doesn't meets your requirements, you have to write a custom one.
+  If this doesn't meet your requirements, you have to write a custom one.
       
 * Custom implementation
 
