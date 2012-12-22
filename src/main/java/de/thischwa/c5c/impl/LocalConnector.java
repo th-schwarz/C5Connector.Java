@@ -52,7 +52,6 @@ import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
-import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
@@ -78,13 +77,7 @@ public class LocalConnector implements Connector {
 	@Override
 	public List<FileProperties> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		File folder = buildAndCheckFolder(urlPath);
-		List<FileProperties> props = constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
-		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
-		for (FileProperties fileProperties : props) {
-			FileInfo fi = ResponseFactory.buildFileInfo(urlPath, fileProperties);
-			infos.add(fi);
-		}
-		return props;
+		return constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
