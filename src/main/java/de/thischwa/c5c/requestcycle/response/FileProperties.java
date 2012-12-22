@@ -23,21 +23,26 @@
 package de.thischwa.c5c.requestcycle.response;
 
 import java.awt.Dimension;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 
-
+/**
+ * Object to hold the properties of a file or folder. It is used for the response of a get-request of 
+ * an implementation of the {@link Connector}.
+ */
 public final class FileProperties extends FileInfoProperties {
 
 	private boolean isDir = false;
 	
-	public FileProperties(String name, String modified) {
+	public FileProperties(String name, Date modified) {
 		super(name, modified);
 	}
 	
-	public FileProperties(String name, long size, String modified) {
+	public FileProperties(String name, long size, Date modified) {
 		super(name, size, modified);
 	}
 	

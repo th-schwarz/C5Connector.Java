@@ -31,10 +31,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
@@ -50,7 +49,6 @@ import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
-import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
@@ -205,10 +203,7 @@ public class LocalConnector implements Connector {
 			throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
 			
 		try {
-			Locale locale = RequestData.getLocale();
-			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-			String dateStr = df.format(file.lastModified());
-			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), dateStr);
+			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			if(Extension.IMAGE.isAllowedExtension(FilenameUtils.getExtension(file.getPath()))) {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
@@ -240,10 +235,7 @@ public class LocalConnector implements Connector {
 		// add dirs
 		File[] fileList = dir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
 		for (File file : fileList) {
-			Locale locale = RequestData.getLocale();
-			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-			String dateStr = df.format(file.lastModified());
-			FileProperties fp = new FileProperties(file.getName(), dateStr);
+			FileProperties fp = new FileProperties(file.getName(), new Date(file.lastModified()));
 			fp.setDir(true);
 			props.add(fp);
 		}

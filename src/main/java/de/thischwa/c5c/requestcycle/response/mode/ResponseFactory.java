@@ -23,6 +23,7 @@
 package de.thischwa.c5c.requestcycle.response.mode;
 
 import java.io.InputStream;
+import java.util.Date;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
@@ -36,7 +37,7 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
  */
 public class ResponseFactory {
 
-	public static FileProperties buildFileProperties(String name, long size, String modified) {
+	public static FileProperties buildFileProperties(String name, long size, Date modified) {
 		return new FileProperties(name, size, modified);
 	}
 
