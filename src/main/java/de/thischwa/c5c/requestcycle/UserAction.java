@@ -41,7 +41,7 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
 public interface UserAction {
 
 	/**
-	 * Checks if the file upload is enabled/allowed.
+	 * Checks if the upload of a file is enabled/allowed.
 	 * 
 	 * @param request
 	 *            current user request instance
@@ -51,7 +51,7 @@ public interface UserAction {
 	public boolean isFileUploadEnabled(final HttpServletRequest request);
 	
 	/**
-	 * Checks if folder creation is enabled/allowed. 
+	 * Checks if the creation of a folder is enabled/allowed. 
 	 * 
 	 * @param request
 	 *            current user request instance
