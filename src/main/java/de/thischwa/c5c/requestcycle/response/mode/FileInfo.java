@@ -55,12 +55,12 @@ public final class FileInfo extends Response {
 
 	private String previewPath;
 
-	FileInfo(String path, boolean isDir) {
+	public FileInfo(String path, boolean isDir) {
+		capabilities = new ArrayList<String>();
 		virtualFile = new VirtualFile(path, isDir);
 		this.path = path;
 		if (isDir && !this.path.endsWith(Constants.separator))
 			this.path += Constants.separator;
-		capabilities = new ArrayList<String>();
 	}
 
 	@JsonProperty("Path")
@@ -103,7 +103,7 @@ public final class FileInfo extends Response {
 		return previewPath;
 	}
 
-	void setPreviewPath(String previewPath) {
+	public void setPreviewPath(String previewPath) {
 		this.previewPath = previewPath;
 	}
 
@@ -112,7 +112,7 @@ public final class FileInfo extends Response {
 		return fileProperties;
 	}
 
-	void setFileProperties(FileInfoProperties fileProperties) {
+	public void setFileProperties(FileInfoProperties fileProperties) {
 		this.fileProperties = fileProperties;
 	}
 
@@ -127,7 +127,7 @@ public final class FileInfo extends Response {
 	}
 
 	@JsonIgnore
-	void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
+	public void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
 		if (capabilities != null && capabilities.length > 0) {
 			this.capabilities = new ArrayList<String>(capabilities.length);
 			for (FilemanagerCapability.Capability capability : capabilities) {

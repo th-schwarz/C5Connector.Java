@@ -27,12 +27,12 @@ import java.io.InputStream;
 /**
  * Simple container object to hold data which is relevant for download. 
  */
-public class DownloadInfo {
+public final class DownloadInfo {
 	
 	private InputStream in;
 	private long fileSize;
 	
-	DownloadInfo(InputStream in, long fileSize) {
+	public DownloadInfo(InputStream in, long fileSize) {
 		this.in = in;
 		this.fileSize = fileSize;
 	}

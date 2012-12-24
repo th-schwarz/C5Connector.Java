@@ -41,7 +41,7 @@ public final class Rename extends Response {
 	
 	private String newName;
 	
-	Rename(String oldFullPath, String newName) {
+	public Rename(String oldFullPath, String newName) {
 		this.oldFullPath = oldFullPath;
 		this.newName = newName;
 		VirtualFile oldVF = new VirtualFile(oldFullPath);

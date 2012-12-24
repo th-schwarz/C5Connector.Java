@@ -20,7 +20,7 @@ Connector
   Just implement the interface {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}.
   Consult the javadoc and see how it works.
   
-  [Hint:] Use the factory {{{./apidocs/de/thischwa/c5c/requestcycle/response/mode/ModeResponseFactory.html}<<<de.thischwa.c5c.requestcycle.response.mode.ModeRespanseFactory>>>}}
+  [Hint:] Use the factory {{{./apidocs/de/thischwa/c5c/ResponseFactory.html}<<<de.thischwa.c5c.ResponseFactory>>>}}
           to build the desired response. To handle exceptions you have to use {{{./apidocs/de/thischwa/c5c/exception/FilemanageException.html}<<<de.thischwa.c5c.exception.FilemanagerException>>>}}
           and {{{./apidocs/de/thischwa/c5c/exception/UserActionException.html}<<<de.thischwa.c5c.exception.UserActionException>>>}}. 
           For details consult the javadoc please!

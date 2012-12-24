@@ -46,13 +46,13 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.FilemanagerAction;
+import de.thischwa.c5c.ResponseFactory;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
-import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
 import de.thischwa.jii.IDimensionProvider;

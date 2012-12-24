@@ -37,11 +37,11 @@ public final class FolderInfo extends Response {
 
 	private Map<String, FileInfo> folderItems;
 
-	FolderInfo() {
+	public FolderInfo() {
 		folderItems = new LinkedHashMap<String, FileInfo>();
 	}
 
-	void add(final FileInfo fileInfo) {
+	public void add(final FileInfo fileInfo) {
 		String path = fileInfo.getPath();
 		if(fileInfo.isDir() && !path.endsWith(Constants.separator))
 			path += Constants.separator;

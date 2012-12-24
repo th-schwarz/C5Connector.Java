@@ -37,7 +37,7 @@ public final class UploadFile extends Response {
 	
 	private String name;
 	
-	UploadFile(String path, String name) {
+	public UploadFile(String path, String name) {
 		this.path = path;
 		this.name = name;
 		if(!StringUtils.isNullOrEmpty(this.path) && !this.path.endsWith(Constants.separator))

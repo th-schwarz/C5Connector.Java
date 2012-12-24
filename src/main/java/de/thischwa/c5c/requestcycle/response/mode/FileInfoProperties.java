@@ -26,7 +26,7 @@ public class FileInfoProperties {
 	private Integer width = null;
 	private Long size = null;
 
-	FileInfoProperties(String name, int width, int height, long size, Date modified) {
+	public FileInfoProperties(String name, int width, int height, long size, Date modified) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
@@ -67,16 +67,12 @@ public class FileInfoProperties {
 		return getDate(created);
 	}
 	
-	void setCreated(Date created) {
-		this.created = created;
-	}
-	
 	@JsonProperty("Date Modified")
 	String getModified() {
 		return getDate(modified);
 	}
 
-	void setModified(Date modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 

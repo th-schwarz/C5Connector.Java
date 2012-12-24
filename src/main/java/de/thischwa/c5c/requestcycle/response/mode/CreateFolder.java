@@ -35,7 +35,7 @@ public final class CreateFolder extends Response {
 	
 	private String folderName;
 	
-	CreateFolder(String parentUrlPath, String folderName) {
+	public CreateFolder(String parentUrlPath, String folderName) {
 		this.parentUrlPath = parentUrlPath;
 		this.folderName = folderName;
 	}

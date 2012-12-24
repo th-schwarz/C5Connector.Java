@@ -33,7 +33,7 @@ public final class Delete extends Response {
 
 	private String fullPath;
 
-	Delete(String fullPath) {
+	public Delete(String fullPath) {
 		this.fullPath = fullPath;
 	}
 	

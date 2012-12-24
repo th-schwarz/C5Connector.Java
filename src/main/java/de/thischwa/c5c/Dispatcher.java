@@ -23,6 +23,7 @@
 package de.thischwa.c5c;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,11 +49,16 @@ import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
+import de.thischwa.c5c.requestcycle.response.mode.Delete;
+import de.thischwa.c5c.requestcycle.response.mode.Download;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
-import de.thischwa.c5c.requestcycle.response.mode.ResponseFactory;
+import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.resource.UserActionMessageHolder;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -135,7 +141,7 @@ final class Dispatcher {
 				String sanitizedName = FileUtils.sanitizeName(newName);
 				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", new Object[] { oldUrlPath, newName, sanitizedName });
 				connector.rename(oldUrlPath, sanitizedName);
-				resp = ResponseFactory.buildRenameFile(oldUrlPath, sanitizedName);
+				resp = Dispatcher.buildRenameFile(oldUrlPath, sanitizedName);
 				break;}
 			case CREATEFOLDER: {
 				if(!UserObjectProxy.isCreateFolderEnabled())
@@ -145,19 +151,19 @@ final class Dispatcher {
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
 				logger.debug("* createFolder -> urlPath: {}, name: {}, sanitized name: {}", new Object[] { urlPath, folderName, sanitizedFolderName });
 				connector.createFolder(urlPath, sanitizedFolderName);
-				resp = ResponseFactory.buildCreateFolder(urlPath, sanitizedFolderName);
+				resp = Dispatcher.buildCreateFolder(urlPath, sanitizedFolderName);
 				break;}
 			case DELETE: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* delete -> urlPath: {}", urlPath);
 				connector.delete(urlPath);
-				resp = ResponseFactory.buildDelete(urlPath);
+				resp = Dispatcher.buildDelete(urlPath);
 				break;}
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* download -> urlPath: {}", urlPath);
 				DownloadInfo di = connector.download(urlPath);
-				resp = ResponseFactory.buildDownload(urlPath, di.getFileSize(), di.getInputStream());
+				resp = Dispatcher.buildDownload(urlPath, di.getFileSize(), di.getInputStream());
 				break;}
 			default: {
 				logger.error("'mode' not found: {}", req.getParameter("mode"));
@@ -172,25 +178,25 @@ final class Dispatcher {
 	}
 	
 	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {
-		FolderInfo folderInfo = ResponseFactory.buildFolderInfo();
+		FolderInfo folderInfo = Dispatcher.buildFolderInfo();
 		if(props == null)
 			return folderInfo;
 		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
 		for (FileProperties fileProperties : props) {
-			FileInfo fileInfo = ResponseFactory.buildFileInfo(urlPath, fileProperties);
-			ResponseFactory.setCapabilities(fileInfo, urlPath);
+			FileInfo fileInfo = Dispatcher.buildFileInfo(urlPath, fileProperties);
+			Dispatcher.setCapabilities(fileInfo, urlPath);
 			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
-			ResponseFactory.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
+			Dispatcher.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
 			infos.add(fileInfo);
-			ResponseFactory.add(folderInfo, fileInfo);
+			Dispatcher.add(folderInfo, fileInfo);
 		}
 		return folderInfo;
 	}
 	
 	private FileInfo buildInfo(String urlPath, FileProperties props) {
-		FileInfo fileInfo = ResponseFactory.buildFileInfo(urlPath, props);
-		ResponseFactory.setCapabilities(fileInfo, urlPath);
-		ResponseFactory.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
+		FileInfo fileInfo = Dispatcher.buildFileInfo(urlPath, props);
+		Dispatcher.setCapabilities(fileInfo, urlPath);
+		Dispatcher.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
 		return fileInfo;
 	}
 
@@ -230,7 +236,7 @@ final class Dispatcher {
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
 				if(!UserObjectProxy.isFileUploadEnabled()) {
 					// we have to use explicit the UploadFile object here because of the textarea stuff
-					resp = ResponseFactory.buildUploadFileForError(urlPath, sanitizedName);
+					resp = Dispatcher.buildUploadFileForError(urlPath, sanitizedName);
 				} else {
 					resp = connector.upload(urlPath, sanitizedName, uplFile.getInputStream());
 				}
@@ -252,5 +258,50 @@ final class Dispatcher {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
 		}
+	}
+
+	private static void add(FolderInfo folderInfo, FileInfo fileInfo) {
+		folderInfo.add(fileInfo);
+	}
+
+	private static FolderInfo buildFolderInfo() {
+		return new FolderInfo();
+	}
+
+	private static Rename buildRenameFile(String oldFullPath, String newName) {
+		return new Rename(oldFullPath, newName);
+	}
+
+	private static CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {
+		return new CreateFolder(parentUrlPath, folderName);
+	}
+
+	private static Download buildDownload(String fullPath, long contentLength, InputStream in) {
+		return new Download(fullPath, contentLength, in);
+	}
+
+	private static Delete buildDelete(String fullPath) {
+		return new Delete(fullPath);
+	}
+
+	private static UploadFile buildUploadFileForError(String path, String sanitizedName) {
+		UploadFile uploadFile = new UploadFile(path, sanitizedName);
+		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.Key.UploadNotAllowed.getPropertyName()), 200);
+		uploadFile.setMode(FilemanagerAction.UPLOAD);
+		return uploadFile;
+	}
+
+	private static void setPreviewPath(FileInfo fi, String previewPath) {
+		fi.setPreviewPath(previewPath);
+	}
+
+	private static void setCapabilities(FileInfo fi, String urlPath) {
+		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
+	}
+
+	private static FileInfo buildFileInfo(String urlPath, FileProperties fp) {
+		FileInfo fi = new FileInfo(urlPath, fp.isDir());
+		fi.setFileProperties(fp);
+		return fi;
 	}
 }

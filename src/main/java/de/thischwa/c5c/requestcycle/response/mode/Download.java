@@ -46,7 +46,7 @@ public final class Download extends Response {
 	
 	private InputStream in;
 
-	Download(String fullPath, long contentLength, InputStream in) {
+	public Download(String fullPath, long contentLength, InputStream in) {
 		this.fullPath = fullPath;
 		this.contentLength = contentLength;
 		this.in = in;
