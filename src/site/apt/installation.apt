@@ -11,7 +11,7 @@ Installation Guide
           
 * Prepare the Installation
 
-  The current version can be downloaded	on {{{https://sourceforge.net/projects/c5connectorjava/files/}SF}}.
+  The current version can be downloaded	from {{{https://sourceforge.net/projects/c5connectorjava/files/}Sourceforge}}.
   There is a zip file like <<<c5connector-java-[version]-SNAPSHOT-bin.zip>>> which contains all binaries
   of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
   Don't forget to add a preferred SLF4J binding!
