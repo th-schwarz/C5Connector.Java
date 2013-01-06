@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
-import de.thischwa.c5c.requestcycle.FilemanagerMessageHolder;
 import de.thischwa.c5c.requestcycle.UserAction;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
@@ -43,7 +42,8 @@ import de.thischwa.c5c.util.VirtualFile;
 
 /**
  * A proxy for the implementations of {@link UserAction}, {@link IconResolver}, {@link FilemanagerMessageHolder} 
- * and {@link FilemanagerCapability} interfaces.
+ * and {@link FilemanagerCapability} interfaces. Wrapper methods for these objects are provided.
+ * <br/>
  * A {@link RuntimeException} is thrown if one of these implementation couldn't be instantiated. 
  */
 public class UserObjectProxy {
@@ -60,11 +60,12 @@ public class UserObjectProxy {
 	private static FilemanagerCapability.Capability[] defaultC5FileCapability;
 
 	/**
-	 * Initialization of the {@link UserObjectProxy}.
+	 * Initialization.
 	 *
 	 * @param servletContext the servlet context
+	 * @throws RuntimeException Is thrown, if one required objects couldn't be initialized.
 	 */
-	static void init(ServletContext servletContext) {
+	static void init(ServletContext servletContext) throws RuntimeException {
 		// 1. try to instantiate the UserAction object
 		String className = PropertiesLoader.getUserActionImpl();
 		if (StringUtils.isNullOrEmptyOrBlank(className))

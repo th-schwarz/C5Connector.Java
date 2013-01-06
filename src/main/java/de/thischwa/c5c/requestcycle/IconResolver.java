@@ -28,7 +28,7 @@ import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
- * TODO document me
+ * An interface to determine the icons for different file types.
  */
 public interface IconResolver {
 

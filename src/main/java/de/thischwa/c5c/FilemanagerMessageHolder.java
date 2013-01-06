@@ -20,7 +20,7 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.requestcycle;
+package de.thischwa.c5c;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -36,15 +36,15 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
 
 /**
- * TODO document me
+ * Holds the messages provided by several javascript files located in the path 'scripts/languages' inside
+ * the folder of filemanager.
  */
-public class FilemanagerMessageHolder {
+class FilemanagerMessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(FilemanagerMessageHolder.class);
 
 	private static String scriptPath = "scripts/languages";
@@ -58,7 +58,7 @@ public class FilemanagerMessageHolder {
 
 	private Map<String, Map<String, String>> messageStore;
 
-	public FilemanagerMessageHolder(ServletContext servletContext) throws RuntimeException {
+	FilemanagerMessageHolder(ServletContext servletContext) throws RuntimeException {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
@@ -88,7 +88,7 @@ public class FilemanagerMessageHolder {
 	 * @return The message for the desired 'locale' and 'key'. If the locale is unknown the default locale is taken.
 	 * @throws IllegalArgumentException If the 'key is unknown.
 	 */
-	public String getMessage(Locale locale, FilemanagerException.Key key) throws IllegalArgumentException {
+	String getMessage(Locale locale, FilemanagerException.Key key) throws IllegalArgumentException {
 		String lang = locale.getLanguage().toLowerCase();
 		if(!messageStore.containsKey(lang)) {
 			logger.warn("Language [{}] not supported, take the default.", lang);

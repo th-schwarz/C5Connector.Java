@@ -36,7 +36,9 @@ import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
  * In general a connector serves and manages files and folders accessed through the filemanager on 
  * an arbitrary backend system. The connector will retrieve a valid request. 'Valid' means in termes of
- * correct and reasonable parameters.
+ * correct and reasonable parameters.<br/>
+ * <br/>
+ * <b>Hint for implementations:</b> There are a factory object, which helps to build the required response objects: {@link ResponseFactory}. 
  */
 public interface Connector {
 

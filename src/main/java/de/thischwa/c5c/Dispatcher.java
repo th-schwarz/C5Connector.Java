@@ -96,13 +96,20 @@ final class Dispatcher {
 		logger.info("Dispatcher successful initialized.");
 	}
 
+	/**
+	 * Tries to resolve the mode (action of the filemanager).
+	 * 
+	 * @param mode String representation of the mode)
+	 * @return The resolved {@link FilemanagerAction}.
+	 * @throws C5CException Thrown if the mode couldn't be resolved.
+	 */
 	private FilemanagerAction resolveMode(String mode) throws C5CException { 
 		if(mode == null)
 			throw new IllegalArgumentException("Missing 'mode' parameter.");
 		try {
 			return FilemanagerAction.valueOfIgnoreCase(mode);
 		} catch (IllegalArgumentException e) {
-			logger.error("'mode' not found: {}", mode);
+			logger.error("Unknown 'mode': {}", mode);
 			throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(FilemanagerException.Key.ModeError));
 		}
 	}
@@ -173,8 +180,7 @@ final class Dispatcher {
 			return resp;
 		} catch (C5CException e) {
 			return ErrorResponseFactory.buildException(e);
-		}
-		
+		}		
 	}
 	
 	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {
