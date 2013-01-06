@@ -6,21 +6,23 @@ Installation Guide
 
   Please read the topics in this guide from top to bottom.
   
-  [Hint:] C5Connector.Java uses the state-of-the-art logging facade {{{http://http://www.slf4j.org}SLF4J}}.
+  [Hint:] C5Connector.Java uses the state-of-the-art logging facade {{{http://www.slf4j.org}SLF4J}}.
           Read the corresponding manual, if you are not familiar with it.
           
 * Prepare the Installation
 
-  The desired jar file can be easily build with maven2. 
+  The current version can be downloaded	on {{{https://sourceforge.net/projects/c5connectorjava/files/}SF}}.
+  There is a zip file like <<<c5connector-java-[version]-SNAPSHOT-bin.zip>>> which contains all binaries
+  of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
+  Don't forget to add a preferred SLF4J binding!
+
+  However, the binary zip file can be easily build with maven2, too. 
   Just download the source, declare a preferred SLF4J binding in the dependencies section of your POM within 
   the runtime scope and call the following command:
   
 +------------------------------------------------------------------------------+
 mvn clean package
 +------------------------------------------------------------------------------+
-
-  It creates a zip file like <<<c5connector-java-[version]-SNAPSHOT-bin.zip>>> which contains all binaries
-  of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
 
 * Activation of the Connector Servlet
 
