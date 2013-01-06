@@ -20,7 +20,7 @@ FilemanagerCapability
       
 * Custom implementation
 
-  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle.FilemangerCapability>>>}}.
+  Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle.FilemanagerCapability>>>}}.
   Consult the javadoc and see how it works.
   
   And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
