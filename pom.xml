@@ -5,9 +5,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>The Java backend for the filemanager of corefive.</description>
 	<name>C5Connector.Java</name>
-	<inceptionYear>2012</inceptionYear>
-
 	<url>https://github.com/th-schwarz/C5Connector.Java</url>
+	<inceptionYear>2012</inceptionYear>
 	<licenses>
 		<license>
 			<name>GPL, MIT</name>
