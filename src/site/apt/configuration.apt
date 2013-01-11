@@ -91,8 +91,8 @@ Configuration properties
 | 									 | .FilemanagerIconResolver 		  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
 |									 | 									  | .IconResolver>>>}} implementation. 				 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.fileCapabilityImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/impl/C5FileCapabiltiy.html}<<<de.thischwa.c5c.requestcycle. |
-|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle | impl.DefaultCapability>>>}}. |
+| connector.fileCapabilityImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle.FilemanagerCapability>>>}}. |
+|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle |  |
 |									 | 									  | .FilemanagerCapability>>>}} implementation. 	 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
