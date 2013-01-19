@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
@@ -40,7 +41,7 @@ import de.thischwa.jii.IDimensionProvider;
  * This container maintenance objects per request. It relies on {@link ThreadLocal}.<br/>
  * Provided Objects:<ul>
  * <li>The {@link Locale}: It is grabbed from the query string of the referrer. That's the location set by the filemanager.</li>
- * <li> The {@link HttpServletRequest}.</li>
+ * <li> The {@link Context}.</li>
  * </ul>
  * <i>Hint:</i> The implementation of the {@link IDimensionProvider} will be initialized 
  * and provided for each request because there isn't any a that it is thread-save.
@@ -48,7 +49,7 @@ import de.thischwa.jii.IDimensionProvider;
 public class RequestData {
 	private static Logger logger = LoggerFactory.getLogger(RequestData.class);
 	
-	private static ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
+	private static ThreadLocal<Context> context = new ThreadLocal<Context>();
 	
 	private static ThreadLocal<IDimensionProvider> dimensionProvider = new ThreadLocal<IDimensionProvider>();
 	
@@ -63,7 +64,13 @@ public class RequestData {
 	public static void beginRequest(final HttpServletRequest req) {
 		if (req == null)
 			throw new NullPointerException("the request cannot be null");
-		RequestData.request.set(req);
+		
+		// init the context
+		try {
+			RequestData.context.set(new Context(req));
+		} catch (C5CException e) {
+			throw new RuntimeException("Couldn't initialize the context.", e);
+		}
 		
 		// init the dimension provider
 		try {
@@ -95,12 +102,12 @@ public class RequestData {
 	}
 
 	/**
-	 * Returns the current user request instance.
+	 * Gets the context.
 	 * 
-	 * @return the current user request instance
+	 * @return the context
 	 */
-	public static HttpServletRequest getRequest() {
-		return request.get();
+	public static Context getContext() {
+		return context.get();
 	}
 	
 	/**
@@ -126,7 +133,7 @@ public class RequestData {
 	 * <strong>Important: To prevent memory leaks, make sure that this method is called at the end of the current request cycle!</strong>
 	 */
 	public static void endRequest() {
-		request.remove();
+		context.remove();
 		dimensionProvider.remove();
 		locale.remove();
 	}

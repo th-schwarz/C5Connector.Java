@@ -42,9 +42,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
-import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.exception.UserActionException;
+import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
@@ -97,34 +97,17 @@ final class Dispatcher {
 	}
 
 	/**
-	 * Tries to resolve the mode (action of the filemanager).
-	 * 
-	 * @param mode String representation of the mode)
-	 * @return The resolved {@link FilemanagerAction}.
-	 * @throws C5CException Thrown if the mode couldn't be resolved.
-	 */
-	private FilemanagerAction resolveMode(String mode) throws C5CException { 
-		if(mode == null)
-			throw new IllegalArgumentException("Missing 'mode' parameter.");
-		try {
-			return FilemanagerAction.valueOfIgnoreCase(mode);
-		} catch (IllegalArgumentException e) {
-			logger.error("Unknown 'mode': {}", mode);
-			throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(FilemanagerException.Key.ModeError));
-		}
-	}
-
-	/**
 	 * getinfo, getfolder, rename, delete, download.
 	 *
 	 * @return the response 
 	 */
 	Response doGet() {
 		logger.debug("Entering Dispatcher#doGet");
-		HttpServletRequest req = RequestData.getRequest();
+		Context ctx = RequestData.getContext();
+		FilemanagerAction mode = ctx.getMode();
+		HttpServletRequest req = RequestData.getContext().getServletRequest();
 		try {
 			Response resp = null;
-			FilemanagerAction mode = resolveMode(req.getParameter("mode"));
 			switch (mode) {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
@@ -213,7 +196,9 @@ final class Dispatcher {
 	 */
 	Response doPost() {
 		logger.debug("Entering Dispatcher#doPost");
-		HttpServletRequest req = RequestData.getRequest();
+		Context ctx = RequestData.getContext();
+		FilemanagerAction mode = ctx.getMode();
+		HttpServletRequest req = RequestData.getContext().getServletRequest();
 
 		try {
 			Response resp = null;
@@ -232,7 +217,6 @@ final class Dispatcher {
 					uplFile = item;
 			}
 			
-			FilemanagerAction mode = resolveMode(params.get("mode"));
 			switch (mode) {
 			case UPLOAD: {
 				String urlPath = params.get("currentpath");

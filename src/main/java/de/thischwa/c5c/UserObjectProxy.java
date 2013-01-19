@@ -131,7 +131,7 @@ public class UserObjectProxy {
 	 * @see UserAction#isFileUploadEnabled(HttpServletRequest)
 	 */
 	public static boolean isFileUploadEnabled() {
-		return userAction.isFileUploadEnabled(RequestData.getRequest());
+		return userAction.isFileUploadEnabled(RequestData.getContext().getServletRequest());
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class UserObjectProxy {
 	 * @see UserAction#isCreateFolderEnabled(HttpServletRequest)
 	 */
 	public static boolean isCreateFolderEnabled() {
-		return userAction.isCreateFolderEnabled(RequestData.getRequest());
+		return userAction.isCreateFolderEnabled(RequestData.getContext().getServletRequest());
 	}
 	
 	public static String getIconPath(final VirtualFile vf) {
@@ -153,7 +153,7 @@ public class UserObjectProxy {
 	}
 
 	public static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
-		return fileCapability.getCapabilities(RequestData.getRequest(), filePath);
+		return fileCapability.getCapabilities(RequestData.getContext().getServletRequest(), filePath);
 	}
 
 	public static FilemanagerCapability.Capability[] getDefaultC5FileCapabilities() {
