@@ -39,7 +39,7 @@ public interface UserPathBuilder {
 	 * Returns the server-side <i>userfiles</i> absolute path. The provided implementation of {@link Connector}
 	 * will use this value to resolve the server-side location of resources. <br/>
 	 * <br/> 
-	 * <b>Hint:</b> E.g. {@link Connector} and/or {@link ServletContext} can be used to to implement a
+	 * <b>Hint:</b> E.g. {@link Context} and/or {@link ServletContext} can be used to to implement a
 	 * filesystem storage for each user.  
 	 * 
 	 * @param urlPath
