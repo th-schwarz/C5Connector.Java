@@ -95,7 +95,10 @@ public class Path {
 		return path.replace(File.separator, Constants.separator);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Builds the path.
+	 * 
+	 * @return the path builded with the separator {@link Constants#separator}
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

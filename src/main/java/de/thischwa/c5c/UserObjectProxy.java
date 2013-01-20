@@ -26,13 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
+import de.thischwa.c5c.requestcycle.UserPathBuilder;
 import de.thischwa.c5c.requestcycle.UserAction;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
@@ -41,13 +42,15 @@ import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
- * A proxy for the implementations of {@link UserAction}, {@link IconResolver}, {@link FilemanagerMessageHolder} 
- * and {@link FilemanagerCapability} interfaces. Wrapper methods for these objects are provided.
+ * A proxy for the implementations of {@link UserAction}, {@link IconResolver}, {@link FilemanagerMessageHolder},
+ * {@link FilemanagerCapability} and {@link UserPathBuilder} interfaces. Wrapper methods for these objects are provided.
  * <br/>
  * A {@link RuntimeException} is thrown if one of these implementation couldn't be instantiated. 
  */
 public class UserObjectProxy {
 	private static final Logger logger = LoggerFactory.getLogger(UserObjectProxy.class);
+	
+	private static ServletContext servletContext;
 	
 	private static UserAction userAction;
 	
@@ -58,6 +61,8 @@ public class UserObjectProxy {
 	private static FilemanagerCapability fileCapability;
 	
 	private static FilemanagerCapability.Capability[] defaultC5FileCapability;
+	
+	private static UserPathBuilder userPathBuilder;
 
 	/**
 	 * Initialization.
@@ -66,6 +71,8 @@ public class UserObjectProxy {
 	 * @throws RuntimeException Is thrown, if one required objects couldn't be initialized.
 	 */
 	static void init(ServletContext servletContext) throws RuntimeException {
+		UserObjectProxy.servletContext = servletContext;
+		
 		// 1. try to instantiate the UserAction object
 		String className = PropertiesLoader.getUserActionImpl();
 		if (StringUtils.isNullOrEmptyOrBlank(className))
@@ -119,7 +126,21 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 5. build the default c5FileCapabilties if exists
+		// 5. try to initialize the UserPathBuilder
+		className = PropertiesLoader.getUserPathBuilderImpl();
+		if(StringUtils.isNullOrEmpty(className))
+			throw new RuntimeException("Empty UserPathBuilder implementation class name! Depending property must be set!");
+		try {
+			Class<?> clazz = Class.forName(className);
+			userPathBuilder = (UserPathBuilder) clazz.newInstance();
+			logger.info("UserPathBuilder initialized to {}", className);
+		} catch (Throwable e) {
+			String msg = "UserPathBuilder couldn't be initialized.";
+			logger.error(msg);
+			throw new RuntimeException(msg, e);
+		}
+		
+		// 6. build the default c5FileCapabilties if exists
 		String capabilitiesStr = PropertiesLoader.getDefaultCapacity();
 		defaultC5FileCapability = buildDefaultCapabilities(capabilitiesStr);
 	}
@@ -128,20 +149,20 @@ public class UserObjectProxy {
 	 * Returns <code>true</code> if user is allowed to upload files. The behavior is specified by the current UserAction instance.
 	 * 
 	 * @return true if user is allowed to upload files, false otherwise
-	 * @see UserAction#isFileUploadEnabled(HttpServletRequest)
+	 * @see UserAction#isFileUploadEnabled(Context)
 	 */
 	public static boolean isFileUploadEnabled() {
-		return userAction.isFileUploadEnabled(RequestData.getContext().getServletRequest());
+		return userAction.isFileUploadEnabled(RequestData.getContext());
 	}
 
 	/**
 	 * Returns <code>true</code> if user is allowed to create folders. The behavior is specified by the current UserAction instance.
 	 * 
 	 * @return true if user is allowed to create folders, false otherwise
-	 * @see UserAction#isCreateFolderEnabled(HttpServletRequest)
+	 * @see UserAction#isCreateFolderEnabled(Context)
 	 */
 	public static boolean isCreateFolderEnabled() {
-		return userAction.isCreateFolderEnabled(RequestData.getContext().getServletRequest());
+		return userAction.isCreateFolderEnabled(RequestData.getContext());
 	}
 	
 	public static String getIconPath(final VirtualFile vf) {
@@ -153,11 +174,15 @@ public class UserObjectProxy {
 	}
 
 	public static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
-		return fileCapability.getCapabilities(RequestData.getContext().getServletRequest(), filePath);
+		return fileCapability.getCapabilities(RequestData.getContext());
 	}
 
 	public static FilemanagerCapability.Capability[] getDefaultC5FileCapabilities() {
 		return defaultC5FileCapability;
+	}
+	
+	public static String getUserPath(final String path) {
+		return userPathBuilder.getServerPath(path, RequestData.getContext(), servletContext);
 	}
 	
 	/**

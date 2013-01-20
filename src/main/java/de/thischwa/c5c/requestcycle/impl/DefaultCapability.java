@@ -22,9 +22,8 @@
  */
 package de.thischwa.c5c.requestcycle.impl;
 
-import javax.servlet.http.HttpServletRequest;
-
 import de.thischwa.c5c.UserObjectProxy;
+import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 
 /**
@@ -34,7 +33,7 @@ import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 public class DefaultCapability implements FilemanagerCapability {
 
 	@Override
-	public Capability[] getCapabilities(HttpServletRequest req, final String urlPath) { // TODO add type based on extension
+	public Capability[] getCapabilities(Context ctx) { // TODO add type based on extension
 		return UserObjectProxy.getDefaultC5FileCapabilities();
 	}
 

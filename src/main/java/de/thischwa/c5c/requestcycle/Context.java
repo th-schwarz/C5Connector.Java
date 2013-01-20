@@ -40,11 +40,15 @@ public class Context {
 
 	/** action of the filemanager */
 	private FilemanagerAction mode;
+	
+	/** the given path from url pram */
+	private String urlPath;
 
 	private HttpServletRequest servletRequest;
 
 	Context(HttpServletRequest servletRequest) throws C5CException {
 		this.servletRequest = servletRequest;
+		urlPath = servletRequest.getParameter("path");
 		String paramMode = servletRequest.getParameter("mode");
 		if (paramMode == null)
 			throw new IllegalArgumentException("Missing 'mode' parameter.");
@@ -63,6 +67,15 @@ public class Context {
 	 */
 	public FilemanagerAction getMode() {
 		return mode;
+	}
+	
+	/**
+	 * Gets the 'path' parameter from the url.
+	 * 
+	 * @return the parameter 'path' from the url
+	 */
+	public String getUrlPath() {
+		return urlPath;
 	}
 	
 	/**

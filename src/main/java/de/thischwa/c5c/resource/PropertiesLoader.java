@@ -295,6 +295,15 @@ public class PropertiesLoader {
 	}
 
 	/**
+	 * Returns <code>connector.userPathBuilderImpl</code> property
+	 *
+	 * @return the user action impl
+	 */
+	public static String getUserPathBuilderImpl() {
+		return properties.getProperty("connector.userPathBuilderImpl");
+	}
+
+	/**
 	 * Returns <code>connector.forceSingleExtension</code> property
 	 *
 	 * @return true, if is force single extension

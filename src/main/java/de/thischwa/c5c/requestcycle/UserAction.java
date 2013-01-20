@@ -41,22 +41,20 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
 public interface UserAction {
 
 	/**
-	 * Checks if the upload of a file is enabled/allowed.
+	 * Checks if the upload of a file is enabled/allowed. 
+	 * @param context the {@link Context}
 	 * 
-	 * @param request
-	 *            current user request instance
 	 * @return {@code true} if file upload is enabled/allowed, else {@code
 	 *         false}
 	 */
-	public boolean isFileUploadEnabled(final HttpServletRequest request);
+	public boolean isFileUploadEnabled(Context context);
 	
 	/**
 	 * Checks if the creation of a folder is enabled/allowed. 
+	 * @param context the {@link Context}
 	 * 
-	 * @param request
-	 *            current user request instance
 	 * @return {@code true} if folder creation is enabled/allowed, else {@code
 	 *         false}
 	 */
-	public boolean isCreateFolderEnabled(final HttpServletRequest request);
+	public boolean isCreateFolderEnabled(Context context);
 }

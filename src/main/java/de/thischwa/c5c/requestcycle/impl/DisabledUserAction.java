@@ -22,8 +22,8 @@
  */
 package de.thischwa.c5c.requestcycle.impl;
 
-import javax.servlet.http.HttpServletRequest;
 
+import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
@@ -31,11 +31,11 @@ import de.thischwa.c5c.requestcycle.UserAction;
  */
 public class DisabledUserAction implements UserAction {
 
-	public boolean isFileUploadEnabled(final HttpServletRequest request) {
+	public boolean isFileUploadEnabled(Context context) {
 		return false;
 	}
 
-	public boolean isCreateFolderEnabled(final HttpServletRequest request) {
+	public boolean isCreateFolderEnabled(Context context) {
 		return false;
 	}
 }

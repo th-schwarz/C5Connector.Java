@@ -92,7 +92,7 @@ final class Dispatcher {
 				throw new RuntimeException("Connector implementation " + connectorClassName + " could not be instantiated", e);
 			}
 		}
-		connector.init(servletContext);
+		connector.init();
 		logger.info("Dispatcher successful initialized.");
 	}
 

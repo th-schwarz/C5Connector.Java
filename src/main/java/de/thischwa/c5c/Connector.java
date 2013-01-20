@@ -25,7 +25,6 @@ package de.thischwa.c5c;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
@@ -45,10 +44,9 @@ public interface Connector {
 	/**
 	 * Initializes the connector.
 	 *
-	 * @param servletContext the servlet context
 	 * @throws Exception if the initialization fails.
 	 */
-	public void init(final ServletContext servletContext) throws RuntimeException;
+	public void init() throws RuntimeException;
 
 	public List<FileProperties> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException;
 

@@ -22,7 +22,6 @@
  */
 package de.thischwa.c5c.requestcycle;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * An interface to control the capabilities used in a response of an info-request of the filemanager.
@@ -47,11 +46,9 @@ public interface FilemanagerCapability {
 	/**
 	 * Gets the capabilities for a desired url-path.
 	 * 
-	 * @param req
-	 *            the {@link HttpServletRequest} of the request
-	 * @param urlPath
-	 *            the url path
+	 * @param ctx
+	 *            the {@link Context} of the request
 	 * @return the capabilities for the desired url-path
 	 */
-	public Capability[] getCapabilities(final HttpServletRequest req, final String urlPath);
+	public Capability[] getCapabilities(final Context ctx);
 }

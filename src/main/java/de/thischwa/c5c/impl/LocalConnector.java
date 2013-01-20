@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -47,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.ResponseFactory;
+import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
@@ -67,11 +67,8 @@ public class LocalConnector implements Connector {
 	
 	private static Logger logger = LoggerFactory.getLogger(LocalConnector.class);
 	
-	private ServletContext servletContext;
-	
-	public void init(ServletContext servletContext) {
+	public void init() {
 		logger.info("*** {} sucessful initialized.", this.getClass().getName());
-		this.servletContext = servletContext;
 	}
 	
 	@Override
@@ -154,6 +151,17 @@ public class LocalConnector implements Connector {
 		}		
 		return parentFolder;
 	}
+
+	/**
+	 * Builds the real file.
+	 *
+	 * @param urlPath the url path
+	 * @return the file
+	 */
+	private File buildRealFile(String urlPath) {
+		String path = UserObjectProxy.getUserPath(urlPath);
+		return new File(path);
+	}
 	
 	@Override
 	public void delete(String urlPath) throws C5CException {
@@ -168,18 +176,6 @@ public class LocalConnector implements Connector {
 			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, urlPath);
 		}
 	}
-	
-	/**
-	 * Builds the real file.
-	 *
-	 * @param urlPath the url path
-	 * @return the file
-	 */
-	private File buildRealFile(String urlPath) {
-		String path = servletContext.getRealPath(urlPath);
-		return new File(path);
-	}
-	
 
 	/**
 	 * Construct file info.
