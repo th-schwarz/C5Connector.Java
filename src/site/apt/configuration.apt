@@ -98,3 +98,7 @@ Configuration properties
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
 |                                    |									  | select,delete,rename,download					 | {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.userPathBuilderImpl 	 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
+|									 | .ServerPathBuilder				  | {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle | 		|
+|									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

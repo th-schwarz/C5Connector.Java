@@ -21,6 +21,9 @@ Overview
     
   * <<UserAction>>: Gives you full control over actions, which aren't covered by the
     capabilities of the filemanager, - uploading files and creating folders.
+    
+  * <<UserPathBuilder>>: Gives you the full control over the server-side <userfiles> path,
+    the path to the server-side resources.
   
 
 Big picture

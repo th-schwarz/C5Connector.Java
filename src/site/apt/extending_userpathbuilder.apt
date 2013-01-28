@@ -1,0 +1,17 @@
+   ----------------------------
+   UserPathBuilder
+   ----------------------------
+
+UserPathBuilder
+
+  For each request of the filemanager the parameter <<<path>>> must be mapped to a real path in the storage backend.
+    
+  There is a ready-to-go implementation: {{{./apidocs/de/thischwa/c5c/requestcycle/impl/ServerPathBuilder.html}<<<de.thischwa.c5c.requestcycle.impl.ServerPathBuilder>>>}},
+  the default one. It simply maps the parameter <<<path>>> to a path inside of the root directory of your web-app.
+  
+  
+* Custom implementation
+
+  With an implementation of the interface {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle.UserPathBuilder>>>}}
+  you are able to map the parameter <<<path>>> to whatever you need. For example that's useful, if you want to have one
+  directory for each user in the storage backend.

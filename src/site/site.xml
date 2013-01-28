@@ -16,6 +16,7 @@
 			<item name="Connector" href="extending_connector.html"/>
 			<item name="FilemanagerCapability" href="extending_filemanagercapability.html"/>
 			<item name="UserAction" href="extending_useraction.html"/>
+			<item name="UserPathBuilder" href="extending_userpathbuilder.html"/>
 		</menu>
 		<menu ref="reports"/>
 		<links>
