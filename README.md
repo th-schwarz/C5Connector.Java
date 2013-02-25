@@ -12,3 +12,5 @@ C5Connector.Java is distributed under the [GPL](http://www.gnu.org/licenses/gpl.
 
 * 0.0.2
   * issue#4: Implementation of a 'UserPathBuilder' 
+  * updated slf4j to 1.7.2
+  * updated test-jetty-servlet to 8.1.9 
