@@ -60,14 +60,7 @@
 			<groupId>de.thischwa.jii</groupId>
 			<artifactId>java-image-info</artifactId>
 			<version>${jii.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		
+		</dependency>		
 		<dependency>
 		  <groupId>com.fasterxml.jackson.core</groupId>
 		  <artifactId>jackson-core</artifactId>
@@ -105,14 +98,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet-tester</artifactId>
+			<artifactId>test-jetty-servlet</artifactId>
+			<version>8.1.9.v20130131</version>
 			<scope>test</scope>
-			<version>7.0.0.M2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-nop</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.2</version>
 		</dependency>
 	</dependencies>
 

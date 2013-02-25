@@ -23,18 +23,19 @@ package de.thischwa.c5c;
 
 import static org.junit.Assert.*;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.testing.HttpTester;
 import org.eclipse.jetty.testing.ServletTester;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ContextGetRequestsTest {
 	
-	private ServletTester tester;
+	private static ServletTester tester;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
 		tester = new ServletTester();
 		tester.setContextPath("/context");
 		tester.setResourceBase("src/test/resources/requesttest");
@@ -42,8 +43,8 @@ public class ContextGetRequestsTest {
 		tester.start();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 		tester.stop();
 	}
 
@@ -57,7 +58,7 @@ public class ContextGetRequestsTest {
 		HttpTester response = new HttpTester();
 		response.parse(responseStr);
 		
-		assertEquals(200, response.getStatus());
+		assertEquals(HttpStatus.OK_200, response.getStatus());
 		String expected = "{\"/userfiles/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/_Open.png\",\"Filename\":\"folder\",\"File Type\":\"dir\"},\"/userfiles/pic01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}}";
 		assertEquals(expected, response.getContent());
 	}
@@ -72,7 +73,7 @@ public class ContextGetRequestsTest {
 		HttpTester response = new HttpTester();
 		response.parse(responseStr);
 		
-		assertEquals(200, response.getStatus());
+		assertEquals(HttpStatus.OK_200, response.getStatus());
 		String expected = "{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/context/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}";
 		assertEquals(expected, response.getContent());
 	}
