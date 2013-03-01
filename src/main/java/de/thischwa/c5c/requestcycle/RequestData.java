@@ -44,7 +44,7 @@ import de.thischwa.jii.IDimensionProvider;
  * <li> The {@link Context}.</li>
  * </ul>
  * <i>Hint:</i> The implementation of the {@link IDimensionProvider} will be initialized 
- * and provided for each request because there isn't any a that it is thread-save.
+ * and provided for each request because there isn't any thread-save one.
  */
 public class RequestData {
 	private static Logger logger = LoggerFactory.getLogger(RequestData.class);

@@ -25,7 +25,6 @@ package de.thischwa.c5c;
 import java.io.InputStream;
 import java.util.List;
 
-
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
@@ -58,7 +57,7 @@ public interface Connector {
 	
 	public void delete(String urlPath) throws C5CException;
 
-	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException;
+	public Response upload(String urlPath, String sanitizedName, InputStream in) throws C5CException;
 
 	public DownloadInfo download(String urlPath) throws C5CException;
 }

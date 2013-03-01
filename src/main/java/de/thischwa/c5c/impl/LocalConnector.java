@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -238,13 +237,13 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response upload(String urlPath, String sanitizedName, InputStream fileIn) throws C5CException {
+	public Response upload(String urlPath, String sanitizedName, InputStream in) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlPath);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
 			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlPath);
 		try {
-			Long size = IOUtils.copyLarge(fileIn, new FileOutputStream(fileToSave));
+			Long size = IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
 			UploadFile uf = ResponseFactory.buildUploadFile(urlPath, sanitizedName, size);
 			return uf;
 		} catch (IOException e) {

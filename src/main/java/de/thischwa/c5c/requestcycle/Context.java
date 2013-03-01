@@ -24,6 +24,8 @@ package de.thischwa.c5c.requestcycle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.http.HttpMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +51,17 @@ public class Context {
 	Context(HttpServletRequest servletRequest) throws C5CException {
 		this.servletRequest = servletRequest;
 		urlPath = servletRequest.getParameter("path");
-		String paramMode = servletRequest.getParameter("mode");
+		String paramMode;
+		if(servletRequest.getMethod().equals(HttpMethods.POST)) {
+			try {
+				paramMode = IOUtils.toString(servletRequest.getPart("mode").getInputStream());
+			} catch (Exception e) {
+				logger.error("Couldn't retrieve the 'mode' parameter from multipart.");
+				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(FilemanagerException.Key.ModeError));
+			}
+		} else {
+			paramMode = servletRequest.getParameter("mode");
+		}
 		if (paramMode == null)
 			throw new IllegalArgumentException("Missing 'mode' parameter.");
 		try {

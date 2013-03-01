@@ -25,6 +25,7 @@ package de.thischwa.c5c;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +55,7 @@ import de.thischwa.c5c.resource.PropertiesLoader;
  * folder in your webapp.
  * }</pre>
  */
+@MultipartConfig
 public class ConnectorServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;

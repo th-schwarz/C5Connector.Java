@@ -98,7 +98,7 @@ public abstract class Response {
 	 */
 	@JsonIgnore
 	public void write(HttpServletResponse resp) throws IOException {
-		if(mode != null)
+		if(mode != null && mode.getContentType() != null)
 			resp.setContentType(mode.getContentType());
 		OutputStream out = resp.getOutputStream();
 		IOUtils.write(toString(), out);

@@ -25,19 +25,15 @@ package de.thischwa.c5c;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +53,6 @@ import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.UserActionMessageHolder;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
@@ -202,33 +197,23 @@ final class Dispatcher {
 
 		try {
 			Response resp = null;
-			Map<String, String> params = new HashMap<String, String>();
-			FileItemFactory factory = new DiskFileItemFactory();
-			ServletFileUpload upload = new ServletFileUpload(factory);
-			@SuppressWarnings("unchecked")
-			List<FileItem> items = upload.parseRequest(req);
-			FileItem uplFile = null;
-			
-			// analyze the multi part upload
-			for(FileItem item : items) {
-				if(item.isFormField()) {
-					params.put(item.getFieldName(), item.getString(PropertiesLoader.getDefaultEncoding()));
-				} else if(uplFile == null) // We upload just one file at the same time.
-					uplFile = item;
-			}
 			
 			switch (mode) {
 			case UPLOAD: {
-				String urlPath = params.get("currentpath");
+				String urlPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
+				String newName = IOUtils.toString(req.getPart("filepath").getInputStream());
 				// Some browsers transfer the entire source path not just the filename
-				String fileName = FilenameUtils.getName(uplFile.getName()); // TODO check forceSingleExtension
+				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
 				if(!UserObjectProxy.isFileUploadEnabled()) {
 					// we have to use explicit the UploadFile object here because of the textarea stuff
 					resp = Dispatcher.buildUploadFileForError(urlPath, sanitizedName);
 				} else {
-					resp = connector.upload(urlPath, sanitizedName, uplFile.getInputStream());
+					Part uploadPart = req.getPart("newfile");
+					resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream());
+					// TODO add file size constraint
+					logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				}
 				resp.setMode(FilemanagerAction.UPLOAD);
 				return resp;
@@ -241,13 +226,13 @@ final class Dispatcher {
 		} catch (C5CException e) {
 			logger.error("A ConnectionException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildException(e);
-		} catch (FileUploadException e) {
-			logger.error("A FileUploadException was thrown while uploading: " + e.getMessage(), e);
+		} catch (ServletException e) {
+			logger.error("A ServletException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
 		} catch (IOException e) {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
-		}
+		} 
 	}
 
 	private static void add(FolderInfo folderInfo, FileInfo fileInfo) {
