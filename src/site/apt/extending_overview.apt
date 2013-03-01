@@ -10,7 +10,7 @@ Overview
   
   []
   
-  The C5Connector.Java library provides several interfaces to extend and
+  The C5Connector.Java library is compatible with the Servlet 3.0 specification. It provides several interfaces to extend and
   adapt it to your needs. 
   
   * <<Connector>>: Gives you the ability to handle server-side connector requests
@@ -24,6 +24,8 @@ Overview
     
   * <<UserPathBuilder>>: Gives you the full control over the server-side <userfiles> path,
     the path to the server-side resources.
+    
+  There are default-implementations for all of these interfaces!
   
 
 Big picture
