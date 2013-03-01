@@ -51,7 +51,7 @@ public class Context {
 		this.servletRequest = servletRequest;
 		urlPath = servletRequest.getParameter("path");
 		String paramMode;
-		if(servletRequest.getMethod().equals("post")) {
+		if(servletRequest.getMethod().equals("POST")) {
 			try {
 				paramMode = IOUtils.toString(servletRequest.getPart("mode").getInputStream());
 			} catch (Exception e) {
