@@ -25,7 +25,6 @@ package de.thischwa.c5c.requestcycle;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.http.HttpMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +51,7 @@ public class Context {
 		this.servletRequest = servletRequest;
 		urlPath = servletRequest.getParameter("path");
 		String paramMode;
-		if(servletRequest.getMethod().equals(HttpMethods.POST)) {
+		if(servletRequest.getMethod().equals("post")) {
 			try {
 				paramMode = IOUtils.toString(servletRequest.getPart("mode").getInputStream());
 			} catch (Exception e) {
