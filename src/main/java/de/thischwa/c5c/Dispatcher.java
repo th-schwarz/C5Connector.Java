@@ -201,7 +201,8 @@ final class Dispatcher {
 			switch (mode) {
 			case UPLOAD: {
 				String urlPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
-				String newName = IOUtils.toString(req.getPart("filepath").getInputStream());
+				Part uploadPart = req.getPart("newfile");
+				String newName = getFileName(uploadPart);
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
@@ -210,7 +211,6 @@ final class Dispatcher {
 					// we have to use explicit the UploadFile object here because of the textarea stuff
 					resp = Dispatcher.buildUploadFileForError(urlPath, sanitizedName);
 				} else {
-					Part uploadPart = req.getPart("newfile");
 					resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream());
 					// TODO add file size constraint
 					logger.debug("successful uploaded {} bytes", uploadPart.getSize());
@@ -233,6 +233,17 @@ final class Dispatcher {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
 		} 
+	}
+
+	private String getFileName(final Part part) {
+	    final String partHeader = part.getHeader("content-disposition");
+	    for (String content : partHeader.split(";")) {
+	        if (content.trim().startsWith("filename")) {
+	            return content.substring(
+	                    content.indexOf('=') + 1).trim().replace("\"", "");
+	        }
+	    }
+	    return null;
 	}
 
 	private static void add(FolderInfo folderInfo, FileInfo fileInfo) {
