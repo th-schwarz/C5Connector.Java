@@ -15,5 +15,6 @@ C5Connector.Java is distributed under the [GPL](http://www.gnu.org/licenses/gpl.
   * updated slf4j to 1.7.2
   * updated test-jetty-servlet to 8.1.9 
   
-* 0.0.3-SNOPSHOT
+* 0.0.3-SNAPSHOT
   * compatible with the Servlet 3.0 specification
+  * fixed scope of the dependency slf4j-nop
