@@ -6,6 +6,9 @@
 
 	<publishDate position="none" />
 	<body>
+		<head>
+			<meta name="google-site-verification" content="3VgDeYncBf44nzOOzsGdm0-DDNqSLNyYniqcmFyoBkA" />
+		</head>
 		<menu name="Introduction">
 			<item name="About" href="/index.html" />
 			<item name="Installation" href="/installation.html"/>
