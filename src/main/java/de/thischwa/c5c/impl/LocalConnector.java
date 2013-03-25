@@ -50,7 +50,6 @@ import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.Extension;
@@ -115,8 +114,8 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public void createFolder(String urlPath, String sanitizedFolderName) throws C5CException {
-		File parentFolder = buildAndCheckFolder(urlPath);
+	public void createFolder(String urlDirectory, String sanitizedFolderName) throws C5CException {
+		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File newFolder = new File(parentFolder, sanitizedFolderName);
 		if(newFolder.exists()) {
 			logger.warn("Destination file already exists: {}", newFolder.getAbsolutePath());
@@ -237,17 +236,17 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public Response upload(String urlPath, String sanitizedName, InputStream in) throws C5CException {
-		File parentFolder = buildAndCheckFolder(urlPath);
+	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException {
+		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
-			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlPath);
+			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlDirectory);
 		try {
 			Long size = IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
-			UploadFile uf = ResponseFactory.buildUploadFile(urlPath, sanitizedName, size);
+			UploadFile uf = ResponseFactory.buildUploadFile(urlDirectory, sanitizedName, size);
 			return uf;
 		} catch (IOException e) {
-			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, urlPath);
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, urlDirectory);
 		}
 	}
 	
