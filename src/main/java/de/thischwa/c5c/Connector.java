@@ -36,6 +36,7 @@ import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
  * connector will retrieve a valid request. 'Valid' means in termes of correct and reasonable parameters.<br/>
  * <br/>
  * <b>Hint for implementations:</b> There are a factory object, which helps to build the required response objects: {@link ResponseFactory}.
+ * Another important object is the {@link UserObjectProxy}. It provides helpful wrapper methods to the configurable user-objects.
  */
 public interface Connector {
 
@@ -53,7 +54,7 @@ public interface Connector {
 	 * @param urlPath
 	 *            the requested folder, e.g. <code>/UserFiles/Image/</code>
 	 * @param needSize
-	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be returned.
+	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be set in the {@link FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
 	 * @return a list of {@link FileProperties} objects prefilled with data of the files inside the requested folder
@@ -67,7 +68,7 @@ public interface Connector {
 	 * @param urlPath
 	 *            the requested file, e.g. <code>/UserFiles/Image/logo.png</code>
 	 * @param needSize
-	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be returned.
+	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be set in the {@link FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
 	 * @return a {@link FileProperties} object prefilled with data of the requested file

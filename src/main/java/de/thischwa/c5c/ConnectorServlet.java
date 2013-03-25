@@ -51,9 +51,9 @@ import de.thischwa.c5c.resource.PropertiesLoader;
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<url-pattern>/filemanager/connectors/java/*</url-pattern> 	
  * </servlet-mapping>
+ * }</pre>
  * Assuming the filemanager is installed in the <code>/filemanager</code> 
  * folder in your webapp.
- * }</pre>
  */
 @MultipartConfig
 public class ConnectorServlet extends HttpServlet {

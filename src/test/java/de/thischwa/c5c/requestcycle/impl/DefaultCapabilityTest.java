@@ -19,7 +19,7 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c;
+package de.thischwa.c5c.requestcycle.impl;
 
 import static org.junit.Assert.*;
 
@@ -27,18 +27,18 @@ import org.junit.Test;
 
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 
-public class UserObjectProxyTest {
+public class DefaultCapabilityTest {
 
 	@Test
-	public void testBuildDefaultCapabilities() {
-		assertNull(UserObjectProxy.buildDefaultCapabilities(null));
-		assertNull(UserObjectProxy.buildDefaultCapabilities(" "));
+	public void testBuildDefaultCapability() {
+		assertNull(DefaultCapability.buildDefaultCapabilities(null));
+		assertNull(DefaultCapability.buildDefaultCapabilities(" "));
 		
 		assertArrayEquals(new FilemanagerCapability.Capability[] { FilemanagerCapability.Capability.select }, 
-				UserObjectProxy.buildDefaultCapabilities("select"));
+				DefaultCapability.buildDefaultCapabilities("select"));
 
 		assertArrayEquals(new FilemanagerCapability.Capability[] { FilemanagerCapability.Capability.select, FilemanagerCapability.Capability.delete }, 
-				UserObjectProxy.buildDefaultCapabilities("select, dElEtE"));
+				DefaultCapability.buildDefaultCapabilities("select, dElEtE"));
 	}
 
 }

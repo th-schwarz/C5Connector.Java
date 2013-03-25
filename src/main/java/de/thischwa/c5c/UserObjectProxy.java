@@ -22,9 +22,6 @@
  */
 package de.thischwa.c5c;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
@@ -42,10 +39,18 @@ import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
- * A proxy for the implementations of {@link UserAction}, {@link IconResolver}, {@link FilemanagerMessageHolder},
- * {@link FilemanagerCapability} and {@link UserPathBuilder} interfaces. Wrapper methods for these objects are provided.
+ * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
+ * <ul>
+ * <li>{@link UserAction}</li>
+ * <li>{@link IconResolver}</li>
+ * <li>{@link FilemanagerMessageHolder}</li>
+ * <li>{@link FilemanagerCapability}</li>
+ * <li>{@link UserPathBuilder}</li> 
+ * </ul>
+ * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the
+ * user-objects itself.
  * <br/>
- * A {@link RuntimeException} is thrown if one of these implementation couldn't be instantiated. 
+ * A {@link RuntimeException} will be thrown if one of these implementation couldn't be instantiated. 
  */
 public class UserObjectProxy {
 	private static final Logger logger = LoggerFactory.getLogger(UserObjectProxy.class);
@@ -60,15 +65,13 @@ public class UserObjectProxy {
 	
 	private static FilemanagerCapability fileCapability;
 	
-	private static FilemanagerCapability.Capability[] defaultC5FileCapability;
-	
 	private static UserPathBuilder userPathBuilder;
 
 	/**
-	 * Initialization.
+	 * Instantiates all user-objects.
 	 *
 	 * @param servletContext the servlet context
-	 * @throws RuntimeException Is thrown, if one required objects couldn't be initialized.
+	 * @throws RuntimeException is thrown, if one of the required user-objects couldn't be instantiated
 	 */
 	static void init(ServletContext servletContext) throws RuntimeException {
 		UserObjectProxy.servletContext = servletContext;
@@ -111,6 +114,7 @@ public class UserObjectProxy {
 		try {
 			Class<?> clazz = Class.forName(className);
 			fileCapability = (FilemanagerCapability) clazz.newInstance();
+			logger.info("FilemanagerCapability initialized to {}", className);
 		} catch (Throwable e) {
 			String msg = String.format("FilemanagerCapability implementation [%s] couldn't be instantiated.", className);
 			logger.error(msg);
@@ -139,14 +143,10 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
-		
-		// 6. build the default c5FileCapabilties if exists
-		String capabilitiesStr = PropertiesLoader.getDefaultCapacity();
-		defaultC5FileCapability = buildDefaultCapabilities(capabilitiesStr);
 	}
 
 	/**
-	 * Returns <code>true</code> if user is allowed to upload files. The behavior is specified by the current UserAction instance.
+	 * Retrieves whether the current user is allowed to upload files. 
 	 * 
 	 * @return true if user is allowed to upload files, false otherwise
 	 * @see UserAction#isFileUploadEnabled(Context)
@@ -156,52 +156,56 @@ public class UserObjectProxy {
 	}
 
 	/**
-	 * Returns <code>true</code> if user is allowed to create folders. The behavior is specified by the current UserAction instance.
+	 * Retrieves whether the current user is allowed to create folders. 
 	 * 
-	 * @return true if user is allowed to create folders, false otherwise
+	 * @return true if user is allowed to create folders, otherwise false
 	 * @see UserAction#isCreateFolderEnabled(Context)
 	 */
 	public static boolean isCreateFolderEnabled() {
 		return userAction.isCreateFolderEnabled(RequestData.getContext());
 	}
 	
-	public static String getIconPath(final VirtualFile vf) {
+	/**
+	 * Retrieves the url-path of the icon for the desired {@link VirtualFile}.
+	 * @param vf the {@link VirtualFile} for which to retrieve the url-path of the icon
+	 * 
+	 * @return the url-path of the desired {@link VirtualFile}
+	 * @see IconResolver#getIconPath(VirtualFile)
+	 */
+	static String getIconPath(final VirtualFile vf) {
 		return iconResolver.getIconPath(vf);
 	}
 	
+	/**
+	 * Retrieves the localized and known message provided by the filemanager. 
+	 * @param key the key of the desired message
+	 * 
+	 * @return the localized and known error message of the filemanager
+	 * @see FilemanagerMessageHolder#getMessage(java.util.Locale, de.thischwa.c5c.exception.FilemanagerException.Key)
+	 */
 	public static String getFilemanagerErrorMessage(FilemanagerException.Key key) {
 		return c5messageHolder.getMessage(RequestData.getLocale(), key);
 	}
 
-	public static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
+	/**
+	 * Retrieves the file capabilities for the desired file.
+	 * @param filePath the path of the file for which the capabilities have to retrieve
+	 * 
+	 * @return the capabilities for the desired file
+	 * @see FilemanagerCapability#getCapabilities(Context)
+	 */
+	static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
 		return fileCapability.getCapabilities(RequestData.getContext());
 	}
 
-	public static FilemanagerCapability.Capability[] getDefaultC5FileCapabilities() {
-		return defaultC5FileCapability;
-	}
-	
-	public static String getUserPath(final String path) {
-		return userPathBuilder.getServerPath(path, RequestData.getContext(), servletContext);
-	}
-	
 	/**
-	 * Builds the default capabilities.
+	 * Retrieves the server-side path to the desired url-path.
+	 * @param urlPath the url-path for which to retrieve the server-side path
+	 * 
+	 * @return the server-side path to the desired url-path
+	 * @see UserPathBuilder#getServerPath(String, Context, ServletContext)
 	 */
-	static FilemanagerCapability.Capability[] buildDefaultCapabilities(String capabilitiesStr) {
-		if(StringUtils.isNullOrEmptyOrBlank(capabilitiesStr)) 
-			return null;
-		
-		String[] caps = capabilitiesStr.split(",");
-		List<FilemanagerCapability.Capability> capList = new ArrayList<FilemanagerCapability.Capability>(caps.length);
-		for (String cap : caps) {
-			FilemanagerCapability.Capability capability = FilemanagerCapability.Capability.valueOf(cap.trim().toLowerCase());
-			if(capability == null) {
-				logger.warn("Couldn't interprete [{}] as FilemanagerCapability!", cap);
-			} else {
-				capList.add(capability);
-			}
-		}
-		return (capList.isEmpty()) ? null : capList.toArray(new FilemanagerCapability.Capability[capList.size()]);
+	public static String getUserPath(final String urlPath) {
+		return userPathBuilder.getServerPath(urlPath, RequestData.getContext(), servletContext);
 	}
 }

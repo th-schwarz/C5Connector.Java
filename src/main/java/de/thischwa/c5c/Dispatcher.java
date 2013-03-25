@@ -59,8 +59,8 @@ import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
- * Dispatch the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
- * {@link Connector} interface.
+ * Dispatches the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
+ * {@link Connector} interface. The parameters of the request will be prepared before dispatching them to connector. 
  */
 final class Dispatcher {
 	private static Logger logger = LoggerFactory.getLogger(Dispatcher.class);
@@ -70,9 +70,9 @@ final class Dispatcher {
 	/**
 	 * Instantiates and initializes the implementation of the {@link Connector}.
 	 * 
-	 * @param servletContext
-	 * @param connectorClassName 
-	 * @throws RuntimeException
+	 * @param servletContext the servlet context
+	 * @param connectorClassName FQN of the implementation of the connector 
+	 * @throws RuntimeException if the connector couldn't be instantiated
 	 */
 	Dispatcher(final ServletContext servletContext, String connectorClassName) throws RuntimeException {
 		if (StringUtils.isNullOrEmpty(connectorClassName))
@@ -83,8 +83,9 @@ final class Dispatcher {
 				connector = (Connector) clazz.newInstance();
 				logger.info("Connector instantiated to {}", connectorClassName);
 			} catch (Throwable e) {
-				logger.error("Connector implementation {} could not be instantiated", connectorClassName);
-				throw new RuntimeException("Connector implementation " + connectorClassName + " could not be instantiated", e);
+				String msg = String.format("Connector implementation [%s] couldn't be instatiated.", connectorClassName);
+				logger.error(msg);
+				throw new RuntimeException(msg, e);
 			}
 		}
 		connector.init();

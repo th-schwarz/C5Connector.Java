@@ -29,6 +29,6 @@ Connector
           
   And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
 
-+------------------------------------------------------------------------------+
-connector.userActionImpl = <desired implementation>
-+------------------------------------------------------------------------------+
++---+
+connector.impl = <desired implementation>
++---+

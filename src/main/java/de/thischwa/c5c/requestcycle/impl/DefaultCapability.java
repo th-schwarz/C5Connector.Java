@@ -22,19 +22,53 @@
  */
 package de.thischwa.c5c.requestcycle.impl;
 
-import de.thischwa.c5c.UserObjectProxy;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
+import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.util.StringUtils;
 
 /**
  * The default {@link FilemanagerCapability} implementation. All capabilities
  * which set in the property <code>connector.capabilities</code> will be set for each files. 
  */
 public class DefaultCapability implements FilemanagerCapability {
+	private static Logger logger = LoggerFactory.getLogger(DefaultCapability.class);
 
+	private FilemanagerCapability.Capability[] defaultC5FileCapability;
+	
+	public DefaultCapability() {
+		String capabilitiesStr = PropertiesLoader.getDefaultCapacity();
+		defaultC5FileCapability = buildDefaultCapabilities(capabilitiesStr);
+	}
+	
 	@Override
 	public Capability[] getCapabilities(Context ctx) { // TODO add type based on extension
-		return UserObjectProxy.getDefaultC5FileCapabilities();
+		return defaultC5FileCapability;
 	}
 
+	/**
+	 * Builds the default capabilities.
+	 */
+	static FilemanagerCapability.Capability[] buildDefaultCapabilities(String capabilitiesStr) {
+		if(StringUtils.isNullOrEmptyOrBlank(capabilitiesStr)) 
+			return null;
+		
+		String[] caps = capabilitiesStr.split(",");
+		List<FilemanagerCapability.Capability> capList = new ArrayList<FilemanagerCapability.Capability>(caps.length);
+		for (String cap : caps) {
+			FilemanagerCapability.Capability capability = FilemanagerCapability.Capability.valueOf(cap.trim().toLowerCase());
+			if(capability == null) {
+				logger.warn("Couldn't interprete [{}] as FilemanagerCapability!", cap);
+			} else {
+				capList.add(capability);
+			}
+		}
+		return (capList.isEmpty()) ? null : capList.toArray(new FilemanagerCapability.Capability[capList.size()]);
+	}
 }
