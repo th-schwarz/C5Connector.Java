@@ -93,7 +93,7 @@ final class Dispatcher {
 	}
 
 	/**
-	 * getinfo, getfolder, rename, delete, download.
+	 * Processes the get-request. Known modes are: getinfo, getfolder, rename, delete, download.
 	 *
 	 * @return the response 
 	 */
@@ -186,7 +186,7 @@ final class Dispatcher {
 	}
 
 	/**
-	 * Do post, just for file upload.
+	 * Processes the post-request. It's just for file upload.
 	 *
 	 * @return the response
 	 */

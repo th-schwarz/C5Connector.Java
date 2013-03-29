@@ -44,11 +44,11 @@ public interface FilemanagerCapability {
 	};
 
 	/**
-	 * Gets the capabilities for a desired url-path.
+	 * Gets the capabilities for a desired context.
 	 * 
 	 * @param ctx
 	 *            the {@link Context} of the request
-	 * @return the capabilities for the desired url-path
+	 * @return the capabilities for the desired context.
 	 */
 	public Capability[] getCapabilities(final Context ctx);
 }
