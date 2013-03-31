@@ -32,23 +32,7 @@ import de.thischwa.c5c.resource.UserActionMessageHolder;
 public class UserActionException extends C5CException {
 	private static final long serialVersionUID = 1L;
 
-	public UserActionException(Key key) {
-		super(UserActionMessageHolder.get(RequestData.getLocale(), key.propertyName));
-	}
-
-	
-	public enum Key {
-		UploadNotAllowed("upload.notallowed"),
-		CreateFolderNotAllowed("createfolder.notallowed");
-		
-		private String propertyName;
-		
-		private Key(String propertyName) {
-			this.propertyName = propertyName;
-		}
-		
-		public String getPropertyName() {
-			return propertyName;
-		}
+	public UserActionException(UserActionMessageHolder.Key key) {
+		super(UserActionMessageHolder.get(RequestData.getLocale(), key));
 	}
 }

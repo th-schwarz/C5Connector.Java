@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
@@ -42,9 +43,8 @@ public class UserActionMessageHolder {
 
 	private static Map<String, ResourceBundle> cache = new HashMap<String, ResourceBundle>();
 
-	private static String baseName = String.format("%s/%s", UserActionMessageHolder.class.getPackage().getName(), "actionMessages");
-	
-	private static Locale defaultLocale = Locale.ENGLISH;
+	private static String messagesBaseName = "actionMessages";
+	private static String baseName = String.format("%s/%s", UserActionMessageHolder.class.getPackage().getName(), messagesBaseName);
 	
 	static {
 		// load known locales
@@ -56,18 +56,34 @@ public class UserActionMessageHolder {
 		}
 	}
 
-	public static String get(Locale locale, String key) {
+	public static String get(Locale locale, Key key) {
 		ResourceBundle rb;
 		if (cache.containsKey(locale.getLanguage()))
 			rb = cache.get(locale.getLanguage());
 		else 
-			rb = cache.get(defaultLocale.getLanguage());
+			rb = cache.get(Constants.DEFAULT_LOCALE.getLanguage());
 		
 		try {
-			return rb.getString(key);
+			return rb.getString(key.getPropertyName());
 		} catch (MissingResourceException e) {
 			logger.error("Missinig key for locale [{}]: {}", locale.toString(), key);
 			return String.format("MISSING KEY | %s |", key);
 		}
+	} 
+
+	public enum Key {
+		UploadNotAllowed("upload.notallowed"),
+		CreateFolderNotAllowed("createfolder.notallowed");
+		
+		private String propertyName;
+		
+		private Key(String propertyName) {
+			this.propertyName = propertyName;
+		}
+		
+		public String getPropertyName() {
+			return propertyName;
+		}
 	}
 }
+

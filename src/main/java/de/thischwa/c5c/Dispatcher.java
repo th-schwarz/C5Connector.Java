@@ -131,7 +131,7 @@ final class Dispatcher {
 				break;}
 			case CREATEFOLDER: {
 				if(!UserObjectProxy.isCreateFolderEnabled())
-					throw new UserActionException(UserActionException.Key.CreateFolderNotAllowed);
+					throw new UserActionException(UserActionMessageHolder.Key.CreateFolderNotAllowed);
 				String urlPath = req.getParameter("path");
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
@@ -273,7 +273,7 @@ final class Dispatcher {
 
 	private static UploadFile buildUploadFileForError(String path, String sanitizedName) {
 		UploadFile uploadFile = new UploadFile(path, sanitizedName);
-		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionException.Key.UploadNotAllowed.getPropertyName()), 200);
+		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionMessageHolder.Key.UploadNotAllowed), 200);
 		uploadFile.setMode(FilemanagerAction.UPLOAD);
 		return uploadFile;
 	}
