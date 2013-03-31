@@ -31,7 +31,6 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
@@ -61,7 +60,7 @@ public class UserActionMessageHolder {
 		if (cache.containsKey(locale.getLanguage()))
 			rb = cache.get(locale.getLanguage());
 		else 
-			rb = cache.get(Constants.DEFAULT_LOCALE.getLanguage());
+			rb = cache.get(PropertiesLoader.getDefaultLocale().getLanguage());
 		
 		try {
 			return rb.getString(key.getPropertyName());

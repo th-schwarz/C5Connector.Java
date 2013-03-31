@@ -59,8 +59,8 @@ public final class FileInfo extends Response {
 		capabilities = new ArrayList<String>();
 		virtualFile = new VirtualFile(path, isDir);
 		this.path = path;
-		if (isDir && !this.path.endsWith(Constants.separator))
-			this.path += Constants.separator;
+		if (isDir && !this.path.endsWith(Constants.defaultSeparator))
+			this.path += Constants.defaultSeparator;
 	}
 
 	@JsonProperty("Path")
@@ -69,14 +69,14 @@ public final class FileInfo extends Response {
 			throw new IllegalArgumentException("No properties are set.");
 		Path p = new Path(path);
 		String path = p.toString();
-		if(path.endsWith(Constants.separator))
+		if(path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
 		if(!path.endsWith(fileProperties.getName()))
 			path = p.addFile(fileProperties.getName());
-		if(!getType().equals(type_dir) && path.endsWith(Constants.separator))
+		if(!getType().equals(type_dir) && path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
-		else if(getType().equals(type_dir) && !path.endsWith(Constants.separator))
-			path += Constants.separator;
+		else if(getType().equals(type_dir) && !path.endsWith(Constants.defaultSeparator))
+			path += Constants.defaultSeparator;
 		return path;
 	}
 

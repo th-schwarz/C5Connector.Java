@@ -40,8 +40,8 @@ public final class UploadFile extends Response {
 	public UploadFile(String path, String name) {
 		this.path = path;
 		this.name = name;
-		if(!StringUtils.isNullOrEmpty(this.path) && !this.path.endsWith(Constants.separator))
-			this.path += Constants.separator;
+		if(!StringUtils.isNullOrEmpty(this.path) && !this.path.endsWith(Constants.defaultSeparator))
+			this.path += Constants.defaultSeparator;
 	}
 
 	@JsonProperty("Path")

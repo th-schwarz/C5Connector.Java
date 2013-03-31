@@ -43,8 +43,8 @@ public final class FolderInfo extends Response {
 
 	public void add(final FileInfo fileInfo) {
 		String path = fileInfo.getPath();
-		if(fileInfo.isDir() && !path.endsWith(Constants.separator))
-			path += Constants.separator;
+		if(fileInfo.isDir() && !path.endsWith(Constants.defaultSeparator))
+			path += Constants.defaultSeparator;
 		folderItems.put(path, fileInfo);
 	}
 

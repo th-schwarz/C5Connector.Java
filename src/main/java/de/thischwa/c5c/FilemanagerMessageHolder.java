@@ -92,7 +92,7 @@ class FilemanagerMessageHolder {
 		String lang = locale.getLanguage().toLowerCase();
 		if(!messageStore.containsKey(lang)) {
 			logger.warn("Language [{}] not supported, take the default.", lang);
-			lang = Constants.DEFAULT_LOCALE.getLanguage().toLowerCase();
+			lang = PropertiesLoader.getDefaultLocale().getLanguage().toLowerCase();
 		}
 		Map<String, String> messages = messageStore.get(lang);
 		if(!messages.containsKey(key.getPropertyName()))

@@ -50,16 +50,16 @@ public class VirtualFile {
 
 	public VirtualFile(String fullPath, boolean isDir) {
 		this.fullPath = fullPath;
-		if(!fullPath.startsWith(Constants.separator))
-			fullPath = Constants.separator.concat(fullPath);
-		if (isDir && !fullPath.endsWith(Constants.separator)) // simple normalization
-			fullPath += Constants.separator;
+		if(!fullPath.startsWith(Constants.defaultSeparator))
+			fullPath = Constants.defaultSeparator.concat(fullPath);
+		if (isDir && !fullPath.endsWith(Constants.defaultSeparator)) // simple normalization
+			fullPath += Constants.defaultSeparator;
 		
 		type = Type.file;
 		String cleanPath = fullPath;
-		if(cleanPath.endsWith(Constants.separator))
+		if(cleanPath.endsWith(Constants.defaultSeparator))
 			cleanPath = cleanPath.substring(0, cleanPath.length()-1);
-		if (fullPath.endsWith(Constants.separator)) {
+		if (fullPath.endsWith(Constants.defaultSeparator)) {
 			folder = fullPath;
 			type = Type.directory;
 		} else {
@@ -70,7 +70,7 @@ public class VirtualFile {
 				extension = fullPath.substring(extPos + 1);
 		}
 		
-		int pathPos = cleanPath.lastIndexOf(Constants.separator);
+		int pathPos = cleanPath.lastIndexOf(Constants.defaultSeparator);
 		if (pathPos != -1) {
 			folder = cleanPath.substring(0, pathPos + 1);
 			name = cleanPath.substring(pathPos + 1, cleanPath.length());

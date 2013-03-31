@@ -49,7 +49,7 @@ public class Path {
 	public Path(String folder) {
 		this();
 		String cleanedFolder = cleanPath(folder);
-		if(cleanedFolder.endsWith(Constants.separator))
+		if(cleanedFolder.endsWith(Constants.defaultSeparator))
 			cleanedFolder = cleanedFolder.substring(0, cleanedFolder.length()-1);
 		sb.append(cleanedFolder);
 	}
@@ -62,12 +62,12 @@ public class Path {
 	 */
 	public Path addFolder(String folder) {
 		StringBuilder sb = new StringBuilder(cleanPath(folder));
-		if(sb.charAt(0) == Constants.separatorChar)
+		if(sb.charAt(0) == Constants.defaultSeparatorChar)
 			sb.deleteCharAt(0);
-		if(sb.charAt(sb.length()-1) == Constants.separatorChar)
+		if(sb.charAt(sb.length()-1) == Constants.defaultSeparatorChar)
 			sb.deleteCharAt(sb.length()-1);
 		if(this.sb.length() != 0)
-			this.sb.append(Constants.separatorChar);
+			this.sb.append(Constants.defaultSeparatorChar);
 		this.sb.append(sb);
 		return this;
 	}
@@ -80,7 +80,7 @@ public class Path {
 	 */
 	public String addFile(String baseName) {
 		String tmp = cleanPath(baseName);
-		if(tmp.startsWith(Constants.separator))
+		if(tmp.startsWith(Constants.defaultSeparator))
 			tmp = tmp.substring(1);
 		return toString().concat(tmp);
 	}
@@ -92,17 +92,17 @@ public class Path {
 	 * @return the string
 	 */
 	private String cleanPath(String path) {
-		return path.replace(File.separator, Constants.separator);
+		return path.replace(File.separator, Constants.defaultSeparator);
 	}
 	
 	/**
 	 * Builds the path.
 	 * 
-	 * @return the path builded with the separator {@link Constants#separator}
+	 * @return the path builded with the defaultSeparator {@link Constants#defaultSeparator}
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return sb.toString().concat(Constants.separator);
+		return sb.toString().concat(Constants.defaultSeparator);
 	}
 }

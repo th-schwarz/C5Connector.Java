@@ -24,6 +24,7 @@ package de.thischwa.c5c.resource;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -115,12 +116,21 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * Returns <code>default.encoding</code> property
+	 * Returns <code>default.encoding</code> property.
 	 *
 	 * @return the default encoding
 	 */
 	public static String getDefaultEncoding() {
 		return properties.getProperty("default.encoding");
+	}
+	
+	/**
+	 * Obtains the default locale dependent on the <code>default.language</code> property.
+	 * 
+	 * @return the default locale
+	 */
+	public static Locale getDefaultLocale() {
+		return new Locale(properties.getProperty("default.language"));
 	}
 	
 	/**

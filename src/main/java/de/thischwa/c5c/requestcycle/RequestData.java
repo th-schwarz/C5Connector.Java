@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.StringUtils;
@@ -91,13 +90,13 @@ public class RequestData {
 			String langCode = params.get("langCode");
 			if(StringUtils.isNullOrEmptyOrBlank(langCode)) {
 				logger.warn("Couldn't analyse the locale from the referer to use, take the default one.");
-				locale.set(Constants.DEFAULT_LOCALE);
+				locale.set(PropertiesLoader.getDefaultLocale());
 			} else {
 				locale.set(new Locale(langCode.toLowerCase()));
 			}
 		} catch (Exception e) {
 			logger.warn("Couldn't analyse the locale to use, take the default one.");
-			locale.set(Constants.DEFAULT_LOCALE);
+			locale.set(PropertiesLoader.getDefaultLocale());
 		}
 	}
 
