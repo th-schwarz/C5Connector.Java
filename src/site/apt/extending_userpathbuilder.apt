@@ -13,5 +13,5 @@ UserPathBuilder
 * Custom implementation
 
   With an implementation of the interface {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle.UserPathBuilder>>>}}
-  you are able to map the parameter <<<path>>> to whatever you need. For example that's useful, if you want to have one
+  you are able to map the parameter <<<path>>> to whatever locations you desired. For example if you want to have one
   directory for each user in the storage backend.

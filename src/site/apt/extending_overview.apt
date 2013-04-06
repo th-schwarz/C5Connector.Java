@@ -5,7 +5,7 @@
 Overview
 
   [Hint:] This section is just for those who want to extend the library. 
-          It is necessary to understand the request cycle of {{{http://github.com/simogeo/Filemanager}filemanager of corefive}} 
+          It is necessary to understand the request cycle of the {{{http://github.com/simogeo/Filemanager}filemanager of corefive}} 
           completely. If not, refer to this corresponding documentation!
   
   []
@@ -34,10 +34,10 @@ Big picture
   
   A request is taken from the <ConnectorServlet> and will be dispatched to several other objects which
   prepare the parameter of the request. Now, C5Connector.Java knows which action/command has to be
-  proceeded. Before this action is dispatched to the implementation of the Connector, it will be examined 
-  if the implementation of <UserAction> has to be called to verify the action.
+  proceeded. The implementation of <UserAction> verifies, if the action is allowed or not. If it is allowed
+  the action will be dispatched to the implementation of the Connector.
   
-  If the verification was achieved, the action with its parameters will be dispatched to the 
+  If the verification was successful, the action with its parameters will be dispatched to the 
   implementation of the Connector. It processes the action and builds a response object with the help of
   the <ResponseFactory>. The capabilities for the filemanager are set dependently on there configuration.
   

@@ -16,7 +16,7 @@ FilemanagerCapability
   If you want to change the capabilities for all <get> commands you just have to set the property <connector.capabilities> in your
   <<<c5connector.properties>>> file.
   
-  If this doesn't meet your requirements, you have to write a custom one.
+  If this doesn't meet your requirements, you have to implement your own one.
       
 * Custom implementation
 

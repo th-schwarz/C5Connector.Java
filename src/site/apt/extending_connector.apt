@@ -14,7 +14,7 @@ Connector
 * Custom implementation
   
   In many situations it isn't enough or not possible at all to store files within
-  the context or local file system. Therefore C5Connector.Java provides a way to create
+  the context or local file system. Therefore, C5Connector.Java provides a way to create
   your own one. 
   
   Just implement the interface {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}.
@@ -23,7 +23,7 @@ Connector
   [Hint:] Use the factory {{{./apidocs/de/thischwa/c5c/ResponseFactory.html}<<<de.thischwa.c5c.ResponseFactory>>>}}
           to build the desired response. To handle exceptions you have to use {{{./apidocs/de/thischwa/c5c/exception/FilemanageException.html}<<<de.thischwa.c5c.exception.FilemanagerException>>>}}
           and {{{./apidocs/de/thischwa/c5c/exception/UserActionException.html}<<<de.thischwa.c5c.exception.UserActionException>>>}}. 
-          For details consult the javadoc please!
+          For details consult please the javadoc!
           
           []
           

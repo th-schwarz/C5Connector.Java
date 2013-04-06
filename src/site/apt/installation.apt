@@ -4,7 +4,7 @@
 
 Installation Guide
 
-  Please read the topics in this guide from top to bottom.
+  Please read the topics in this guide in order from top to bottom.
   
   C5Connector.Java uses the state-of-the-art logging facade {{{http://www.slf4j.org}SLF4J}}.
   You should read the corresponding manual, if you are not familiar with it!
@@ -16,7 +16,7 @@ Installation Guide
   of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
   Don't forget to add a preferred SLF4J binding!
 
-  However, the binary zip file can be easily build with maven2, too. 
+  However, the binary zip file can be easily built with maven2, too. 
   Just download the source, declare a preferred SLF4J binding in the dependencies section of your POM within 
   the runtime scope and call the following command:
   
@@ -26,11 +26,11 @@ mvn clean package
 
 * Activation of the Connector Servlet
 
-  [Hint:] The declaration of the servlet is mandatory, all user actions disabled by default for security reasons!
+  [Hint:] The declaration of the servlet is mandatory, all user actions are disabled by default for security reasons!
   
   []
    
-  It takes three steps to enabled it.
+  It takes three steps to enable it.
   
   [[1]]  Declare the ConnectorServlet in your <<<web.xml>>>:
 
@@ -50,7 +50,8 @@ mvn clean package
   Assuming the filemanager has been installed in the <<</filemanager>>> folder in your webapp.\
   The Connector Servlet is now declared but is <still> disabled. 
 
-  [[1]] All user actions are disabled by default. To enable that, create a <<<c5connector.properties>>> file in your classpath and add:
+  [[1]] All user actions are disabled by default. To enable user actions, create a <<<c5connector.properties>>> 
+        file in your classpath and add:
   
 +---+
 connector.userActionImpl = de.thischwa.c5c.requestcycle.impl.EnabledUserAction
