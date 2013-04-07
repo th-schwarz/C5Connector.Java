@@ -24,7 +24,7 @@ package de.thischwa.c5c.requestcycle;
 
 import javax.servlet.http.HttpServletRequest;
 
-import de.thischwa.c5c.resource.UserActionMessageHolder;
+import de.thischwa.c5c.resource.bundle.UserActionMessageHolder;
 
 /**
  * An interface for user action control which aren't cover by the capabilities if 

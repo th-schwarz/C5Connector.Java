@@ -53,7 +53,7 @@ import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import de.thischwa.c5c.resource.UserActionMessageHolder;
+import de.thischwa.c5c.resource.bundle.UserActionMessageHolder;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
