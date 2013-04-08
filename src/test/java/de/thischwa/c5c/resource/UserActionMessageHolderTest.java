@@ -1,12 +1,10 @@
-package de.thischwa.c5c.resource.bundle;
+package de.thischwa.c5c.resource;
 
 import static org.junit.Assert.*;
 
 import java.util.Locale;
 
 import org.junit.Test;
-
-import de.thischwa.c5c.resource.bundle.UserActionMessageHolder;
 
 public class UserActionMessageHolderTest {
 

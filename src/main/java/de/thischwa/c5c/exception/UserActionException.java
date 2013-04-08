@@ -23,7 +23,7 @@
 package de.thischwa.c5c.exception;
 
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.resource.bundle.UserActionMessageHolder;
+import de.thischwa.c5c.resource.UserActionMessageHolder;
 
 
 /**

@@ -20,7 +20,7 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.resource.bundle;
+package de.thischwa.c5c.resource;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,38 +47,27 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
- * It provides localized messages for failed user actions of the {@link UserAction} implementation. 
+ * It provides localized messages for failed user actions of the {@link UserAction} implementation. <br/>
+ * In the backend it utilizes the regular {@link ResourceBundle} class.
  */
 public class UserActionMessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(UserActionMessageHolder.class);
+	
+	private static Map<String, Properties> langData = new HashMap<String, Properties>();
 
 	private static String baseName = "userActionMessages";
-	private static Map<String, Properties> bundleData = new HashMap<String, Properties>();
 	
 	static {
-		Pattern baseNamePattern = Pattern.compile(String.format(".*%s_?([a-z]{2})?\\.properties$", baseName));
 		Map<String, InputStream> data = new HashMap<String, InputStream>();
 		List<String> langs = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages()));
 		langs.add(null);
-
-		// read the library bundles
-		String pckg = ClassPathResourceList.class.getPackage().getName().replace('.', File.separatorChar).concat(File.separator );
-		if(pckg.contains("\\"))
-			pckg = pckg.replace("\\", "\\\\");
-		String search = String.format(".*%s%s.*.properties", pckg, baseName);
-		ClassPathResourceList resourceList = new ClassPathResourceList(search);
-		for(String item : resourceList.getEntries()) {
-			Matcher matcher = baseNamePattern.matcher(item);
-			if(!matcher.matches())
-				continue;
-			String lang = matcher.group(1);
-			if(langs.contains(lang)) {
-				data.put(lang, resourceList.getInputStream(item));
-				logger.debug("library-bundle-search: lang#{} found", lang);
-			}
-		}
-
-		// read user bundles
+		
+		// load known language files in the library
+		data.put(null, UserActionMessageHolder.class.getResourceAsStream(String.format("%s.properties", baseName)));
+		data.put("de", UserActionMessageHolder.class.getResourceAsStream(String.format("%s_de.properties", baseName)));
+		
+		// load user bundles
+		Pattern baseNamePattern = Pattern.compile(String.format(".*%s_?([a-z]{2})?\\.properties$", baseName));
 		File dir = new File(System.getProperty("user.dir"));
 		for(File file : dir.listFiles(new FilenameFilter() {
 			@Override
@@ -102,27 +92,27 @@ public class UserActionMessageHolder {
 				}
 			}
 		}
-		
+
 		// build the bundles and cache it
 		for(String lang : data.keySet()) {
 			try {
 				Properties props = new Properties();
 				props.load(data.get(lang));
-				bundleData.put(lang, props);
+				langData.put(lang, props);
 			} catch (IOException e) {
 				throw new RuntimeException(String.format("A ResourceBundle couldn't be initialized for %s", lang));
 			}
 		}
 		
-		logger.info("*** bundle-control successful initialized!");
+		logger.info("*** {} successful initialized.", UserActionMessageHolder.class.getName());
 	}
 
 	public static String get(Locale locale, Key key) {
 		String lang = locale.getLanguage();
 		try {
-			if(!bundleData.containsKey(lang))
-				return bundleData.get(null).getProperty(key.getPropertyName());
-			return bundleData.get(lang).getProperty(key.getPropertyName());
+			if(!langData.containsKey(lang))
+				return langData.get(null).getProperty(key.getPropertyName());
+			return langData.get(lang).getProperty(key.getPropertyName());
 		} catch (MissingResourceException e) {
 			logger.error("Missinig key for locale [{}]: {}", locale.toString(), key);
 			return String.format("MISSING KEY | %s |", key);
