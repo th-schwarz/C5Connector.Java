@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,23 +45,23 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
- * It provides localized messages for failed user actions of the {@link UserAction} implementation. <br/>
- * In the backend it utilizes the regular {@link ResourceBundle} class.
+ * It provides localized messages for failed user actions of the {@link UserAction} implementation.
  */
 public class UserActionMessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(UserActionMessageHolder.class);
 	
 	private static Map<String, Properties> langData = new HashMap<String, Properties>();
+	
+	private static String defaultLanguage = PropertiesLoader.getDefaultLocale().getLanguage();
 
 	private static String baseName = "userActionMessages";
 	
 	static {
 		Map<String, InputStream> data = new HashMap<String, InputStream>();
-		List<String> langs = new ArrayList<String>(Arrays.asList(Locale.getISOLanguages()));
-		langs.add(null);
+		List<String> langs = Arrays.asList(Locale.getISOLanguages());
 		
 		// load known language files in the library
-		data.put(null, UserActionMessageHolder.class.getResourceAsStream(String.format("%s.properties", baseName)));
+		data.put(defaultLanguage, UserActionMessageHolder.class.getResourceAsStream(String.format("%s.properties", baseName)));
 		data.put("de", UserActionMessageHolder.class.getResourceAsStream(String.format("%s_de.properties", baseName)));
 		
 		// load user bundles
@@ -111,7 +109,7 @@ public class UserActionMessageHolder {
 		String lang = locale.getLanguage();
 		try {
 			if(!langData.containsKey(lang))
-				return langData.get(null).getProperty(key.getPropertyName());
+				return langData.get(defaultLanguage).getProperty(key.getPropertyName());
 			return langData.get(lang).getProperty(key.getPropertyName());
 		} catch (MissingResourceException e) {
 			logger.error("Missinig key for locale [{}]: {}", locale.toString(), key);
