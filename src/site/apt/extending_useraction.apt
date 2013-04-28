@@ -18,7 +18,7 @@ UserAction
     It allows all commands. 
 
 
-* Custom implementation
+* Custom Implementation
 
   Just implement the interface {{{./apidocs/de/thischwa/c5c/requestcycle/UserAction.html}<<<de.thischwa.c5c.requestcycle.UserAction>>>}}.
   Consult the javadoc and see how it works.
@@ -29,10 +29,16 @@ UserAction
 connector.userActionImpl = <desired implementation>
 +------------------------------------------------------------------------------+  
 
-* Error messages for user actions
+Error Messages for User Actions
 
   There are two error messages for the UserAction implementation. One for 'file upload is disallowed' and one for 'create a folder is disallowed'.
   Two translations are currently provided: English (the default one) and German.
   
   If you want to contribute other translations, don't hesitate to contact me. An example for a properties file can be found here:
-  {{{https://github.com/th-schwarz/C5Connector.Java/blob/master/src/main/resources/de/thischwa/c5c/resource/actionMessages_en.properties}<<<actionMessages_en.properties>>>}} 
+  {{{https://github.com/th-schwarz/C5Connector.Java/blob/master/src/main/resources/de/thischwa/c5c/resource/userActionMessages.properties}<<<actionMessages.properties>>>}}
+  
+* Customization of the Error Messages
+  
+  The messages can be customized easily. To extend or override the messages just put the desired properties file in the root of 
+  your classpath (usually <<<WEB-INF/classes>>>). Please read the javadoc of {{{./apidocs/de/thischwa/c5c/resource/UserActionMessageHolder.html}<<<de.thischwa.c5c.resource.UserActionMessageHolder>>>}}
+  for further informations.
