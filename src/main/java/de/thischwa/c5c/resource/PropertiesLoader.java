@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * <li>The default properties.</li>
  * <li>The user-defined properties <code>c5connector.properties</code> if present.</li>
  * </ol> 
- * Static wrapper methods are provider for all properties.<br/>
+ * Static wrapper methods are provided for all properties.<br/>
  * Please note: The user-defined properties <em>override</em> the default one.<br/> 
  * Moreover, you can set properties programmatically too ({@link #setProperty(String, String)}), 
  * but make sure to override them <em>before</em> the first call of any property.
@@ -51,6 +51,8 @@ public class PropertiesLoader {
 	private static final String LOCAL_PROPERTIES = "/c5connector.properties";
 	
 	private static Properties properties = new Properties();
+	
+	private static Locale defaultLocale;
 
 	static {
 		// 1. load library defaults
@@ -91,6 +93,9 @@ public class PropertiesLoader {
 				throw new RuntimeException(msg, e);
 			}
 		}
+		
+		// 3. build the default locale
+		defaultLocale = new Locale(properties.getProperty("default.language"));
 	}
 
 	/**
@@ -130,7 +135,7 @@ public class PropertiesLoader {
 	 * @return the default locale
 	 */
 	public static Locale getDefaultLocale() {
-		return new Locale(properties.getProperty("default.language"));
+		return defaultLocale;
 	}
 	
 	/**
