@@ -36,16 +36,26 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.thischwa.c5c.requestcycle.UserAction;
-
 /**
- * It provides localized messages for failed user actions of the {@link UserAction} implementation.
+ * Class for managing the localized messages for failed user actions. The base 
+ * of the localization is the language of the filemanager (query-string 'langCode').<br/>
+ * The naming of the properties files for the localized messages is equals to the naming of {@link ResourceBundle}s
+ * without respecting country-specific specialization.
+ * <ul>
+ * <li>userActionMessages.properties: the messages for the default language, which is defined in the property
+ * <code>default.language</code></li>
+ * <li>userActionMessages_&ltlang&gt;.properties: the messages for a specific language ('lang' is an ISO language code)
+ * </ul>
+ * The package provides the files <code>userActionMessages.properties</code> and <code>userActionMessages_de.properties</code>.
+ * If there are user-defined properties files in the root of the classpath (usually WEB-INF/classes), they where used to
+ * extend or the override package-defined properties. 
  */
 public class UserActionMessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(UserActionMessageHolder.class);
@@ -60,7 +70,7 @@ public class UserActionMessageHolder {
 		Map<String, InputStream> data = new HashMap<String, InputStream>();
 		List<String> langs = Arrays.asList(Locale.getISOLanguages());
 		
-		// load known language files in the library
+		// load known language files which are included in the library
 		data.put(defaultLanguage, UserActionMessageHolder.class.getResourceAsStream(String.format("%s.properties", baseName)));
 		data.put("de", UserActionMessageHolder.class.getResourceAsStream(String.format("%s_de.properties", baseName)));
 		
@@ -98,7 +108,7 @@ public class UserActionMessageHolder {
 				props.load(data.get(lang));
 				langData.put(lang, props);
 			} catch (IOException e) {
-				throw new RuntimeException(String.format("A ResourceBundle couldn't be initialized for %s", lang));
+				throw new RuntimeException(String.format("A language-bundle couldn't be initialized for %s", lang));
 			}
 		}
 		

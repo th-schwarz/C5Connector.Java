@@ -10,20 +10,19 @@ public class UserActionMessageHolderTest {
 
 	@Test
 	public void testGetDefault() {
-		String expected = "Upload is not allowed.";
+		String expected = "You are not authorized to upload files!";
 		assertEquals(expected, UserActionMessageHolder.get(Locale.ITALIAN, UserActionMessageHolder.Key.UploadNotAllowed));
 
-		expected = "The creation of a folder is not allowed.";
+		expected = "You are not authorized to create folders!";
 		assertEquals(expected, UserActionMessageHolder.get(Locale.ITALIAN, UserActionMessageHolder.Key.CreateFolderNotAllowed));
 	}
 
 	@Test
 	public void testGetDE() {
-		String expected = "Das Hochladen ist nicht erlaubt.";
+		String expected = "Sie sind nicht berechtigt Dateien hochzuladen!";
 		assertEquals(expected, UserActionMessageHolder.get(Locale.GERMAN, UserActionMessageHolder.Key.UploadNotAllowed));
 
-		expected = "Das Anlegen eines Verzeichnisses ist nicht erlaubt.";
+		expected = "Sie sind nicht berechtigt Verzeichnisse zu erstellen!";
 		assertEquals(expected, UserActionMessageHolder.get(Locale.GERMAN, UserActionMessageHolder.Key.CreateFolderNotAllowed));
 	}
-
 }
