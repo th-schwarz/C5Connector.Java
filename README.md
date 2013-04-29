@@ -2,7 +2,7 @@
 
 The Java backend for the [filemanager of corefive](http://github.com/simogeo/Filemanager).
 
-C5Connector.Java is distributed under the [GPL](http://www.gnu.org/licenses/gpl.html) and [MIT](http://en.wikipedia.org/wiki/MIT_License) Open Source licenses. This **dual copyleft licensing model** is flexible and allows you to choose the license that is best suited for your needs. The Open Source licenses are intended for:
+C5Connector.Java is distributed under the [LGPL](http://www.gnu.org/licenses/lgpl-3.0.html) and [MPL](http://www.mozilla.org/MPL/2.0/) Open Source licenses. This **dual copyleft licensing model** is flexible and allows you to choose the license that is best suited for your needs. The Open Source licenses are intended for:
 
 * Integrating C5Connector.Java into Open Source software.
 * Personal and educational use of C5Connector.Java.
@@ -15,7 +15,7 @@ C5Connector.Java is distributed under the [GPL](http://www.gnu.org/licenses/gpl.
   * updated slf4j to 1.7.2
   * updated test-jetty-servlet to 8.1.9 
   
-* 0.0.3
+* 0.1
   * compatible with the Servlet 3.0 specification
   * fixed scope of the dependency slf4j-nop
   * extended the UserActionMessageHolder to work with user-defined properties files
