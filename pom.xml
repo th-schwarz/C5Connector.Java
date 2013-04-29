@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.thischwa.c5c</groupId>
 	<artifactId>c5connector-java</artifactId>
@@ -13,7 +14,7 @@
 			<url>LICENSE.txt</url>
 		</license>
 	</licenses>
-  
+
 	<issueManagement>
 		<url>https://github.com/th-schwarz/C5Connector.Java/issues</url>
 		<system>GitHub Issues</system>
@@ -30,6 +31,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
+		<github.global.server>github</github.global.server>
 		<jii.version>0.5</jii.version>
 	</properties>
 
@@ -61,23 +63,23 @@
 			<groupId>de.thischwa.jii</groupId>
 			<artifactId>java-image-info</artifactId>
 			<version>${jii.version}</version>
-		</dependency>		
-		<dependency>
-		  <groupId>com.fasterxml.jackson.core</groupId>
-		  <artifactId>jackson-core</artifactId>
-		  <version>2.1.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>com.fasterxml.jackson.core</groupId>
-		  <artifactId>jackson-annotations</artifactId>
-		  <version>2.1.0</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>com.fasterxml.jackson.dataformat</groupId>
-		  <artifactId>jackson-dataformat-xml</artifactId>
-		  <version>2.1.0</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.1.0</version>
 		</dependency>
-				
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
 		<!-- just for testing image rendering implementations -->
 		<dependency>
 			<groupId>net.coobird</groupId>
@@ -89,7 +91,7 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
 		</dependency>
-		
+
 		<!-- junit testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -121,7 +123,7 @@
 					<target>${project.source.version}</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<!-- build the javadoc jar -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -195,7 +197,7 @@
 				<!-- use mvn site:site for site upload -->
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<version>0.6</version>
+				<version>0.7</version>
 				<configuration>
 					<message>Creating site for ${project.version}</message>
 				</configuration>
@@ -207,25 +209,32 @@
 						<phase>site</phase>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.mylyn.github</groupId>
+						<artifactId>org.eclipse.egit.github.core</artifactId>
+						<version>2.0.3</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<!-- builds the distribution zip / it's bind to the package phase -->
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>
-		        <configuration>
-		          <descriptors>
-		            <descriptor>src/main/assembly/dist.xml</descriptor>
-		          </descriptors>
-		        </configuration>
-		        <executions>
-		        	<execution>
-		        		<id>dist</id>
-		        		<phase>package</phase>
-		        		<goals>
-		        			<goal>single</goal>
-		        		</goals>
-		        	</execution>
-		        </executions>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/dist.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>dist</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
