@@ -19,3 +19,6 @@ C5Connector.Java is distributed under the [LGPL](http://www.gnu.org/licenses/lgp
   * compatible with the Servlet 3.0 specification
   * fixed scope of the dependency slf4j-nop
   * extended the UserActionMessageHolder to work with user-defined properties files
+
+* 0.2 SNAPSHOT
+  * restructured FilemanagerIconResolver to get an easier access from embedded applications

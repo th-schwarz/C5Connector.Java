@@ -42,19 +42,17 @@ import de.thischwa.c5c.util.VirtualFile.Type;
 public class FilemanagerIconResolver implements IconResolver {
 	
 	/** The icon path inside the filemanager. */
-	private static String iconPath = "images/fileicons";
+	protected static String iconPath = "images/fileicons";
 	
-	private Map<String, String> iconsPerType;
+	private Map<String, String> iconsPerType = new HashMap<String, String>();
 	
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {
-		iconsPerType = new HashMap<String, String>();
-		
 		Path fileSystemPath = new Path(PropertiesLoader.getFilemangerPath());
 		fileSystemPath.addFolder(iconPath);
 
 		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
 		if(!iconFolder.exists())
-			throw new RuntimeException("C5 file icons folder couldn't be found!");
+			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemangerPath(), iconFolder.getAbsolutePath()));
 		
 		Path urlPath;
 		if(!StringUtils.isNullOrEmpty(servletContext.getContextPath())) {
@@ -64,6 +62,10 @@ public class FilemanagerIconResolver implements IconResolver {
 		else {
 			urlPath = new Path(fileSystemPath.toString());
 		}
+		collectIcons(iconFolder, urlPath);
+	}
+	
+	protected void collectIcons(final File iconFolder, final Path urlPath) {
 		for(File icon : iconFolder.listFiles(new IconNameFilter())) {
 			String knownExtension = FilenameUtils.getBaseName(icon.getName());
 			iconsPerType.put(knownExtension, urlPath.addFile(icon.getName()));
