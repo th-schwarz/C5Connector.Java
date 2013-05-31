@@ -41,51 +41,46 @@ import de.thischwa.c5c.util.Path;
  * Holds the messages provided by several javascript files located in the path 'scripts/languages' inside
  * the folder of filemanager.
  */
-class FilemanagerMessageHolder {
-	private static Logger logger = LoggerFactory.getLogger(FilemanagerMessageHolder.class);
+public class FilemanagerMessageResolver implements MessageResolver {
+	private static Logger logger = LoggerFactory.getLogger(FilemanagerMessageResolver.class);
 
-	private static String scriptPath = "scripts/languages";
+	protected static String scriptPath = "scripts/languages";
 	
-	private FilenameFilter jsFilter = new FilenameFilter() {
+	protected FilenameFilter jsFilter = new FilenameFilter() {
 		@Override
 		public boolean accept(File dir, String name) {
 			return name.endsWith(".js");
 		}
 	};
 
-	private Map<String, Map<String, String>> messageStore;
+	private Map<String, Map<String, String>> messageStore = new HashMap<String, Map<String,String>>();
 
-	FilemanagerMessageHolder(ServletContext servletContext) throws RuntimeException {
+	@Override
+	public void setServletContext(ServletContext servletContext) throws RuntimeException {
 		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
 			throw new RuntimeException("C5 scripts folder couldn't be found!");
 
-		messageStore = new HashMap<String, Map<String,String>>();		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			for(File file: msgFolder.listFiles(jsFilter)) {
 				String lang = FilenameUtils.getBaseName(file.getName());
 		        @SuppressWarnings("unchecked")
 				Map<String, String> langData = mapper.readValue(file, Map.class);
-				messageStore.put(lang, langData);
+				collectLangData(lang, langData);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		logger.info("*** MessageHolder successful initialized.");
 	}
 	
-	/**
-	 * Gets the message for the desired 'locale' and 'key'. 
-	 * 
-	 * @param locale The {@link Locale} of desired message.
-	 * @param key The key for the message.
-	 * 
-	 * @return The message for the desired 'locale' and 'key'. If the locale is unknown the default locale is taken.
-	 * @throws IllegalArgumentException If the 'key is unknown.
-	 */
-	String getMessage(Locale locale, FilemanagerException.Key key) throws IllegalArgumentException {
+	protected void collectLangData(final String lang, final Map<String, String> data) {
+		messageStore.put(lang, data);
+	}
+	
+	@Override
+	public String getMessage(Locale locale, FilemanagerException.Key key) throws IllegalArgumentException {
 		String lang = locale.getLanguage().toLowerCase();
 		if(!messageStore.containsKey(lang)) {
 			logger.warn("Language [{}] not supported, take the default.", lang);

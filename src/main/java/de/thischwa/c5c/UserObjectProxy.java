@@ -40,7 +40,7 @@ import de.thischwa.c5c.util.VirtualFile;
  * <ul>
  * <li>{@link UserAction}</li>
  * <li>{@link IconResolver}</li>
- * <li>{@link FilemanagerMessageHolder}</li>
+ * <li>{@link MessageResolver}</li>
  * <li>{@link FilemanagerCapability}</li>
  * <li>{@link UserPathBuilder}</li> 
  * </ul>
@@ -58,7 +58,7 @@ public class UserObjectProxy {
 	
 	private static IconResolver iconResolver;
 	
-	private static FilemanagerMessageHolder c5messageHolder;
+	private static MessageResolver messageHolder;
 	
 	private static FilemanagerCapability fileCapability;
 	
@@ -118,11 +118,17 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 4. try to initialize the MessagesHolder
+		// 4. try to initialize the MessageResolver
+		className = PropertiesLoader.getMessageResolverImpl();
+		if(StringUtils.isNullOrEmpty(className))
+			throw new RuntimeException("Empty MessageResolver implementation class name! Depending property must be set!");
 		try {
-			c5messageHolder = new FilemanagerMessageHolder(servletContext);
+			Class<?> clazz = Class.forName(className);
+			messageHolder = (MessageResolver) clazz.newInstance();
+			messageHolder.setServletContext(servletContext);
+			logger.info("MessageResolver initialized to {}", className);
 		} catch (Throwable e) {
-			String msg = "MessagesHolder couldn't be initialized.";
+			String msg = String.format("MessageResolver implementation [%s] couldn't be instantiated.", className);
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
@@ -178,10 +184,10 @@ public class UserObjectProxy {
 	 * @param key the key of the desired message
 	 * 
 	 * @return the localized and known error message of the filemanager
-	 * @see FilemanagerMessageHolder#getMessage(java.util.Locale, de.thischwa.c5c.exception.FilemanagerException.Key)
+	 * @see FilemanagerMessageResolver#getMessage(java.util.Locale, de.thischwa.c5c.exception.FilemanagerException.Key)
 	 */
 	public static String getFilemanagerErrorMessage(FilemanagerException.Key key) {
-		return c5messageHolder.getMessage(RequestData.getLocale(), key);
+		return messageHolder.getMessage(RequestData.getLocale(), key);
 	}
 
 	/**

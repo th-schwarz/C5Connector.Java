@@ -134,60 +134,6 @@ public class PropertiesLoader {
 	public static Locale getDefaultLocale() {
 		return defaultLocale;
 	}
-	
-	/**
-	 * Returns <code>ckeditor.toolbar</code> property
-	 *
-	 * @return the editor toolbar
-	 */
-	public static String getEditorToolbar() {
-		return properties.getProperty("ckeditor.toolbar");
-	}
-
-	/**
-	 * Returns <code>ckeditor.width</code> property
-	 *
-	 * @return the editor width
-	 */
-	public static String getEditorWidth() {
-		return properties.getProperty("ckeditor.width");
-	}
-
-	/**
-	 * Returns <code>ckeditor.height</code> property
-	 *
-	 * @return the editor height
-	 */
-	public static String getEditorHeight() {
-		return properties.getProperty("ckeditor.height");
-	}
-	
-	/**
-	 * Returns <code>ckeditor.textarea.cols</code> property
-	 *
-	 * @return the editor textarea cols
-	 */
-	public static String getEditorTextareaCols() {
-		return properties.getProperty("ckeditor.textarea.cols");
-	}
-	
-	/**
-	 * Returns <code>ckeditor.textarea.rows</code> property
-	 *
-	 * @return the editor textarea rows
-	 */
-	public static String getEditorTextareaRows() {
-		return properties.getProperty("ckeditor.textarea.rows");
-	}
-
-	/**
-	 * Returns <code>ckeditor.basePath</code> property
-	 *
-	 * @return the editor base path
-	 */
-	public static String getEditorBasePath() {
-		return properties.getProperty("ckeditor.basePath");
-	}
 
 	/**
 	 * Returns <code>connector.resourceType.archive.extensions.allowed</code> property
@@ -313,6 +259,15 @@ public class PropertiesLoader {
 	 */
 	public static String getUserPathBuilderImpl() {
 		return properties.getProperty("connector.userPathBuilderImpl");
+	}
+
+	/**
+	 * Returns <code>connector.v</code> property
+	 *
+	 * @return the message resolver impl
+	 */
+	public static String getMessageResolverImpl() {
+		return properties.getProperty("connector.messageResolverImpl");
 	}
 
 	/**

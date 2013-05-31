@@ -22,3 +22,4 @@ C5Connector.Java is distributed under the [LGPL](http://www.gnu.org/licenses/lgp
 
 * 0.2 SNAPSHOT
   * restructured FilemanagerIconResolver to get an easier access from embedded applications
+  * restructured the resolving of messages for the filemanager to get an easier access from embedded applications
