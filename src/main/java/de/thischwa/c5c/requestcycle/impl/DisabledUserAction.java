@@ -24,7 +24,7 @@ import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.UserAction;
 
 /**
- * The implementation of {@link UserAction}, which always returns {@code false}.
+ * An implementation of {@link UserAction}, which always returns {@code false}.
  */
 public class DisabledUserAction implements UserAction {
 

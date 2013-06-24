@@ -25,7 +25,7 @@ import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.UserPathBuilder;
 
 /**
- * Implementation of the {@link UserPathBuilder} that returns the {@link ServletContext#getRealPath(String)}.
+ * An implementation of the {@link UserPathBuilder} that returns the {@link ServletContext#getRealPath(String)}.
  */
 public class ServerPathBuilder implements UserPathBuilder {
 

@@ -31,7 +31,7 @@ import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.StringUtils;
 
 /**
- * The default {@link FilemanagerCapability} implementation. All capabilities
+ * The default implementation of {@link FilemanagerCapability}. All capabilities
  * which set in the property <code>connector.capabilities</code> will be set for each files. 
  */
 public class DefaultCapability implements FilemanagerCapability {
