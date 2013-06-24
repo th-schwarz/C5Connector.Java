@@ -20,6 +20,6 @@ C5Connector.Java is distributed under the [LGPL](http://www.gnu.org/licenses/lgp
   * fixed scope of the dependency slf4j-nop
   * extended the UserActionMessageHolder to work with user-defined properties files
 
-* 0.2 SNAPSHOT
-  * restructured FilemanagerIconResolver to get an easier access from embedded applications
-  * restructured the resolving of messages for the filemanager to get an easier access from embedded applications
+* 0.2
+  * restructured FilemanagerIconResolver to get an easier access for embedded applications
+  * restructured the resolving of messages for the filemanager to get an easier access for embedded applications
