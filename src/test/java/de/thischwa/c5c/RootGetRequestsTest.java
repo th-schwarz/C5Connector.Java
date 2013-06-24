@@ -27,13 +27,10 @@ import java.io.File;
 
 import org.eclipse.jetty.testing.HttpTester;
 import org.eclipse.jetty.testing.ServletTester;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RootGetRequestsTest {
-	
-	private ServletTester tester;
+public class RootGetRequestsTest extends GenericRequestTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -43,11 +40,6 @@ public class RootGetRequestsTest {
 		tester.setResourceBase(resourceBaseDir.getAbsolutePath());
 		tester.addServlet(ConnectorServlet.class, "/filemanager/connectors/java/*");
 		tester.start();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		tester.stop();
 	}
 
 	@Test
@@ -61,8 +53,9 @@ public class RootGetRequestsTest {
 		response.parse(responseStr);
 		
 		assertEquals(200, response.getStatus());
-		String epected = "{\"/userfiles/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/_Open.png\",\"Filename\":\"folder\",\"File Type\":\"dir\"},\"/userfiles/pic01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}}";
-		assertEquals(epected, response.getContent());
+		String actual = cleanResponse(response.getContent());
+		String epected = cleanResponse("{\"/userfiles/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/_Open.png\",\"Filename\":\"folder\",\"File Type\":\"dir\"},\"/userfiles/pic01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}}");
+		assertEquals(epected, actual);
 	}
 
 	@Test
@@ -76,7 +69,9 @@ public class RootGetRequestsTest {
 		response.parse(responseStr);
 		
 		assertEquals(200, response.getStatus());
-		String expected = "{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}";
-		assertEquals(expected, response.getContent());
+		String actual = cleanResponse(response.getContent());
+		String expected = cleanResponse("{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}");
+		assertEquals(expected, actual);
 	}
+	
 }
