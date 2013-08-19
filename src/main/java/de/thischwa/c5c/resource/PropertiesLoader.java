@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,15 +62,15 @@ public class PropertiesLoader {
 		} else {
 			if (!(inDefault instanceof BufferedInputStream))
 				inDefault = new BufferedInputStream(inDefault);
-
 			try {
 				properties.load(inDefault);
-				inDefault.close();
 				logger.info("{} successful loaded", DEFAULT_FILENAME);
 			} catch (Exception e) {
 				String msg = "Error while processing " + DEFAULT_FILENAME;
 				logger.error(msg);
 				throw new RuntimeException(msg, e);
+			} finally {
+				IOUtils.closeQuietly(inDefault);
 			}
 		}
 
@@ -88,6 +89,8 @@ public class PropertiesLoader {
 				String msg = "Error while processing " + LOCAL_PROPERTIES;
 				logger.error(msg);
 				throw new RuntimeException(msg, e);
+			} finally {
+				IOUtils.closeQuietly(inUser);
 			}
 		}
 		
