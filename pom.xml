@@ -37,6 +37,7 @@
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
 		<github.global.server>github</github.global.server>
 		<jii.version>0.5</jii.version>
+		<jackson.version>2.2.2</jackson.version>
 	</properties>
 
 	<repositories>
@@ -71,17 +72,17 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.1.0</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>2.1.0</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.1.0</version>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- just for testing image rendering implementations -->
