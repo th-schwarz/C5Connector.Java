@@ -62,7 +62,7 @@ public class ConnectorServlet extends HttpServlet {
 	private Dispatcher dispatcher;
 	
 	/**
-	 * Initializes this servlet. Internally it initializes the {@link Dispatcher} and the {@link UserObjectProxy}.
+	 * Initializes this servlet. It initializes the {@link Dispatcher} and the {@link UserObjectProxy}.
 	 */
 	@Override
 	public void init() throws ServletException {
