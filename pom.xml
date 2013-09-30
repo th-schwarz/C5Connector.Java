@@ -31,7 +31,7 @@
 	</scm>
 
 	<properties>
-		<project.source.version>1.6</project.source.version>
+		<jse.version>1.7</jse.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
@@ -124,8 +124,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>${project.source.version}</source>
-					<target>${project.source.version}</target>
+					<source>${jse.version}</source>
+					<target>${jse.version}</target>
 				</configuration>
 			</plugin>
 
@@ -188,7 +188,7 @@
 								<top><![CDATA[<h1>${project.name}</h1>]]></top>
 								<bottom><![CDATA[Copyright &#169; {inceptionYear}-{currentYear} <a href="http://www.thischwa.de">Thilo Schwarz<a>. All rights reserved.]]></bottom>
 								<links>
-									<link>http://docs.oracle.com/javase/6/docs/api/</link>
+									<link>http://docs.oracle.com/javase//docs/api/</link>
 								</links>
 							</configuration>
 							<reports>
