@@ -57,7 +57,7 @@ public class DefaultCapability implements FilemanagerCapability {
 			return null;
 		
 		String[] caps = capabilitiesStr.split(",");
-		List<FilemanagerCapability.Capability> capList = new ArrayList<FilemanagerCapability.Capability>(caps.length);
+		List<FilemanagerCapability.Capability> capList = new ArrayList<>(caps.length);
 		for (String cap : caps) {
 			FilemanagerCapability.Capability capability = FilemanagerCapability.Capability.valueOf(cap.trim().toLowerCase());
 			if(capability == null) {

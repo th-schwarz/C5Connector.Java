@@ -35,7 +35,7 @@ public final class FolderInfo extends Response {
 	private Map<String, FileInfo> folderItems;
 
 	public FolderInfo() {
-		folderItems = new LinkedHashMap<String, FileInfo>();
+		folderItems = new LinkedHashMap<>();
 	}
 
 	public void add(final FileInfo fileInfo) {

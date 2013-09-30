@@ -53,7 +53,7 @@ public final class FileInfo extends Response {
 	private String previewPath;
 
 	public FileInfo(String path, boolean isDir) {
-		capabilities = new ArrayList<String>();
+		capabilities = new ArrayList<>();
 		virtualFile = new VirtualFile(path, isDir);
 		this.path = path;
 		if (isDir && !this.path.endsWith(Constants.defaultSeparator))
@@ -126,7 +126,7 @@ public final class FileInfo extends Response {
 	@JsonIgnore
 	public void setCapabilities(FilemanagerCapability.Capability[] capabilities) {
 		if (capabilities != null && capabilities.length > 0) {
-			this.capabilities = new ArrayList<String>(capabilities.length);
+			this.capabilities = new ArrayList<>(capabilities.length);
 			for (FilemanagerCapability.Capability capability : capabilities) {
 				this.capabilities.add(capability.toString().toLowerCase());
 			}

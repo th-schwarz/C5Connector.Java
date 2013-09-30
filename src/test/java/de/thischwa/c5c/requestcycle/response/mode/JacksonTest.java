@@ -41,7 +41,7 @@ public class JacksonTest {
 	public void testReadValue() throws JsonParseException, JsonMappingException, IOException {
 		//String str = "{ name: 'basics', items : [ 'Bold','Italic','Strike','-','About' ] }".replace("'", "\"");
 		String str = "{'test name': 'test', 'value': 'val'}".replace("'", "\"");
-		Map<String, Object> objs = new HashMap<String, Object>();
+		Map<String, Object> objs = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
 		objs = mapper.readValue(str, new TypeReference<Map<String, Object>>() {});
 		assertEquals("test", objs.get("test name"));

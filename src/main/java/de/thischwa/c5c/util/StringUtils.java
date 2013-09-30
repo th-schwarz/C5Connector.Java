@@ -74,7 +74,7 @@ public class StringUtils {
 	}
 
 	public static Map<String, String> divideAndDecodeQueryString(String query) {
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new HashMap<>();
 		if(isNullOrEmptyOrBlank(query))
 			return params;
 		String[] keyValues = query.split("&");

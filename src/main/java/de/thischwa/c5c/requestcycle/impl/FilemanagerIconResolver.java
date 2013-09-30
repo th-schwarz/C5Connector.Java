@@ -44,7 +44,7 @@ public class FilemanagerIconResolver implements IconResolver {
 	/** The icon path inside the filemanager. */
 	protected static String iconPath = "images/fileicons";
 	
-	private Map<String, String> iconsPerType = new HashMap<String, String>();
+	private Map<String, String> iconsPerType = new HashMap<>();
 	
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {
 		Path fileSystemPath = new Path(PropertiesLoader.getFilemangerPath());

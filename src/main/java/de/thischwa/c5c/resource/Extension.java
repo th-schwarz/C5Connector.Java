@@ -64,9 +64,9 @@ public enum Extension {
 
 	private static Set<String> buildSet(final String stringList) {
 		if (StringUtils.isNullOrEmptyOrBlank(stringList))
-			return new HashSet<String>();
+			return new HashSet<>();
 
-		Set<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<>();
 		String[] items = stringList.split(string_list_delimter);
 		for (String item : items) {
 			// add item if not empty

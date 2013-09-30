@@ -45,11 +45,11 @@ import de.thischwa.jii.IDimensionProvider;
 public class RequestData {
 	private static Logger logger = LoggerFactory.getLogger(RequestData.class);
 	
-	private static ThreadLocal<Context> context = new ThreadLocal<Context>();
+	private static ThreadLocal<Context> context = new ThreadLocal<>();
 	
-	private static ThreadLocal<IDimensionProvider> dimensionProvider = new ThreadLocal<IDimensionProvider>();
+	private static ThreadLocal<IDimensionProvider> dimensionProvider = new ThreadLocal<>();
 	
-	private static ThreadLocal<Locale> locale = new ThreadLocal<Locale>();
+	private static ThreadLocal<Locale> locale = new ThreadLocal<>();
 
 	/**
 	 * Initializes the current request cycle.

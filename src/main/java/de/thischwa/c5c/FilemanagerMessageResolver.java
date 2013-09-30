@@ -53,7 +53,7 @@ public class FilemanagerMessageResolver implements MessageResolver {
 		}
 	};
 
-	private Map<String, Map<String, String>> messageStore = new HashMap<String, Map<String,String>>();
+	private Map<String, Map<String, String>> messageStore = new HashMap<>();
 
 	@Override
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {

@@ -215,7 +215,7 @@ public class LocalConnector implements Connector {
 	 * @throws C5CException the connector exception
 	 */
 	private List<FileProperties> constructFromDirRequest(String urlPath, File dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		List<FileProperties> props = new ArrayList<FileProperties>();
+		List<FileProperties> props = new ArrayList<>();
 		// add dirs
 		File[] fileList = dir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
 		for (File file : fileList) {

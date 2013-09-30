@@ -57,14 +57,14 @@ import org.slf4j.LoggerFactory;
 public class UserActionMessageHolder {
 	private static Logger logger = LoggerFactory.getLogger(UserActionMessageHolder.class);
 	
-	private static Map<String, Properties> langData = new HashMap<String, Properties>();
+	private static Map<String, Properties> langData = new HashMap<>();
 	
 	private static String defaultLanguage = PropertiesLoader.getDefaultLocale().getLanguage();
 
 	private static String baseName = "userActionMessages";
 	
 	static {
-		Map<String, InputStream> data = new HashMap<String, InputStream>();
+		Map<String, InputStream> data = new HashMap<>();
 		List<String> langs = Arrays.asList(Locale.getISOLanguages());
 		
 		// load known language files which are included in the library

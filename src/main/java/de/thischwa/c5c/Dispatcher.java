@@ -163,7 +163,7 @@ final class Dispatcher {
 		FolderInfo folderInfo = Dispatcher.buildFolderInfo();
 		if(props == null)
 			return folderInfo;
-		List<FileInfo> infos = new ArrayList<FileInfo>(props.size());
+		List<FileInfo> infos = new ArrayList<>(props.size());
 		for (FileProperties fileProperties : props) {
 			FileInfo fileInfo = Dispatcher.buildFileInfo(urlPath, fileProperties);
 			Dispatcher.setCapabilities(fileInfo, urlPath);
