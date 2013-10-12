@@ -13,10 +13,11 @@ public class FilemanagerConfigurationLoaderTest {
 		FilemanagerConfiguration conf = new FilemanagerConfiguration();
 		conf.setComment("test");
 		conf.getOptions().setLang("java");
+		conf.getOptions().setRelPath(Boolean.FALSE);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String actual = mapper.writeValueAsString(conf);
-		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":0},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null,\"unallowed_files_REGEXP\":null,\"unallowed_dirs_REGEXP\":null},\"images\":{\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"_comment\":\"test\"}";
+		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"capabilities\":null,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":0},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null,\"unallowed_files_REGEXP\":null,\"unallowed_dirs_REGEXP\":null},\"images\":{\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"_comment\":\"test\"}";
 		assertEquals(expected, actual);
 	}
 
@@ -40,5 +41,17 @@ public class FilemanagerConfigurationLoaderTest {
 		assertTrue(conf.getImages().getExtensions().contains("png"));
 		
 		assertEquals("default.png", conf.getIcons().getDefaultIcon());
+		
+		assertTrue(conf.getOptions().getRelPath() instanceof Boolean);
+		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
+		
+		assertEquals(5, conf.getOptions().getCapabilities().size());
+	}
+
+	@Test
+	public void testBool() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		FilemanagerConfiguration conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfiguration.class);
+		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
 	}
 }

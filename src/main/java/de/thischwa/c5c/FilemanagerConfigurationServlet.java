@@ -1,3 +1,22 @@
+/*
+ * C5Connector.Java - The Java backend for the filemanager of corefive.
+ * It's a bridge between the filemanager and a storage backend and 
+ * works like a transparent VFS or proxy.
+ * Copyright (C) Thilo Schwarz
+ * 
+ * == BEGIN LICENSE ==
+ * 
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ * 
+ *  - GNU Lesser General Public License Version 3.0 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl-3.0.html
+ * 
+ *  - Mozilla Public License Version 2.0 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/2.0/
+ * 
+ * == END LICENSE ==
+ */
 package de.thischwa.c5c;
 
 import java.io.BufferedInputStream;
@@ -21,6 +40,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
 
+/**
+ * FilemanagerConfigurationServlet.java - TODO DOCUMENTME!
+ */
 public class FilemanagerConfigurationServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -30,14 +52,10 @@ public class FilemanagerConfigurationServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		String configPath = config.getInitParameter("path");
-		String filePath;
-		if(configPath == null) {
+		if(configPath == null) 
 			throw new IllegalArgumentException("Init-param 'path' isn't set!");
-		} else {
-			 filePath = configPath;
-		}
 		InputStream confIn = null;
-		File confFile = new File(config.getServletContext().getRealPath(filePath));
+		File confFile = new File(config.getServletContext().getRealPath(configPath));
 		try {
 			confIn = new BufferedInputStream(new FileInputStream(confFile));
 			FilemanagerConfiguration.init(confIn);
@@ -46,9 +64,10 @@ public class FilemanagerConfigurationServlet extends HttpServlet {
 		} finally {
 			IOUtils.closeQuietly(confIn);
 		}
-		logger.info("*** {} sucessful initialized with path: {}", this.getClass().getName(), filePath);
+		logger.info("*** {} sucessful initialized with path: {}", this.getClass().getName(), configPath);
 		
 	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());

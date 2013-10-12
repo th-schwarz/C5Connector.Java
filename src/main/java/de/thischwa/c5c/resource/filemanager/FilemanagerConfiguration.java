@@ -94,7 +94,7 @@ public class FilemanagerConfiguration {
 
 	public static FilemanagerConfiguration getConfiguration() {
 		if(config == null)
-			throw new IllegalArgumentException("Configuration wasn't loaded!");
+			throw new IllegalArgumentException("Configuration isn't loaded!");
 		return config;
 	}
 

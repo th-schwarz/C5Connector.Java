@@ -50,9 +50,10 @@ public class Options {
 
 	private String dateFormat;
 	private boolean serverRoot;
-	private String fileRoot;
-	private boolean relPath;
+	private Object fileRoot;
+	private Object relPath;
 	private boolean logger;
+	private Set<String> capabilities;
 	private Set<String> plugins;
 
 	Options() {
@@ -189,19 +190,19 @@ public class Options {
 		this.serverRoot = serverRoot;
 	}
 
-	public String getFileRoot() {
+	public Object getFileRoot() {
 		return fileRoot;
 	}
 
-	public void setFileRoot(String fileRoot) {
+	public void setFileRoot(Object fileRoot) {
 		this.fileRoot = fileRoot;
 	}
 
-	public boolean isRelPath() {
+	public Object getRelPath() {
 		return relPath;
 	}
-
-	public void setRelPath(boolean relPath) {
+	
+	public void setRelPath(Object relPath) {
 		this.relPath = relPath;
 	}
 
@@ -211,6 +212,14 @@ public class Options {
 
 	public void setLogger(boolean logger) {
 		this.logger = logger;
+	}
+	
+	public Set<String> getCapabilities() {
+		return capabilities;
+	}
+	
+	public void setCapabilities(Set<String> capabilities) {
+		this.capabilities = capabilities;
 	}
 
 	public Set<String> getPlugins() {
