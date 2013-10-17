@@ -49,7 +49,8 @@ import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import de.thischwa.c5c.resource.Extension;
+import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
+import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
@@ -189,7 +190,8 @@ public class LocalConnector implements Connector {
 		try {
 			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
-			if(Extension.IMAGE.isAllowedExtension(FilenameUtils.getExtension(file.getPath()))) {
+			String ext = FilenameUtils.getExtension(file.getPath());
+			if(!StringUtils.isNullOrEmptyOrBlank(ext) && FilemanagerConfiguration.getConfiguration().getImages().getExtensions().contains(ext)) {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(file);
 				Dimension dim = dp.getDimension();

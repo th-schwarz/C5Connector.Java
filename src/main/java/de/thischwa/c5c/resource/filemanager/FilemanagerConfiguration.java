@@ -19,21 +19,42 @@
  */
 package de.thischwa.c5c.resource.filemanager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.ServletContext;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.util.Path;
+
 /**
- * Main object to load and hold the JSON-configuration of the filemanager (filemanager.config.js).
+ * Static object for managing the configuration of the filemanager (filemanager.config.js).<br/>
+ * The order of searching files to load the defaults is the following:
+ * <ol>
+ * <li>[filemanger-dir]/scripts/filemanager.config.js</li>
+ * <li>[filemanger-dir]/scripts/filemanager.config.js.default</li>
+ * <li>internal config file</li>
+ * </ol>
+ * The first file which is found, will be loaded.<br/>
+ * <br/>
+ * The properties can be set programmatically to. But here is the same as for the {@link PropertiesLoader}: 
+ * Make sure to override the properties before the first call of any property.
  */
 public class FilemanagerConfiguration {
 	public static final Logger logger = LoggerFactory.getLogger(FilemanagerConfiguration.class);
 	private static FilemanagerConfiguration config;
+	
+	private static final String config_base_file_name = "filemanager.config.js";
 
 	@JsonProperty("_comment")
 	private String comment;
@@ -105,6 +126,39 @@ public class FilemanagerConfiguration {
 			logger.info("Configuration of the filemanager successful loaded.");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
+	}
+	
+	public static void loadDefault(ServletContext context) {
+		try {
+			init(searchConfigFile(context));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private static InputStream searchConfigFile(ServletContext context) throws FileNotFoundException {
+		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder("scripts");
+		File fmScriptDir = new File(context.getRealPath(path.toString()));
+		
+		// 1. defined: filemanager/scripts/filemanager.js
+		File configFile = new File(fmScriptDir, config_base_file_name);
+		if(configFile.exists()) {
+			logger.info("Defined config file found.");
+			return new FileInputStream(configFile);
+		}
+		
+		// 2. default: filemanager/scripts/filemanager.js.default
+		configFile = new File(fmScriptDir, config_base_file_name+".default");
+		if(configFile.exists()){
+			logger.info("Default config file found.");
+			return new FileInputStream(configFile);
+		}
+		
+		// 3. lib-default
+		logger.info("Lib-default config file found.");
+		return FilemanagerConfiguration.class.getResourceAsStream(config_base_file_name+".default");
 	}
 }

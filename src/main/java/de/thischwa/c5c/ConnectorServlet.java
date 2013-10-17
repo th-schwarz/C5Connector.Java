@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
 
 /**
  * <b>The</b> connector servlet of the filemanager. <br/>
@@ -62,7 +63,8 @@ public class ConnectorServlet extends HttpServlet {
 	private Dispatcher dispatcher;
 	
 	/**
-	 * Initializes this servlet. It initializes the {@link Dispatcher} and the {@link UserObjectProxy}.
+	 * Initializes this servlet. It initializes the {@link Dispatcher}, {@link UserObjectProxy} and
+	 * loads the defaults of {@link FilemanagerConfiguration}.
 	 */
 	@Override
 	public void init() throws ServletException {
@@ -79,6 +81,8 @@ public class ConnectorServlet extends HttpServlet {
 			logger.error("UserObjectProxy could not be initialized.", e);
 			throw new ServletException(e);
 		}
+		
+		FilemanagerConfiguration.loadDefault(getServletContext());
 		logger.info(String.format("*** %s sucessful initialized.", this.getClass().getName()));
 	}
 

@@ -44,7 +44,7 @@ import de.thischwa.c5c.util.Path;
 public class FilemanagerMessageResolver implements MessageResolver {
 	private static Logger logger = LoggerFactory.getLogger(FilemanagerMessageResolver.class);
 
-	protected static String scriptPath = "scripts/languages";
+	protected static String langPath = "scripts/languages";
 	
 	protected FilenameFilter jsFilter = new FilenameFilter() {
 		@Override
@@ -57,7 +57,7 @@ public class FilemanagerMessageResolver implements MessageResolver {
 
 	@Override
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {
-		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(scriptPath);
+		Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder(langPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
 			throw new RuntimeException("C5 scripts folder couldn't be found!");

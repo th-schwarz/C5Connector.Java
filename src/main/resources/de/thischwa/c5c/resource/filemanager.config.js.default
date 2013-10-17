@@ -2,7 +2,7 @@
 		"_comment": "IMPORTANT : go to the wiki page to know about options configuration https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file",
     "options": {
         "culture": "en",
-        "lang": "java",
+        "lang": "php",
         "defaultViewMode": "grid",
         "autoload": true,
         "showFullPath": false,
@@ -17,7 +17,7 @@
         "dateFormat": "d M Y H:i",
         "serverRoot": true,
         "fileRoot": false,
-        "relPath": "",
+        "relPath": false,
         "logger": false,
         "capabilities": ["select", "download", "rename", "move", "delete"],
         "plugins": []

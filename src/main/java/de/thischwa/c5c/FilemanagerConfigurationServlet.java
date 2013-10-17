@@ -41,7 +41,26 @@ import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
 
 /**
- * FilemanagerConfigurationServlet.java - TODO DOCUMENTME!
+ * Servlet to serve the content of the {@link FilemanagerConfiguration}. So it's possible to change the
+ * configuration of the filemanager without changing any javascript-config-file.<br/>
+ * To register it in the web.xml the following entries should be used:
+ * <pre> {@code
+ * <servlet>
+ *    <servlet-name>FilemanagerConfigurationServlet</servlet-name>
+ *    <servlet-class>de.thischwa.c5c.FilemanagerConfigurationServlet</servlet-class>
+ *    <load-on-startup>0</load-on-startup>
+ *    <init-param>
+ *       <param-name>default</param-name>
+ *       <param-value>/path/fm.config.js</param-value>
+ *    </init-param>
+ *    <servlet-mapping>
+ *       <servlet-name>FilemanagerConfigurationServlet</servlet-name>
+ *       <url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern>
+ *    </servlet-mapping>
+ * </servlet>
+ * }</pre>
+ * The init-param <i>default</i> is the JSON-config-file to load the default settings. But it isn't necessary. 
+ * If it is set, the defaults of the {@link FilemanagerConfiguration} will be overridden.
  */
 public class FilemanagerConfigurationServlet extends HttpServlet {
 
@@ -51,31 +70,29 @@ public class FilemanagerConfigurationServlet extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		String configPath = config.getInitParameter("path");
-		if(configPath == null) 
-			throw new IllegalArgumentException("Init-param 'path' isn't set!");
-		InputStream confIn = null;
-		File confFile = new File(config.getServletContext().getRealPath(configPath));
-		try {
-			confIn = new BufferedInputStream(new FileInputStream(confFile));
-			FilemanagerConfiguration.init(confIn);
-		} catch (Exception e) {
-			
-		} finally {
-			IOUtils.closeQuietly(confIn);
-		}
-		logger.info("*** {} sucessful initialized with path: {}", this.getClass().getName(), configPath);
-		
+		String defaultPath = config.getInitParameter("default");
+		if (defaultPath != null) {
+			InputStream confIn = null;
+			File confFile = new File(config.getServletContext().getRealPath(defaultPath));
+			try {
+				confIn = new BufferedInputStream(new FileInputStream(confFile));
+				FilemanagerConfiguration.init(confIn);
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+			logger.info("*** {} sucessful initialized with the config-file: {}", this.getClass().getName(), defaultPath);
+		} else
+			logger.info("*** {} sucessful initialized", this.getClass().getName());
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if (!req.getServletPath().contains("filemanager.config.js")) {
+			logger.error("FATAL config-request-error");
+			return;
+		}
 		resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
 		resp.setContentType("application/json");
-		
-		logger.debug("**** DOGET");
-		if(!req.getServletPath().contains("filemanager.config.js"))
-			logger.error("FATAL config-error");
 
 		ObjectMapper mapper = new ObjectMapper();
 		try {
