@@ -10,7 +10,7 @@ public class FilemanagerConfigurationLoaderTest {
 
 	@Test
 	public void testObject() throws Exception {
-		FilemanagerConfiguration conf = new FilemanagerConfiguration();
+		FilemanagerConfig conf = new FilemanagerConfig();
 		conf.setComment("test");
 		conf.getOptions().setLang("java");
 		conf.getOptions().setRelPath(Boolean.FALSE);
@@ -24,7 +24,7 @@ public class FilemanagerConfigurationLoaderTest {
 	@Test
 	public void testFile() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		FilemanagerConfiguration conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfiguration.class);
+		FilemanagerConfig conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfig.class);
 		
 		assertEquals("php", conf.getOptions().getLang());
 		assertEquals(Options.FILE_SORTING.DEFAULT, conf.getOptions().getFileSorting());
@@ -51,7 +51,7 @@ public class FilemanagerConfigurationLoaderTest {
 	@Test
 	public void testBool() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
-		FilemanagerConfiguration conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfiguration.class);
+		FilemanagerConfig conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfig.class);
 		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
 	}
 }

@@ -17,19 +17,21 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.exception;
+package de.thischwa.c5c.requestcycle;
 
-import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.resource.UserActionMessageHolder;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
+import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 
 /**
- * Thrown to indicate a user action, which isn't allowed.
+ * An Interface to determine the configuration of the filemanager.<br/>
+ * 
+ * @see FilemanagerConfig
  */
-public class UserActionException extends C5CException {
-	private static final long serialVersionUID = 1L;
+public interface FilemanagerConfigBuilder {
 
-	public UserActionException(UserActionMessageHolder.Key key) {
-		super(UserActionMessageHolder.get(RequestData.getLocale(), key));
-	}
+	public static final String BASE_FILE_NAME = "filemanager.config.js";
+	
+	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext);
 }

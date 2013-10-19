@@ -137,78 +137,6 @@ public class PropertiesLoader {
 	public static Locale getDefaultLocale() {
 		return defaultLocale;
 	}
-
-	/**
-	 * Returns <code>connector.resourceType.archive.extensions.allowed</code> property
-	 *
-	 * @return the archive resource type allowed extensions
-	 */
-	public static String getArchiveResourceTypeAllowedExtensions() {
-		return properties.getProperty("connector.resourceType.archive.extensions.allowed");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.archive.extensions.denied</code> property
-	 *
-	 * @return the archive resource type denied extensions
-	 */
-	public static String getArchiveResourceTypeDeniedExtensions() {
-		return properties.getProperty("connector.resourceType.archive.extensions.denied");
-	}
-	
-	/**
-	 * Returns <code>connector.resourceType.doc.extensions.allowed</code> property
-	 *
-	 * @return the doc resource type allowed extensions
-	 */
-	public static String getDocResourceTypeAllowedExtensions() {
-		return properties.getProperty("connector.resourceType.doc.extensions.allowed");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.doc.extensions.denied</code> property
-	 *
-	 * @return the doc resource type denied extensions
-	 */
-	public static String getDocResourceTypeDeniedExtensions() {
-		return properties.getProperty("connector.resourceType.doc.extensions.denied");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.image.extensions.allowed</code> property
-	 *
-	 * @return the image resource type allowed extensions
-	 */
-	public static String getImageResourceTypeAllowedExtensions() {
-		return properties.getProperty("connector.resourceType.image.extensions.allowed");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.image.extensions.denied</code> property
-	 *
-	 * @return the image resource type denied extensions
-	 */
-	public static String getImageResourceTypeDeniedExtensions() {
-		return properties.getProperty("connector.resourceType.image.extensions.denied");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.other.extensions.allowed</code> property
-	 *
-	 * @return the other resource type allowed extensions
-	 */
-	public static String getOtherResourceTypeAllowedExtensions() {
-		return properties.getProperty("connector.resourceType.other.extensions.allowed");
-	}
-
-	/**
-	 * Returns <code>connector.resourceType.other.extensions.denied</code> property
-	 *
-	 * @return the oher resource type denied extensions
-	 */
-	public static String getOherResourceTypeDeniedExtensions() {
-		return properties.getProperty("connector.resourceType.other.extensions.denied");
-	}
 	
 	/**
 	 * Returns <code>connector.filemanagerPath</code> property
@@ -227,16 +155,7 @@ public class PropertiesLoader {
 	public static boolean isSecureImageUploads() {
 		return Boolean.valueOf(properties.getProperty("connector.secureImageUploads"));
 	}
-
-	/**
-	 * Returns <code>connector.userActionImpl</code> property
-	 *
-	 * @return the user action impl
-	 */
-	public static String getUserActionImpl() {
-		return properties.getProperty("connector.userActionImpl");
-	}
-
+	
 	/**
 	 * Returns <code>connector.iconResolverImpl</code> property
 	 *
@@ -265,7 +184,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * Returns <code>connector.v</code> property
+	 * Returns <code>connector.messageResolverImpl</code> property
 	 *
 	 * @return the message resolver impl
 	 */
@@ -307,6 +226,15 @@ public class PropertiesLoader {
 	 */
 	public static String getFileCapabilityImpl() {
 		return properties.getProperty("connector.fileCapabilityImpl");
+	} 
+
+	/**
+	 * Gets the file config impl.
+	 *
+	 * @return <code>connector.filemanagerConfigImpl</code> property
+	 */
+	public static String getFilemangerConfigImpl() {
+		return properties.getProperty("connector.filemanagerConfigImpl");
 	} 
 	
 	/**

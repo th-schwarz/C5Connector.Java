@@ -20,6 +20,7 @@
 package de.thischwa.c5c;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +28,18 @@ import org.slf4j.LoggerFactory;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
+import de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.UserAction;
 import de.thischwa.c5c.requestcycle.UserPathBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
  * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
  * <ul>
- * <li>{@link UserAction}</li>
  * <li>{@link IconResolver}</li>
  * <li>{@link MessageResolver}</li>
  * <li>{@link FilemanagerCapability}</li>
@@ -54,8 +55,6 @@ public class UserObjectProxy {
 	
 	private static ServletContext servletContext;
 	
-	private static UserAction userAction;
-	
 	private static IconResolver iconResolver;
 	
 	private static MessageResolver messageHolder;
@@ -63,6 +62,8 @@ public class UserObjectProxy {
 	private static FilemanagerCapability fileCapability;
 	
 	private static UserPathBuilder userPathBuilder;
+	
+	private static FilemanagerConfigBuilder configBuilder;
 
 	/**
 	 * Instantiates all user-objects.
@@ -73,24 +74,8 @@ public class UserObjectProxy {
 	static void init(ServletContext servletContext) throws RuntimeException {
 		UserObjectProxy.servletContext = servletContext;
 		
-		// 1. try to instantiate the UserAction object
-		String className = PropertiesLoader.getUserActionImpl();
-		if (StringUtils.isNullOrEmptyOrBlank(className))
-			throw new RuntimeException("Empty UserAction implementation class name. Depending property must be set!");
-		else {
-			try {
-				Class<?> clazz = Class.forName(className);
-				userAction = (UserAction) clazz.newInstance();
-				logger.info("UserAction initialized to {}", className);
-			} catch (Throwable e) {
-				String msg = String.format("UserAction implementation [%s] couldn't be instantiated.", className);
-				logger.error(msg);
-				throw new RuntimeException(msg, e);
-			}
-		}
-		
-		// 2. try to instantiate the IconResolver object
-		className = PropertiesLoader.getIconResolverImpl();
+		// 1. try to instantiate the IconResolver object
+		String className = PropertiesLoader.getIconResolverImpl();
 		if (StringUtils.isNullOrEmptyOrBlank(className))
 			throw new RuntimeException("Empty IconResolver implementation class name! Depending property must be set!");
 		try {
@@ -104,7 +89,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 
-		// 3. try to instantiate to FileCapacity
+		// 2. try to instantiate to FileCapacity
 		className = PropertiesLoader.getFileCapabilityImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerCapability implementation class name! Depending property must be set!");
@@ -118,7 +103,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 4. try to initialize the MessageResolver
+		// 3. try to initialize the MessageResolver
 		className = PropertiesLoader.getMessageResolverImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty MessageResolver implementation class name! Depending property must be set!");
@@ -133,7 +118,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 5. try to initialize the UserPathBuilder
+		// 4. try to initialize the UserPathBuilder
 		className = PropertiesLoader.getUserPathBuilderImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty UserPathBuilder implementation class name! Depending property must be set!");
@@ -146,28 +131,22 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
+
+		// 5. try to initialize the FilemanagerConfigBuilder
+		className = PropertiesLoader.getFilemangerConfigImpl();
+		if(StringUtils.isNullOrEmpty(className))
+			throw new RuntimeException("Empty FilemanagerConfigBuilder implementation class name! Depending property must be set!");
+		try {
+			Class<?> clazz = Class.forName(className);
+			configBuilder = (FilemanagerConfigBuilder) clazz.newInstance();
+			logger.info("FilemanagerConfigBuilder initialized to {}", className);
+		} catch (Throwable e) {
+			String msg = "FilemanagerConfigBuilder couldn't be initialized.";
+			logger.error(msg);
+			throw new RuntimeException(msg, e);
+		}
 	}
 
-	/**
-	 * Retrieves whether the current user is allowed to upload files. 
-	 * 
-	 * @return true if user is allowed to upload files, false otherwise
-	 * @see UserAction#isFileUploadEnabled(Context)
-	 */
-	public static boolean isFileUploadEnabled() {
-		return userAction.isFileUploadEnabled(RequestData.getContext());
-	}
-
-	/**
-	 * Retrieves whether the current user is allowed to create folders. 
-	 * 
-	 * @return true if user is allowed to create folders, otherwise false
-	 * @see UserAction#isCreateFolderEnabled(Context)
-	 */
-	public static boolean isCreateFolderEnabled() {
-		return userAction.isCreateFolderEnabled(RequestData.getContext());
-	}
-	
 	/**
 	 * Retrieves the url-path of the icon for the desired {@link VirtualFile}.
 	 * @param vf the {@link VirtualFile} for which to retrieve the url-path of the icon
@@ -210,5 +189,17 @@ public class UserObjectProxy {
 	 */
 	public static String getUserPath(final String urlPath) {
 		return userPathBuilder.getServerPath(urlPath, RequestData.getContext(), servletContext);
+	}
+	
+	/**
+	 * Retrieves the {@link FilemanagerConfig}.
+	 * @param req the {@link HttpServletRequest}
+	 * 
+	 * @return the {@link FilemanagerConfig} for the current request
+	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
+	 */
+	public static FilemanagerConfig getFilemanagerConfig(HttpServletRequest req) {
+		// we need the HttpServletRequest here because this breaks the request-cycle, see ConnctorServlet
+		return configBuilder.getConfig(req, servletContext);
 	}
 }

@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -49,7 +50,6 @@ import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
@@ -191,7 +191,8 @@ public class LocalConnector implements Connector {
 			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String ext = FilenameUtils.getExtension(file.getPath());
-			if(!StringUtils.isNullOrEmptyOrBlank(ext) && FilemanagerConfiguration.getConfiguration().getImages().getExtensions().contains(ext)) {
+			Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig(null).getImages().getExtensions();
+			if(!StringUtils.isNullOrEmptyOrBlank(ext) && allowedImageExtensions.contains(ext)) {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(file);
 				Dimension dim = dp.getDimension();

@@ -27,44 +27,55 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.resource.PropertiesLoader;
-import de.thischwa.c5c.resource.filemanager.FilemanagerConfiguration;
 
 /**
  * <b>The</b> connector servlet of the filemanager. <br/>
  * To register it in the web.xml the following entries should be used:
- * <pre> {@code
+ * 
+ * <pre>
+ * {@code
  * <servlet>
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<servlet-class>de.thischwa.c5c.ConnectorServlet</servlet-class>
  * 	<load-on-startup>1</load-on-startup>
  * </servlet>
- *
+ * 
  * <servlet-mapping>
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<url-pattern>/filemanager/connectors/java/*</url-pattern> 	
  * </servlet-mapping>
- * }</pre>
- * Assuming the filemanager is installed in the <code>/filemanager</code> 
- * folder in your webapp.
+ * 
+ * <servlet-mapping>
+ * 	<servlet-name>ConnectorServlet</servlet-name>
+ * 	<url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
+ * </servlet-mapping>
+ * }
+ * </pre>
+ * 
+ * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.<br/>
+ * IMPORTANT: The 2nd servlet-mapping will only be necessary if this servlet should serve the dynamic 
+ * configuration of the filemanager.
  */
 @MultipartConfig
 public class ConnectorServlet extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private static Logger logger = LoggerFactory.getLogger(ConnectorServlet.class);
-	
+
 	private Dispatcher dispatcher;
-	
+
 	/**
-	 * Initializes this servlet. It initializes the {@link Dispatcher}, {@link UserObjectProxy} and
-	 * loads the defaults of {@link FilemanagerConfiguration}.
+	 * Initializes this servlet. It initializes the {@link Dispatcher} and {@link UserObjectProxy}.
 	 */
 	@Override
 	public void init() throws ServletException {
@@ -74,31 +85,45 @@ public class ConnectorServlet extends HttpServlet {
 			logger.error("Dispatcher could not be instantiated.", e);
 			throw new ServletException(e);
 		}
-		
+
 		try {
 			UserObjectProxy.init(getServletContext());
 		} catch (Exception e) {
 			logger.error("UserObjectProxy could not be initialized.", e);
 			throw new ServletException(e);
 		}
-		
-		FilemanagerConfiguration.loadDefault(getServletContext());
+
 		logger.info(String.format("*** %s sucessful initialized.", this.getClass().getName()));
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doRequest(req, resp, true);
+		if (req.getServletPath().contains("filemanager.config.js")) {
+			logger.debug("Filemanager config request.");
+			resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
+			resp.setContentType("application/json");
+
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
+			} catch (Exception e) {
+				logger.error("Handling of 'filemanager.config.js' failed.", e);
+				throw new RuntimeException(e);
+			} finally {
+				IOUtils.closeQuietly(resp.getOutputStream());
+			}
+		} else
+			doRequest(req, resp, true);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doRequest(req, resp, false);		
+		doRequest(req, resp, false);
 	}
-	
+
 	/**
-	 * Processes the request and dispatch it to the {@link Dispatcher}. It initializes the {@link RequestData} too,
-	 * which maintenances request based objects.
+	 * Processes the request and dispatch it to the {@link Dispatcher}. It initializes the {@link RequestData} too, which maintenances
+	 * request based objects.
 	 * 
 	 * @param req
 	 * @param resp
@@ -110,14 +135,15 @@ public class ConnectorServlet extends HttpServlet {
 		resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
 		resp.setContentType("application/json");
 		resp.setHeader("Cache-Control", "no-cache");
-		
+
 		Response response;
 		try {
 			RequestData.beginRequest(req);
-			if(isGetRequest)
+			if (isGetRequest) {
 				response = dispatcher.doGet();
-			else
+			} else {
 				response = dispatcher.doPost();
+			}
 			response.write(resp);
 		} catch (Exception e) {
 			throw new ServletException(e);

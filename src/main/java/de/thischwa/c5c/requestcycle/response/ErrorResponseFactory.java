@@ -21,7 +21,6 @@ package de.thischwa.c5c.requestcycle.response;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
-import de.thischwa.c5c.exception.UserActionException;
 
 
 public class ErrorResponseFactory {
@@ -44,7 +43,7 @@ public class ErrorResponseFactory {
 	}
 
 	public static Response buildException(C5CException e) {
-		if(e instanceof FilemanagerException || e instanceof UserActionException) {
+		if(e instanceof FilemanagerException) {
 			return buildErrorResponse(e.getMessage(), Response.DEFAULT_ERROR_CODE);
 		}
 		String msg = (e.getMode() == null) ? e.getMessage() : String.format("While executing [{}]: {}", e.getMode().toString(), e.getMessage());

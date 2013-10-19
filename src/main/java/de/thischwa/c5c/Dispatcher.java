@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
-import de.thischwa.c5c.exception.UserActionException;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.ErrorResponseFactory;
@@ -49,8 +48,6 @@ import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
-import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import de.thischwa.c5c.resource.UserActionMessageHolder;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -127,8 +124,6 @@ final class Dispatcher {
 				resp = Dispatcher.buildRenameFile(oldUrlPath, sanitizedName);
 				break;}
 			case CREATEFOLDER: {
-				if(!UserObjectProxy.isCreateFolderEnabled())
-					throw new UserActionException(UserActionMessageHolder.Key.CreateFolderNotAllowed);
 				String urlPath = req.getParameter("path");
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
@@ -205,14 +200,9 @@ final class Dispatcher {
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
-				if(!UserObjectProxy.isFileUploadEnabled()) {
-					// we have to use explicit the UploadFile object here because of the textarea stuff
-					resp = Dispatcher.buildUploadFileForError(urlPath, sanitizedName);
-				} else {
-					resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream());
-					// TODO add file size constraint
-					logger.debug("successful uploaded {} bytes", uploadPart.getSize());
-				}
+				resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream());
+				// TODO add file size constraint
+				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp.setMode(FilemanagerAction.UPLOAD);
 				return resp;
 				}
@@ -266,13 +256,6 @@ final class Dispatcher {
 
 	private static Delete buildDelete(String fullPath) {
 		return new Delete(fullPath);
-	}
-
-	private static UploadFile buildUploadFileForError(String path, String sanitizedName) {
-		UploadFile uploadFile = new UploadFile(path, sanitizedName);
-		uploadFile.setError(UserActionMessageHolder.get(RequestData.getLocale(), UserActionMessageHolder.Key.UploadNotAllowed), 200);
-		uploadFile.setMode(FilemanagerAction.UPLOAD);
-		return uploadFile;
 	}
 
 	private static void setPreviewPath(FileInfo fi, String previewPath) {
