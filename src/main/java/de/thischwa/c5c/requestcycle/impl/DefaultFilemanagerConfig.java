@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
-import de.thischwa.c5c.util.Path;
 
 /**
  * Default implementation of {@link FilemanagerConfigBuilder}.
@@ -38,17 +37,25 @@ public class DefaultFilemanagerConfig implements FilemanagerConfigBuilder {
 
 	@Override
 	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext) {
-		if(config == null)
+		if(config == null) {
 			loadConfigFile(servletContext);
+			postLoadConfigFile();
+		}
 		return config;
+	}
+	
+	/**
+	 * This method will be called after the successful loading of a config file. 
+	 * That's an easy for inherited objects to change properties globally.
+	 */
+	protected void postLoadConfigFile() {
 	}
 
 	private void loadConfigFile(ServletContext context) throws RuntimeException {
 		InputStream in = null;
 		
 		try {
-			Path path = new Path(PropertiesLoader.getFilemangerPath()).addFolder("scripts");
-			File fmScriptDir = new File(context.getRealPath(path.toString()));
+			File fmScriptDir = new File(context.getRealPath(PropertiesLoader.getFilemangerPath()), "scripts");
 			
 			// 1. defined: filemanager/scripts/filemanager.js
 			File configFile = new File(fmScriptDir, BASE_FILE_NAME);
@@ -59,14 +66,16 @@ public class DefaultFilemanagerConfig implements FilemanagerConfigBuilder {
 			
 			// 2. default: filemanager/scripts/filemanager.js.default
 			configFile = new File(fmScriptDir, BASE_FILE_NAME+".default");
-			if(configFile.exists()){
+			if(in == null && configFile.exists()) {
 				logger.info("Default config file found.");
 				in = new BufferedInputStream(new FileInputStream(configFile));
 			}
 			
 			// 3. lib-default
-			logger.info("Lib-default config file found.");
-			in = FilemanagerConfig.class.getResourceAsStream(BASE_FILE_NAME+".default");
+			if(in == null) {
+				logger.info("Lib-default config file found.");
+				in = FilemanagerConfig.class.getResourceAsStream(BASE_FILE_NAME+".default");
+			}
 			
 			// load the object
 			ObjectMapper mapper = new ObjectMapper();

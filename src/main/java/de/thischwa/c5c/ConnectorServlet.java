@@ -62,7 +62,7 @@ import de.thischwa.c5c.resource.PropertiesLoader;
  * </pre>
  * 
  * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.<br/>
- * IMPORTANT: The 2nd servlet-mapping will only be necessary if this servlet should serve the dynamic 
+ * IMPORTANT: The 2nd servlet-mapping will be necessary only if this servlet should serve the dynamic 
  * configuration of the filemanager.
  */
 @MultipartConfig
@@ -99,6 +99,8 @@ public class ConnectorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (req.getServletPath().contains("filemanager.config.js")) {
+			// this breaks the request-cycle of this library
+			// but otherwise an extra servlet is needed to serve the config of the filemanager 
 			logger.debug("Filemanager config request.");
 			resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
 			resp.setContentType("application/json");
