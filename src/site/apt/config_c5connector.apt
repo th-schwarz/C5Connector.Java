@@ -40,7 +40,7 @@ Configuration of C5Connector.Java
                initialized.
 
   []
-
+de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig
   As you can see, setting a property is equal in both ways. The tables below
   list all configurable properties for the C5Connector.Java.
   
@@ -66,7 +66,7 @@ Configuration properties
 |									 | .LocalConnector					  | {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}} implementation. | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerConfigImpl    | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}. |
-| 									 | .DefaultFilemanagerConfig		  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle
+| 									 | .GlobalFilemanagerConfig 		  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle
 |									 |									  | .FilemanagerConfigBuilder>>>}} implementation. 	 | 		|				
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle.IconResolver>>>}}. |
