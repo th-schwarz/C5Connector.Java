@@ -62,7 +62,7 @@ import de.thischwa.c5c.resource.PropertiesLoader;
  * </pre>
  * 
  * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.<br/>
- * IMPORTANT: The 2nd servlet-mapping will be necessary only if this servlet should serve the dynamic 
+ * IMPORTANT: The 2nd servlet-mapping will be necessary only if this servlet should 'serve' the dynamic 
  * configuration of the filemanager.
  */
 @MultipartConfig

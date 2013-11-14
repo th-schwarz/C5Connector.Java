@@ -38,7 +38,8 @@ import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
 
 /**
- * Holds the messages provided by several javascript files located in the path 'scripts/languages' inside
+ * The default implementation of the {@link MessageResolver} interface. It holds the messages 
+ * provided by several javascript files located in the path 'scripts/languages' inside
  * the folder of filemanager.
  */
 public class FilemanagerMessageResolver implements MessageResolver {

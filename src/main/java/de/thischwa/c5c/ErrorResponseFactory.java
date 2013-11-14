@@ -17,32 +17,24 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.requestcycle.response;
+package de.thischwa.c5c;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.requestcycle.response.Response;
 
-
-public class ErrorResponseFactory {
-
-	/** The bad request. */
-	public static Response BAD_REQUEST = ErrorResponseFactory.buildErrorResponse("Missing or wrong request parameters.", 10);
-
-	public static Response buildErrorResponse(String error, int errorCode) {
+/**
+ * Factory for building error responses, - for internal use only.
+ */
+class ErrorResponseFactory {
+	
+	static Response buildErrorResponse(String error, int errorCode) {
 		Response r = new ErrorResponse();
 		r.setError(error, errorCode);
 		return r;
 	}
-
-	public static Response buildExceptionFileNotExists(String filePath) {
-		return buildErrorResponse(String.format("File or directory [%s] doesn't exists.", filePath), 100);
-	}
-
-	public static Response buildExceptionFileAccessDenied(String filePath) {
-		return buildErrorResponse(String.format("Access denied for file [%s].", filePath), 101);
-	}
-
-	public static Response buildException(C5CException e) {
+	
+	static Response buildException(C5CException e) {
 		if(e instanceof FilemanagerException) {
 			return buildErrorResponse(e.getMessage(), Response.DEFAULT_ERROR_CODE);
 		}

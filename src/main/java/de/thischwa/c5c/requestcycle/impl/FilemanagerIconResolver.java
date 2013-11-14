@@ -36,7 +36,7 @@ import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
- * The default implementation of {@link IconResolver} which resolves the icons from the c5 file manager. 
+ * The default implementation of {@link IconResolver} which resolves the icons from the c5 filemanager. 
  * It respects the file manager path settings from the properties.
  */
 public class FilemanagerIconResolver implements IconResolver {

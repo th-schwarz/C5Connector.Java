@@ -30,7 +30,9 @@ public class FilemanagerException extends C5CException {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/** The keys of the localized messages of the filemanger. */
 	public enum Key {
+		AllowedFileType("ALLOWED_FILE_TYPE"),
 		AuthorizationRequired("AUTHORIZATION_REQUIRED"),
 		InvalidAction("INVALID_ACTION"),
 		ModeError("MODE_ERROR"),

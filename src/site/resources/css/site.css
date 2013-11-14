@@ -45,7 +45,7 @@ body {
     float: left;
     margin: 0;
     overflow: auto;
-    width: 200px;
+    width: 235px;
 }
 #navcolumn {
     margin: 15px 0 0 30px;
@@ -58,6 +58,7 @@ body {
     border: 2px solid #990000;
     margin: 15px 30px 15px 230px;
 	padding: 0 10px;
+	margin-left: 265px;
 }
 .section {
     margin-bottom: 35px;

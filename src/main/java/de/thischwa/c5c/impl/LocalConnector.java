@@ -56,7 +56,8 @@ import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
 
 /**
- * Real local filesystem backend connector. The file access is translated as-is
+ * The default implementation of the {@link Connector} interface. 
+ * It's a real local filesystem backend connector. The file access is translated as-is
  * to the local filesystem. A servlet context is respected, if it exists.
  */
 public class LocalConnector implements Connector {

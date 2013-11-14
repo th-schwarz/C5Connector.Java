@@ -22,16 +22,31 @@ package de.thischwa.c5c.requestcycle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 
 /**
- * An Interface to determine the configuration of the filemanager.<br/>
+ * An interface to specify the configuration of the filemanager.<br/>
+ * The implemented object has to fill the {@link FilemanagerConfig}. This configuration object is 
+ * used by the implementation of the {@link Connector}.<br/>
+ * <br/>
+ * <b>Hint:</b> You are free to implement this interface the way you need it, 
+ * in other words your return values can be global, regardless of the request, or on a per-request basis. 
+ * For example, it would be possible to build a separate configuration for each user.
  * 
  * @see FilemanagerConfig
  */
 public interface FilemanagerConfigBuilder {
 
+	/** Base filename of the config file of the filemanager. */
 	public static final String BASE_FILE_NAME = "filemanager.config.js";
 	
+	/**
+	 * Builds the configuration of the filemanager. 
+	 * 
+	 * @param req the {@link HttpServletRequest} of the current request
+	 * @param servletContext
+	 * @return a filled {@link FilemanagerConfig} object
+	 */
 	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext);
 }

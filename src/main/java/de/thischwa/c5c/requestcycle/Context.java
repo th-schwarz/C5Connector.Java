@@ -44,6 +44,13 @@ public class Context {
 
 	private HttpServletRequest servletRequest;
 
+	/**
+	 * Initializes the base parameters.
+	 * 
+	 * @param servletRequest
+	 * 
+	 * @throws C5CException thrown if the parameter 'mode' couldn't be resolved
+	 */
 	Context(HttpServletRequest servletRequest) throws C5CException {
 		this.servletRequest = servletRequest;
 		urlPath = servletRequest.getParameter("path");
@@ -58,8 +65,6 @@ public class Context {
 		} else {
 			paramMode = servletRequest.getParameter("mode");
 		}
-		if (paramMode == null)
-			throw new IllegalArgumentException("Missing 'mode' parameter.");
 		try {
 			mode = FilemanagerAction.valueOfIgnoreCase(paramMode);
 		} catch (IllegalArgumentException e) {

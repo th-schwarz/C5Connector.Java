@@ -19,19 +19,19 @@ import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 
 /**
- * Default implementation of {@link FilemanagerConfigBuilder}.
- * 
- * The order of searching files to load the defaults is the following:
+ * Default implementation of {@link FilemanagerConfigBuilder}. It tries to find the
+ * relevant config files in a fixed order and loads the first file which is found.<br/>
+ * The order of searching canfig files is the following:
  * <ol>
- * <li>[filemanger-dir]/scripts/filemanager.config.js</li>
- * <li>[filemanger-dir]/scripts/filemanager.config.js.default</li>
+ * <li>[filemanager-dir]/scripts/filemanager.config.js</li>
+ * <li>[filemanager-dir]/scripts/filemanager.config.js.default</li>
  * <li>internal config file</li>
  * </ol>
- * The first file which is found, will be loaded.
+ * The configuration is loaded globally.
  */
-public class DefaultFilemanagerConfig implements FilemanagerConfigBuilder {
+public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 
-	private static Logger logger = LoggerFactory.getLogger(DefaultFilemanagerConfig.class);
+	private static Logger logger = LoggerFactory.getLogger(GlobalFilemanagerConfig.class);
 	
 	protected FilemanagerConfig config = null;
 
@@ -39,16 +39,16 @@ public class DefaultFilemanagerConfig implements FilemanagerConfigBuilder {
 	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext) {
 		if(config == null) {
 			loadConfigFile(servletContext);
-			postLoadConfigFile();
+			postLoadConfigFileHook();
 		}
 		return config;
 	}
 	
 	/**
-	 * This method will be called after the successful loading of a config file. 
-	 * That's an easy for inherited objects to change properties globally.
+	 * This method hook will be called after the successful loading of a config file. 
+	 * That's an easy point for inherited objects to change properties globally.
 	 */
-	protected void postLoadConfigFile() {
+	protected void postLoadConfigFileHook() {
 	}
 
 	private void loadConfigFile(ServletContext context) throws RuntimeException {
