@@ -40,7 +40,7 @@ Configuration of C5Connector.Java
                initialized.
 
   []
-de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig
+
   As you can see, setting a property is equal in both ways. The tables below
   list all configurable properties for the C5Connector.Java.
   
