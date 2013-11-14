@@ -1,0 +1,69 @@
+   ----------------------------
+   Shared Configuration
+   ----------------------------
+   
+Shared Configuration
+
+  There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>>) for sharing
+  the configuration between the frontend (javascript filemanager) and the backend (C5Connector.Java).  
+  The {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  object (read the javadoc carefully) is the corresponding object-oriented map of this configuration file and is respected by every 
+  implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}.
+  
+  Commonly the C5Connector.Java uses the default implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}} 
+  ({{{./apidocs/de/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}})
+  to build the JSON-configuration of the filemanager.
+  
+  To change the configuration the corresponding file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>>)
+  must be edited.\
+  This changes are global and where true for all users of your webapp!
+  
+  C5Connector.Java provides a way to change the configuration in an Java-style approach. Additionally the {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  can be 'delegate' to the filemanager. With that, a request-based (and user-based) configuration can be released.
+  
+* Enable the request-based Configuration
+
+  Assuming the filemanager is installed in the <<</filemanager>>> folder of your webapp and the {{{./apidocs/de/thischwa/c5c/ConnectorServlet.html}<<<de.thischwa.c5c.ConnectorServlet>>>}}
+  has the name 'ConnectorServlet', the following lines must be add to the <<<web.xml>>> to instruct the <<<ConnectorServlet>>> to serve the
+  configuration of the filemanager:
+
++---+
+<servlet-mapping>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
+</servlet-mapping>
++---+
+
+  Now the {{{./apidocs/de/thischwa/c5c/ConnectorServlet.html}<<<de.thischwa.c5c.ConnectorServlet>>>}} used the default implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
+  to get the configuration. This will be transferred to JSON automatically.
+  
+* Java-style Changing of the Configuration
+
+  The easiest way for changing the shared configuration by Java <globally> is to inherit the {{{./apidocs/de/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}}
+  and override the method <<<postLoadConfigFileHook()>>>. This hook is called after the successful loading of a
+  configuration file, - the configuration object {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  is filled. All changes that are made now are global.\
+  Example:
+  
++---+
+public class GlobalFilemanagerConfigImpl extends GlobalFilemanagerConfig {
+  @Override
+  protected void postLoadConfigFileHook() {
+    Options options = config.getOptions();
+    options.setLang("java");
+    options.setFileRoot("/files/");
+  }
+}
++---+
+
+  Don't forget to change the corresponding property in your <<<c5connector.properties>>> file in the classpath (usually WEB-INF/classes):
+  
++---+
+...
+connector.filemanagerConfigImpl = yourpackage.GlobalFilemanagerConfigImpl
+...
++---+
+
+  [Hint:] In this example, all changes are global. If you want to make changes per request (per user), build your own
+  implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
+  interface.

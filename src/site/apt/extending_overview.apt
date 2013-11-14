@@ -16,11 +16,10 @@ Overview
   * <<Connector>>: Gives you the ability to handle server-side connector requests
     the way you want.    
   
+  * <<FilemanagerConfigBuilder>>: Gives you full control over the configuration of the filemanager (in Java!!!).
+    
   * <<FilemanagerCapability>>: Gives you the ability to decide which capabilities are set in 
     an info request.  
-    
-  * <<UserAction>>: Gives you full control over actions, which aren't covered by the
-    capabilities of the filemanager, - uploading files and creating folders.
     
   * <<UserPathBuilder>>: Gives you the full control over the server-side <userfiles> path,
     the path to the server-side resources.
@@ -34,8 +33,7 @@ Big picture
   
   A request is taken from the <ConnectorServlet> and will be dispatched to several other objects which
   prepare the parameter of the request. Now, C5Connector.Java knows which action/command has to be
-  proceeded. The implementation of <UserAction> verifies, if the action is allowed or not. If it is allowed
-  the action will be dispatched to the implementation of the Connector.
+  proceeded.
   
   If the verification was successful, the action with its parameters will be dispatched to the 
   implementation of the Connector. It processes the action and builds a response object with the help of

@@ -1,0 +1,53 @@
+   ----------------------------
+   Installation 
+   ----------------------------
+
+Installation Guide
+
+  Please read the topics in this guide in order from top to bottom.
+  
+  C5Connector.Java uses the state-of-the-art logging facade {{{http://www.slf4j.org}SLF4J}}.
+  You should read the corresponding manual, if you are not familiar with it!
+
+* Prepare the Installation
+
+  The current version can be downloaded	from {{{https://sourceforge.net/projects/c5connectorjava/files/}Sourceforge}}.
+  There is a zip file like <<<c5connector-java-[version]-SNAPSHOT-bin.zip>>> which contains all binaries
+  of the project dependencies. Simply put these files in your classpath (usually <<<WEB-INF/lib>>>).
+  Don't forget to add a preferred SLF4J binding!
+
+  However, the binary zip file can be easily built with maven2, too. 
+  Just download the source, declare a preferred SLF4J binding in the dependencies section of your POM within 
+  the runtime scope and call the following command:
+  
++---+
+mvn clean package
++---+
+
+* Activation of the Connector Servlet
+   
+  It takes two steps to enable it.
+  
+  [[1]]  Declare the ConnectorServlet in your <<<web.xml>>>:
+
+  To enable the connector servlet add the following entries to your <<<web.xml>>>:
+  
++---+
+<servlet>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <servlet-class>de.thischwa.c5c.ConnectorServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <url-pattern>/filemanager/connectors/java/*</url-pattern> 	
+</servlet-mapping>
++---+
+  
+  Assuming the filemanager has been installed in the <<</filemanager>>> folder in your webapp.\ 
+
+  [[1]] Inside the sub-directory <scripts> make a copy of the file <<<filemanager.config.js.default>>> 
+  and rename it to <<<filemanager.config.js>>>. Change the option property <lang> to 'java'.
+        
+  A complete reference of all settings can be found {{{https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file}here}}
