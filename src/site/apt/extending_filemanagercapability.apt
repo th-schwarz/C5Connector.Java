@@ -25,9 +25,6 @@ FilemanagerCapability
   
   And finally you have to declare your custom implementation in the <<<c5connector.properties>>> file:
 
-+------------------------------------------------------------------------------+
++---+
 connector.capabilities = <desired implementation>
-+------------------------------------------------------------------------------+  
-
-    [Hint:] There are two commands which are not covered by <FilemanagerCapability>: Uploading files and creating folders. \
-            These commands can be controlled by <UserAction>.
++---+  

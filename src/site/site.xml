@@ -11,14 +11,17 @@
 		</head>
 		<menu name="Introduction">
 			<item name="About" href="/index.html" />
-			<item name="Installation" href="/installation.html"/>
-			<item name="Configuration" href="/configuration.html"/>
+			<item name="Installation" href="/intro_installation.html"/>
+		</menu>
+		<menu name="Configuration">
+			<item name="Overview" href="config_overview.html"/>
+			<item name="Config the C5Connector" href="/config_c5connector.html"/>
+			<item name="Shared Config" href="/config_shared.html"/>
 		</menu>
 		<menu name="Extending the Library">
 			<item name="Overview" href="extending_overview.html"/>
 			<item name="Connector" href="extending_connector.html"/>
 			<item name="FilemanagerCapability" href="extending_filemanagercapability.html"/>
-			<item name="UserAction" href="extending_useraction.html"/>
 			<item name="UserPathBuilder" href="extending_userpathbuilder.html"/>
 		</menu>
 		<menu ref="reports"/>
