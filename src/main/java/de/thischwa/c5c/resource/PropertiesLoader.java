@@ -220,6 +220,19 @@ public class PropertiesLoader {
 	} 
 	
 	/**
+	 * Gets the maximum allowed file size in MB for upload. 
+	 * 
+	 * @return <code>connector.maxUploadSize</code> property, or null if not set or a {@link NumberFormatException} was thrown.
+	 */
+	public static Integer getMaxUploadSize() {
+		try {
+			return Integer.valueOf(properties.getProperty("connector.maxUploadSize"));
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	/**
 	 * Gets the file capability impl.
 	 *
 	 * @return <code>connector.fileCapabilityImpl</code> property

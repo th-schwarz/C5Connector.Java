@@ -49,15 +49,17 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 || Property                          || Default                  	      || Valid Values               					 || Description                     ||
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| default.encoding 				 	 | UTF-8                			  | any string				      					 |  The general character encoding. <<Should be untouched!>> |
+| default.encoding 				 	 | UTF-8                			  | any string				      					 | The general character encoding. <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 |  Checks uploaded images for validity. |
+| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 | Checks uploaded images for validity. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.imagePreview		  	 | false	               			  | true, false (boolean)	  						 |  Enables/disables previewing of images. <<Not yet implemented!>> |
+| connector.imagePreview		  	 | false	               			  | true, false (boolean)	  						 | Enables/disables previewing of images. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.forceSingleExtension  	 | true		               			  | true, false (boolean)	    					 |  Indicates whether filenames with multiple extensions are sanitized. <<Not yet implemented!>> |
+| connector.forceSingleExtension  	 | true		               			  | true, false (boolean)	    					 | Indicates whether filenames with multiple extensions are sanitized. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerPath          | /filemanager					      | any path                   						 | The path of the editor installation resides within your webapp. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.maxUploadSize	         | 10							      | any integer                						 | The maximum size for files to be uploaded in MB (respected, if the filemanager config upload#fileSizeLimit='auto'). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
 |									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  

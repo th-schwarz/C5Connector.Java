@@ -237,13 +237,15 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException {
+	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in, Integer maxFileSize) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
 			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlDirectory);
 		try {
 			Long size = IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
+			if(maxFileSize != null && size > maxFileSize.longValue() * 1024 * 1024)
+				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
 			UploadFile uf = ResponseFactory.buildUploadFile(urlDirectory, sanitizedName, size);
 			return uf;
 		} catch (IOException e) {

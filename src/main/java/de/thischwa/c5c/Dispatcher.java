@@ -47,6 +47,7 @@ import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -187,6 +188,9 @@ final class Dispatcher {
 		FilemanagerAction mode = ctx.getMode();
 		HttpServletRequest req = RequestData.getContext().getServletRequest();
 
+		Integer maxFileSize = (UserObjectProxy.getFilemanagerConfig(req).getUpload().isFileSizeLimitAuto())
+				? PropertiesLoader.getMaxUploadSize()
+				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
 		try {
 			Response resp = null;
 			
@@ -199,7 +203,7 @@ final class Dispatcher {
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
-				resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream());
+				resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream(), maxFileSize);
 				// TODO add file size constraint
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp.setMode(FilemanagerAction.UPLOAD);

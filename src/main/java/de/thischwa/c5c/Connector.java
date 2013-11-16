@@ -34,8 +34,8 @@ import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
  * connector will retrieve a valid request. 'Valid' means in terms of correct and reasonable parameters.<br/>
  * <br/>
  * <b>Hint for implementations:</b> There are a factory object, which helps to build the required response objects: {@link ResponseFactory}.
- * Another important object is the {@link UserObjectProxy}. It provides helpful wrapper methods to the configurable user-objects.
- * For throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful constructors are provided.
+ * Another important object is the {@link UserObjectProxy}. It provides helpful wrapper methods to the configurable user-objects. For
+ * throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful constructors are provided.
  */
 public interface Connector {
 
@@ -117,10 +117,12 @@ public interface Connector {
 	 *            the (sanitized) name of the folder hat should be created, e.g. <code>logo.png</code>
 	 * @param in
 	 *            {@link InputStream} in which the file data has to put in
+	 * @param maxFileSize
+	 *            the maximum size for files to be uploaded, could be <code>null</code> if it is handled by the filemanager
 	 * @return a {@link UploadFile} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
-	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException;
+	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in, Integer maxFileSize) throws C5CException;
 
 	/**
 	 * Executes the 'download'-method of the filemanager.
