@@ -19,6 +19,7 @@
  */
 package de.thischwa.c5c.resource.filemanager;
 
+
 /**
  * Represents the type <code>upload</code> of the JSON configuration of the filemanager. 
  */
@@ -26,7 +27,7 @@ public class Upload {
 
 	private boolean overwrite;
 	private boolean imagesOnly;
-	private int fileSizeLimit;
+	private Object fileSizeLimit;
 
 	Upload() {
 	}
@@ -48,10 +49,22 @@ public class Upload {
 	}
 
 	public int getFileSizeLimit() {
-		return fileSizeLimit;
+		try {
+			return ((Integer)fileSizeLimit).intValue();
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 
 	public void setFileSizeLimit(int fileSizeLimit) {
 		this.fileSizeLimit = fileSizeLimit;
+	}
+	
+	public void setFileSizeLimit() {
+		this.fileSizeLimit = "auto";
+	}
+	
+	public boolean isFileSizeLimitAuto() {
+		return (fileSizeLimit != null && fileSizeLimit.equals("auto"));
 	}
 }
