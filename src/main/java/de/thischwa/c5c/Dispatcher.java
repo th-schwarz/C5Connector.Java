@@ -102,7 +102,7 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getFolder -> urlPath: {}, needSize: {}, showThumbnails: {}", new Object[] { urlPath, needSize, showThumbnailsInGrid });
+				logger.debug("* getFolder -> urlPath: {}, needSize: {}, showThumbnails: {}", urlPath, needSize, showThumbnailsInGrid);
 				List<FileProperties> props = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
 				resp = buildFolder(urlPath, props);
 				break;}
@@ -110,7 +110,7 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getInfo -> urlPath: {}, needSize: {}, showThumbnails: {}", new Object[] { urlPath, needSize, showThumbnailsInGrid });
+				logger.debug("* getInfo -> urlPath: {}, needSize: {}, showThumbnails: {}", urlPath, needSize, showThumbnailsInGrid);
 				FileProperties fp = connector.getInfo(urlPath, needSize, showThumbnailsInGrid);
 				resp = buildInfo(urlPath, fp);
 				break;}
@@ -118,7 +118,7 @@ final class Dispatcher {
 				String oldUrlPath = req.getParameter("old");
 				String newName = req.getParameter("new");
 				String sanitizedName = FileUtils.sanitizeName(newName);
-				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", new Object[] { oldUrlPath, newName, sanitizedName });
+				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", oldUrlPath, newName, sanitizedName);
 				connector.rename(oldUrlPath, sanitizedName);
 				resp = Dispatcher.buildRenameFile(oldUrlPath, sanitizedName);
 				break;}
@@ -126,7 +126,7 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
-				logger.debug("* createFolder -> urlPath: {}, name: {}, sanitized name: {}", new Object[] { urlPath, folderName, sanitizedFolderName });
+				logger.debug("* createFolder -> urlPath: {}, name: {}, sanitized name: {}", urlPath, folderName, sanitizedFolderName);
 				connector.createFolder(urlPath, sanitizedFolderName);
 				resp = Dispatcher.buildCreateFolder(urlPath, sanitizedFolderName);
 				break;}
