@@ -55,7 +55,7 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 		InputStream in = null;
 		
 		try {
-			File fmScriptDir = new File(context.getRealPath(PropertiesLoader.getFilemangerPath()), "scripts");
+			File fmScriptDir = new File(context.getRealPath(PropertiesLoader.getFilemanagerPath()), "scripts");
 			
 			// 1. defined: filemanager/scripts/filemanager.js
 			File configFile = new File(fmScriptDir, BASE_FILE_NAME);

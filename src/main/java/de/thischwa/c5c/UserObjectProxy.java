@@ -133,7 +133,7 @@ public class UserObjectProxy {
 		}
 
 		// 5. try to initialize the FilemanagerConfigBuilder
-		className = PropertiesLoader.getFilemangerConfigImpl();
+		className = PropertiesLoader.getFilemanagerConfigImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerConfigBuilder implementation class name! Depending property must be set!");
 		try {

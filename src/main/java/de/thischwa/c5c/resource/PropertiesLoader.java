@@ -141,9 +141,9 @@ public class PropertiesLoader {
 	/**
 	 * Returns <code>connector.filemanagerPath</code> property
 	 *
-	 * @return the filemanger path
+	 * @return the filemanager path
 	 */
-	public static String getFilemangerPath() {
+	public static String getFilemanagerPath() {
 		return properties.getProperty("connector.filemanagerPath");
 	}
 
@@ -246,7 +246,7 @@ public class PropertiesLoader {
 	 *
 	 * @return <code>connector.filemanagerConfigImpl</code> property
 	 */
-	public static String getFilemangerConfigImpl() {
+	public static String getFilemanagerConfigImpl() {
 		return properties.getProperty("connector.filemanagerConfigImpl");
 	} 
 	

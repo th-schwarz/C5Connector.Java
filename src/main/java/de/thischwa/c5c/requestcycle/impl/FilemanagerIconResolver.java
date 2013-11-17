@@ -47,12 +47,12 @@ public class FilemanagerIconResolver implements IconResolver {
 	private Map<String, String> iconsPerType = new HashMap<>();
 	
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {
-		Path fileSystemPath = new Path(PropertiesLoader.getFilemangerPath());
+		Path fileSystemPath = new Path(PropertiesLoader.getFilemanagerPath());
 		fileSystemPath.addFolder(iconPath);
 
 		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
 		if(!iconFolder.exists())
-			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemangerPath(), iconFolder.getAbsolutePath()));
+			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemanagerPath(), iconFolder.getAbsolutePath()));
 		
 		Path urlPath;
 		if(!StringUtils.isNullOrEmpty(servletContext.getContextPath())) {
