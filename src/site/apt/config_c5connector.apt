@@ -4,7 +4,7 @@
    
 Configuration of C5Connector.Java
    
-   In the meaning of 'convention over configuration' all properties are predefined. Change only those you intend 
+   In the meaning of 'convention over configuration' all properties are predefined. Change only those intended 
    to override for the <entire> web application.
    
   There are two ways to override the default properties permanently:
@@ -41,8 +41,8 @@ Configuration of C5Connector.Java
 
   []
 
-  As you can see, setting a property is equal in both ways. The tables below
-  list all configurable properties for the C5Connector.Java.
+  As you can see, both ways of setting a property are equally functional. The table below
+  lists all configurable properties for the C5Connector.Java.
   
 Configuration properties
 
@@ -51,7 +51,7 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | default.encoding 				 	 | UTF-8                			  | any string				      					 | The general character encoding. <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 | Checks uploaded images for validity. |
+| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 | Checks validity of uploaded images. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.imagePreview		  	 | false	               			  | true, false (boolean)	  						 | Enables/disables previewing of images. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

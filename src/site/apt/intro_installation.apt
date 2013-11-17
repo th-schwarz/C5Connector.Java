@@ -4,7 +4,7 @@
 
 Installation Guide
 
-  Please read the topics in this guide in order from top to bottom.
+  Please read the topics in this guide from top to bottom.
   
   C5Connector.Java uses the state-of-the-art logging facade {{{http://www.slf4j.org}SLF4J}}.
   You should read the corresponding manual, if you are not familiar with it!
@@ -28,9 +28,7 @@ mvn clean package
    
   It takes two steps to enable it.
   
-  [[1]]  Declare the ConnectorServlet in your <<<web.xml>>>:
-
-  To enable the connector servlet add the following entries to your <<<web.xml>>>:
+  [[1]]  To enable the conector servlet the following entries must be declared in your <<<web.xml>>>:
   
 +---+
 <servlet>

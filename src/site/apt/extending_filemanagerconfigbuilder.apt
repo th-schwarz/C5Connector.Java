@@ -1,0 +1,46 @@
+   ----------------------------
+   FilemanagerConfigBuilder
+   ----------------------------
+
+FilemanagerConfigBuilder
+
+  The implementation of {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
+  is used to fill and hold the shared configuration object {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}.
+  If the request-based configuration is enabled (see {{{./config_shared.html}Shared Config}}), the default implementation
+  ({{{./apidocs/de/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}})
+  can be used to change the configuration by Java <globally>. 
+  Just inherit this object and override the method <<<postLoadConfigFileHook()>>>. This hook is called after the successful loading of a
+  configuration file, - the configuration object {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  is filled.\
+  Example:
+  
++---+
+public class GlobalFilemanagerConfigImpl extends GlobalFilemanagerConfig {
+  @Override
+  protected void postLoadConfigFileHook() {
+    Options options = config.getOptions();
+    options.setLang("java");
+    options.setFileRoot("/files/");
+  }
+}
++---+
+
+  That's a nice way to do the configuration in an Java-style approach!
+
+  Don't forget to change the corresponding property in your <<<c5connector.properties>>> file in the classpath (usually WEB-INF/classes):
+  
++---+
+...
+connector.filemanagerConfigImpl = yourpackage.GlobalFilemanagerConfigImpl
+...
++---+
+
+  If this doesn't meet your requirements, you have to implement your own one.
+
+* Custom Implementation
+
+  Just implement the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
+  interface. Consult the javadoc and see how it works. Among other things, a user-based configuration
+  could be realized.
+
+  And finally you have to declare your custom implementation in the c5connector.properties file (see above)!
