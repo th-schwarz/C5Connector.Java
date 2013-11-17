@@ -44,6 +44,7 @@ import de.thischwa.c5c.util.VirtualFile;
  * <li>{@link MessageResolver}</li>
  * <li>{@link FilemanagerCapability}</li>
  * <li>{@link UserPathBuilder}</li> 
+ * <li>{@link FilemanagerConfigBuilder}</li> 
  * </ul>
  * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the
  * user-objects itself.
