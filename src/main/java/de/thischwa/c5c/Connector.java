@@ -106,7 +106,7 @@ public interface Connector {
 	 * 
 	 * @param urlPath
 	 *            the requested file to delete, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @return TODO
+	 * @return an initialized {@link Delete} object
 	 * @throws C5CException
 	 */
 	public Delete delete(String urlPath) throws C5CException;
