@@ -17,12 +17,14 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c;
+package de.thischwa.c5c.requestcycle.response;
 
 import java.io.InputStream;
 import java.util.Date;
 
-import de.thischwa.c5c.requestcycle.response.FileProperties;
+import de.thischwa.c5c.Connector;
+import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
@@ -46,6 +48,22 @@ public class ResponseFactory {
 	 */
 	public static FileProperties buildFileProperties(String name, long size, Date modified) {
 		return new FileProperties(name, size, modified);
+	}
+
+	/**
+	 * Builds the {@link Delete}-response.
+	 * 
+	 * @param path
+	 *            full path of the file or directory to delete
+	 * @param isDirectory
+	 *            <code>true</code> if a directory was deleted, otherwise <code>false</code>
+	 * @return The initialized {@link Delete}.
+	 */
+	public static Delete buildDelete(String path, boolean isDirectory) {
+		String delPath = path;
+		if (isDirectory && !delPath.endsWith(Constants.defaultSeparator))
+			delPath += Constants.defaultSeparator;
+		return new Delete(delPath);
 	}
 
 	/**

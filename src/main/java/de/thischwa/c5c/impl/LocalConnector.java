@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -42,12 +43,13 @@ import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.FilemanagerAction;
-import de.thischwa.c5c.ResponseFactory;
 import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
+import de.thischwa.c5c.requestcycle.response.ResponseFactory;
+import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.util.StringUtils;
@@ -161,21 +163,32 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public void delete(String urlPath) throws C5CException {
+	public Delete delete(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			FilemanagerException.Key key = (file.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
 			throw new FilemanagerException(FilemanagerAction.DELETE, key, urlPath);
 		}
-		boolean success = org.apache.commons.io.FileUtils.deleteQuietly(file);
-		if(!success) {
-			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, urlPath);
+		boolean success = false;
+		boolean isDir = file.isDirectory();
+		if(isDir) {
+			try {
+				FileUtils.deleteDirectory(file);
+				success = true;
+			} catch (IOException e) {
+			}
+		} else {
+			success = FileUtils.deleteQuietly(file);
 		}
+		if(!success) 
+			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, urlPath);
+		return ResponseFactory.buildDelete(urlPath, isDir);
 	}
 
 	/**
 	 * Construct file info.
+	 * 
 	 * @param file the file
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
@@ -185,9 +198,6 @@ public class LocalConnector implements Connector {
 	 * @throws C5CException the connector exception
 	 */
 	private FileProperties constructFileInfo(File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		if (file.isDirectory())
-			throw new IllegalArgumentException(String.format("It's a file request, but requested file is a directory: %s", file.getName()));
-			
 		try {
 			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.

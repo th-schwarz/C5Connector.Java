@@ -25,6 +25,8 @@ import java.util.List;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
+import de.thischwa.c5c.requestcycle.response.ResponseFactory;
+import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 
@@ -104,9 +106,10 @@ public interface Connector {
 	 * 
 	 * @param urlPath
 	 *            the requested file to delete, e.g. <code>/UserFiles/Image/logo.png</code>
+	 * @return TODO
 	 * @throws C5CException
 	 */
-	public void delete(String urlPath) throws C5CException;
+	public Delete delete(String urlPath) throws C5CException;
 
 	/**
 	 * Executes the 'add'-method of the filemanager.

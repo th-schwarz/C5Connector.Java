@@ -41,7 +41,6 @@ import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.Response;
 import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
-import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.Download;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
@@ -134,8 +133,7 @@ final class Dispatcher {
 			case DELETE: {
 				String urlPath = req.getParameter("path");
 				logger.debug("* delete -> urlPath: {}", urlPath);
-				connector.delete(urlPath);
-				resp = Dispatcher.buildDelete(urlPath);
+				resp = connector.delete(urlPath);
 				break;}
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
@@ -255,10 +253,6 @@ final class Dispatcher {
 
 	private static Download buildDownload(String fullPath, long contentLength, InputStream in) {
 		return new Download(fullPath, contentLength, in);
-	}
-
-	private static Delete buildDelete(String fullPath) {
-		return new Delete(fullPath);
 	}
 
 	private static void setPreviewPath(FileInfo fi, String previewPath) {
