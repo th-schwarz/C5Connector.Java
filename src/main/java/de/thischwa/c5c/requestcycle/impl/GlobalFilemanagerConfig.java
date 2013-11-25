@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
+import de.thischwa.c5c.resource.filemanager.Options;
 
 /**
  * Default implementation of {@link FilemanagerConfigBuilder}. It tries to find the
@@ -39,6 +40,13 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext) {
 		if(config == null) {
 			loadConfigFile(servletContext);
+			
+			// set some necessary defaults
+			config.setComment("Built by the C5Connector.Java");
+			Options options = config.getOptions();
+			options.setLang("java");
+			//options.setFileRoot("/");
+			
 			postLoadConfigFileHook();
 		}
 		return config;

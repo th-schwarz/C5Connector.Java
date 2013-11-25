@@ -22,15 +22,13 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.thischwa.c5c.Constants;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
  * Holds the data of a FolderInfo response.
  */
-public final class FolderInfo extends Response {
+public final class FolderInfo extends GenericResponse {
 
 	private Map<String, FileInfo> folderItems;
 
@@ -47,13 +45,6 @@ public final class FolderInfo extends Response {
 
 	@Override
 	public String toString() {
-		ObjectMapper mapper = new ObjectMapper();
-		// overridden because it's just a collection of FolderInfo
-		try {
-			String jsonStr = mapper.writeValueAsString(folderItems);
-			return jsonStr;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return serialize(folderItems);
 	}
 }

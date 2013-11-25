@@ -52,7 +52,7 @@ public class JacksonTest {
 		FileInfo fileInfo = new FileInfo("/tmp", false);
 		fileInfo.setError("Test Error", 5);
 		fileInfo.setFileProperties(new FileInfoProperties("img.png", 200, 100, 30024, null));
-		String actual = "{\"Error\":\"Test Error\",\"Code\":5,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"/tmp/img.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img.png\",\"File Type\":\"png\"}";
+		String actual = "{\"Error\":\"Test Error\",\"Code\":5,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"\\/tmp\\/img.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img.png\",\"File Type\":\"png\"}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }

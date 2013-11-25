@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.resource.PropertiesLoader;
 
 /**
@@ -102,7 +102,7 @@ public class ConnectorServlet extends HttpServlet {
 			// this breaks the request-cycle of this library
 			// but otherwise an extra servlet is needed to serve the config of the filemanager 
 			logger.debug("Filemanager config request.");
-			resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
+			//resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
 			resp.setContentType("application/json");
 
 			ObjectMapper mapper = new ObjectMapper();
@@ -134,11 +134,9 @@ public class ConnectorServlet extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void doRequest(HttpServletRequest req, HttpServletResponse resp, boolean isGetRequest) throws ServletException, IOException {
-		resp.setCharacterEncoding(PropertiesLoader.getDefaultEncoding());
-		resp.setContentType("application/json");
 		resp.setHeader("Cache-Control", "no-cache");
 
-		Response response;
+		GenericResponse response;
 		try {
 			RequestData.beginRequest(req);
 			if (isGetRequest) {

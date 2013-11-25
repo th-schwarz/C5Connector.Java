@@ -30,10 +30,10 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  */
 public interface IconResolver {
 
-	/** Response key to signal a directory */
+	/** GenericResponse key to signal a directory */
 	public static final String key_directory = Type.directory.toString().toLowerCase();
 
-	/** Response key to signal an unknown file. */
+	/** GenericResponse key to signal an unknown file. */
 	public static final String key_unknown = "unknown";
 
 	public void setServletContext(ServletContext servletContext);

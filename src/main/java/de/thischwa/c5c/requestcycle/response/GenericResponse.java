@@ -30,27 +30,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
 
 /**
  * Base class for each response objects.
  */
-public abstract class Response {
-	
+public abstract class GenericResponse {
+
 	/** Default code for no errors. */
 	public final static int DEFAULT_NO_ERROR_CODE = 0;
-	
+
 	/** Default error code. */
 	public final static int DEFAULT_ERROR_CODE = -1;
 
 	/** The error message. */
 	private String error = "";
-	
+
 	/** The error code. */
 	private int errorCode = DEFAULT_NO_ERROR_CODE;
-	
+
 	private FilemanagerAction mode = null;
-	
+
 	public void setError(String error, int errorCode) {
 		this.error = error;
 		this.errorCode = errorCode;
@@ -60,7 +61,7 @@ public abstract class Response {
 	public String getError() {
 		return error;
 	}
-	
+
 	@JsonProperty("Code")
 	public int getErrorCode() {
 		return errorCode;
@@ -80,37 +81,46 @@ public abstract class Response {
 	public FilemanagerAction getMode() {
 		return mode;
 	}
-	
+
 	@JsonIgnore
 	public void setMode(FilemanagerAction mode) {
 		this.mode = mode;
 	}
 
 	/**
-	 * Write the response to the {@link HttpServletResponse}. Inherited object could overwrite this to
-	 * write special content like files.
-	 *
-	 * @param resp the resp
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * Write the response to the {@link HttpServletResponse} (The character encoding of the {@link HttpServletResponse} will
+	 * be used. Inherited object could overwrite this to write 
+	 * special content. 
+	 * 
+	 * @param resp
+	 *            the resp
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@JsonIgnore
 	public void write(HttpServletResponse resp) throws IOException {
-		if(mode != null && mode.getContentType() != null)
+		if (mode != null && mode.getContentType() != null)
 			resp.setContentType(mode.getContentType());
 		OutputStream out = resp.getOutputStream();
-		IOUtils.write(toString(), out);
+		String json = toString();
+		IOUtils.write(json, out, resp.getCharacterEncoding());
 		IOUtils.closeQuietly(out);
 	}
 	
-	@Override
-	public String toString() {
+	protected String serialize(Object obj) {
 		ObjectMapper mapper = new ObjectMapper();
-	
 		try {
-			String jsonStr = mapper.writeValueAsString(this);
+			String jsonStr = mapper.writeValueAsString(obj);
+			// escaping the slashes to use JSON in textareas
+			jsonStr = jsonStr.replace(Constants.defaultSeparator, "\\".concat(Constants.defaultSeparator));
 			return jsonStr;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return serialize(this);
 	}
 }

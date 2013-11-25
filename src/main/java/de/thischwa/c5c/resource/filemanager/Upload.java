@@ -19,6 +19,8 @@
  */
 package de.thischwa.c5c.resource.filemanager;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * Represents the type <code>upload</code> of the JSON configuration of the filemanager. 
@@ -64,6 +66,7 @@ public class Upload {
 		this.fileSizeLimit = "auto";
 	}
 	
+	@JsonIgnore
 	public boolean isFileSizeLimitAuto() {
 		return (fileSizeLimit != null && fileSizeLimit.equals("auto"));
 	}

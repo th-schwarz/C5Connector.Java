@@ -28,6 +28,7 @@ import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
+import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 
 /**
@@ -86,9 +87,10 @@ public interface Connector {
 	 *            the requested file to rename, e.g. <code>/UserFiles/Image/logo.png</code>
 	 * @param sanitizedNewName
 	 *            the new (sanitized) name of the file, e.g. <code>img.png</code>
+	 * @return an initialized {@link Rename} object
 	 * @throws C5CException
 	 */
-	public void rename(String oldPath, String sanitizedNewName) throws C5CException;
+	public Rename rename(String oldPath, String sanitizedNewName) throws C5CException;
 
 	/**
 	 * Executes the 'addfolder'-method of the filemanger.

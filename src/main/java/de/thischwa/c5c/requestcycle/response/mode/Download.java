@@ -30,12 +30,12 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
- * Holds the data for a Download Response.
+ * Holds the data for a Download GenericResponse.
  */
-public final class Download extends Response {
+public final class Download extends GenericResponse {
 
 	private String fullPath;
 	

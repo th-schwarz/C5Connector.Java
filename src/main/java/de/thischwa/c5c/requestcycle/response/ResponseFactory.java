@@ -27,6 +27,7 @@ import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
+import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 
 /**
@@ -40,14 +41,15 @@ public class ResponseFactory {
 	 * 
 	 * @param name
 	 *            the name of the file
+	 * @param isDir TODO
 	 * @param size
 	 *            the absolute size of the file
 	 * @param modified
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	public static FileProperties buildFileProperties(String name, long size, Date modified) {
-		return new FileProperties(name, size, modified);
+	public static FileProperties buildFileProperties(String name, boolean isDir, long size, Date modified) {
+		return (isDir) ? new FileProperties(name, modified) : new FileProperties(name, size, modified);
 	}
 
 	/**
@@ -64,6 +66,19 @@ public class ResponseFactory {
 		if (isDirectory && !delPath.endsWith(Constants.defaultSeparator))
 			delPath += Constants.defaultSeparator;
 		return new Delete(delPath);
+	}
+
+	/**
+	 * Builds the {@link Rename}.
+	 * 
+	 * @param urlPath the 'original' path parameter
+	 * @param newSanitizedName the sanitized new name
+	 * @param isDirectory
+	 *            <code>true</code> if a directory was deleted, otherwise <code>false</code>
+	 * @return The initialized {@link Rename}.
+	 */
+	public static Rename buildRename(String urlPath, String newSanitizedName, boolean isDirectory) {
+		return new Rename(urlPath, newSanitizedName, isDirectory);
 	}
 
 	/**

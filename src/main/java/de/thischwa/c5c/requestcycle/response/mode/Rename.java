@@ -21,14 +21,15 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
  * Holds the data of a Rename response.
  */
-public final class Rename extends Response {
+public final class Rename extends GenericResponse {
 	
 	private String oldFullPath;
 	
@@ -38,12 +39,16 @@ public final class Rename extends Response {
 	
 	private String newName;
 	
-	public Rename(String oldFullPath, String newName) {
+	public Rename(String oldFullPath, String newName, boolean isDirectory) {
 		this.oldFullPath = oldFullPath;
 		this.newName = newName;
 		VirtualFile oldVF = new VirtualFile(oldFullPath);
 		oldName = oldVF.getName();
 		newFullPath = new Path(oldVF.getFolder()).addFile(newName).toString();
+		if(isDirectory && !newFullPath.endsWith(Constants.defaultSeparator))
+			this.newFullPath += Constants.defaultSeparator;
+		if(isDirectory && !this.oldFullPath.endsWith(Constants.defaultSeparator))
+			this.oldFullPath += Constants.defaultSeparator;
 	}
 	
 	@JsonProperty("Old Path")

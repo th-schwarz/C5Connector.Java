@@ -39,13 +39,12 @@ import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
 import de.thischwa.c5c.requestcycle.response.mode.Download;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
-import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
@@ -90,13 +89,13 @@ final class Dispatcher {
 	 *
 	 * @return the response 
 	 */
-	Response doGet() {
+	GenericResponse doGet() {
 		logger.debug("Entering Dispatcher#doGet");
 		Context ctx = RequestData.getContext();
 		FilemanagerAction mode = ctx.getMode();
 		HttpServletRequest req = RequestData.getContext().getServletRequest();
 		try {
-			Response resp = null;
+			GenericResponse resp = null;
 			switch (mode) {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
@@ -119,8 +118,7 @@ final class Dispatcher {
 				String newName = req.getParameter("new");
 				String sanitizedName = FileUtils.sanitizeName(newName);
 				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", oldUrlPath, newName, sanitizedName);
-				connector.rename(oldUrlPath, sanitizedName);
-				resp = Dispatcher.buildRenameFile(oldUrlPath, sanitizedName);
+				resp = connector.rename(oldUrlPath, sanitizedName);
 				break;}
 			case CREATEFOLDER: {
 				String urlPath = req.getParameter("path");
@@ -180,7 +178,7 @@ final class Dispatcher {
 	 *
 	 * @return the response
 	 */
-	Response doPost() {
+	GenericResponse doPost() {
 		logger.debug("Entering Dispatcher#doPost");
 		Context ctx = RequestData.getContext();
 		FilemanagerAction mode = ctx.getMode();
@@ -190,7 +188,7 @@ final class Dispatcher {
 				? PropertiesLoader.getMaxUploadSize()
 				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
 		try {
-			Response resp = null;
+			GenericResponse resp = null;
 			
 			switch (mode) {
 			case UPLOAD: {
@@ -241,10 +239,6 @@ final class Dispatcher {
 
 	private static FolderInfo buildFolderInfo() {
 		return new FolderInfo();
-	}
-
-	private static Rename buildRenameFile(String oldFullPath, String newName) {
-		return new Rename(oldFullPath, newName);
 	}
 
 	private static CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {

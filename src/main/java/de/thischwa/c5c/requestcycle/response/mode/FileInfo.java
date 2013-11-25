@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -36,7 +36,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
 /**
  * Holds the data for a FileInfo response.
  */
-public final class FileInfo extends Response {
+public final class FileInfo extends GenericResponse {
 	
 	private static final String type_unknown = "txt";
 	

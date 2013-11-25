@@ -45,7 +45,7 @@ public class RootGetRequestsTest extends GenericRequestTest {
 	@Test
 	public void testGetFolder() throws Exception {
 		HttpTester request = HttpTestFactory.buildInitialRequest();
-		request.setURI("/filemanager/connectors/java/filemanager.java?path=%2Fuserfiles%2F&mode=getfolder&showThumbs=true&time=258");
+		request.setURI("/filemanager/connectors/java/filemanager.java?path=%2Ffilemanager%2Fuserfiles%2F&mode=getfolder&showThumbs=true&time=241");
 		String requestStr = request.generate();
 		
 		String responseStr = tester.getResponses(requestStr);
@@ -54,14 +54,14 @@ public class RootGetRequestsTest extends GenericRequestTest {
 		
 		assertEquals(200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String epected = cleanResponse("{\"/userfiles/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"9/26/12\",\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/_Open.png\",\"Filename\":\"folder\",\"File Type\":\"dir\"},\"/userfiles/pic01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}}");
+		String epected = cleanResponse("{\"/filemanager/userfiles/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/filemanager/userfiles/folder/\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/_Open.png\",\"Filename\":\"folder\",\"File Type\":\"dir\"},\"/filemanager/userfiles/pic01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/filemanager/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}}");
 		assertEquals(epected, actual);
 	}
 
 	@Test
 	public void testGetInfo() throws Exception {
 		HttpTester request = HttpTestFactory.buildInitialRequest(); 
-		request.setURI("/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Fuserfiles%2Fpic01.png&time=244");
+		request.setURI("/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png&time=244");
 		String requestStr = request.generate();
 		
 		String responseStr = tester.getResponses(requestStr);
@@ -70,7 +70,7 @@ public class RootGetRequestsTest extends GenericRequestTest {
 		
 		assertEquals(200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String expected = cleanResponse("{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"7/16/12\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"/userfiles/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"/filemanager/images/fileicons/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}");
+		String expected = cleanResponse("{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":\"11\\/14\\/13\",\"Height\":70,\"Width\":110,\"Size\":2250},\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Preview\":\"\\/filemanager\\/images\\/fileicons\\/png.png\",\"Filename\":\"pic01.png\",\"File Type\":\"png\"}");
 		assertEquals(expected, actual);
 	}
 	

@@ -21,27 +21,27 @@ package de.thischwa.c5c;
 
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
  * Factory for building error responses, - for internal use only.
  */
 class ErrorResponseFactory {
 	
-	static Response buildErrorResponse(String error, int errorCode) {
-		Response r = new ErrorResponse();
+	static GenericResponse buildErrorResponse(String error, int errorCode) {
+		GenericResponse r = new ErrorResponse();
 		r.setError(error, errorCode);
 		return r;
 	}
 	
-	static Response buildException(C5CException e) {
+	static GenericResponse buildException(C5CException e) {
 		if(e instanceof FilemanagerException) {
-			return buildErrorResponse(e.getMessage(), Response.DEFAULT_ERROR_CODE);
+			return buildErrorResponse(e.getMessage(), GenericResponse.DEFAULT_ERROR_CODE);
 		}
 		String msg = (e.getMode() == null) ? e.getMessage() : String.format("While executing [{}]: {}", e.getMode().toString(), e.getMessage());
 		return buildErrorResponse(msg, 1000);
 	}
 
-	private static class ErrorResponse extends Response {
+	private static class ErrorResponse extends GenericResponse {
 	}
 }

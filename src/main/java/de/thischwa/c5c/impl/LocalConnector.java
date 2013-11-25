@@ -51,6 +51,7 @@ import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.ResponseFactory;
 import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
+import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
@@ -87,14 +88,15 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public void rename(String oldPath, String sanitizedName) throws C5CException {
+	public Rename rename(String oldPath, String sanitizedName) throws C5CException {
 		File src = buildRealFile(oldPath);
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
 			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath);
 		}
-	
+		
+		boolean isDirectory = src.isDirectory();
 		File dest = new File(src.getParentFile(), sanitizedName);
 		if(dest.exists()) {
 			logger.warn("Destination file already exists: {}", dest.getAbsolutePath());
@@ -112,6 +114,7 @@ public class LocalConnector implements Connector {
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.ErrorRenamingDirectory : FilemanagerException.Key.ErrorRenamingFile;
 			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath, sanitizedName);
 		}
+		return ResponseFactory.buildRename(oldPath, sanitizedName, isDirectory);
 	}
 	
 	@Override
@@ -199,7 +202,7 @@ public class LocalConnector implements Connector {
 	 */
 	private FileProperties constructFileInfo(File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		try {
-			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.length(), new Date(file.lastModified()));
+			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.isDirectory(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String ext = FilenameUtils.getExtension(file.getPath());
 			Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig(null).getImages().getExtensions();

@@ -22,13 +22,13 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.StringUtils;
 
 /**
- * Holds the data of an upload Response.
+ * Holds the data of an upload GenericResponse.
  */
-public final class UploadFile extends Response {
+public final class UploadFile extends GenericResponse {
 
 	private String path;
 	

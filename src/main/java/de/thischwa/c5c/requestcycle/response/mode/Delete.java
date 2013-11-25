@@ -21,12 +21,12 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.thischwa.c5c.requestcycle.response.Response;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
  * Holds the data for a Delete response.
  */
-public final class Delete extends Response {
+public final class Delete extends GenericResponse {
 
 	private String fullPath;
 
