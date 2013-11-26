@@ -205,7 +205,7 @@ public class LocalConnector implements Connector {
 			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.isDirectory(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String ext = FilenameUtils.getExtension(file.getPath());
-			Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig(null).getImages().getExtensions();
+			Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig().getImages().getExtensions();
 			if(!StringUtils.isNullOrEmptyOrBlank(ext) && allowedImageExtensions.contains(ext)) {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(file);
