@@ -49,20 +49,17 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 || Property                          || Default                  	      || Valid Values               					 || Description                     ||
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| default.encoding 				 	 | UTF-8                			  | any string				      					 | The general character encoding. <<Should be untouched!>> |
+| default.encoding 				 	 | UTF-8                			  | any valid standard charset     					 | The general character encoding. <<Should be untouched!>> |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.defaultEncoding 		 | ISO-8859-1              			  | any valid standard charset, or empty     		 | The character encoding of the HttpResponse. If it is empty, no charset will be explicitly set. <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 | Checks validity of uploaded images. |
-*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.imagePreview		  	 | false	               			  | true, false (boolean)	  						 | Enables/disables previewing of images. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.forceSingleExtension  	 | true		               			  | true, false (boolean)	    					 | Indicates whether filenames with multiple extensions are sanitized. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerPath          | /filemanager					      | any path                   						 | The path of the editor installation resides within your webapp. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.maxUploadSize	         | 10							      | any integer                						 | The maximum size for files to be uploaded in MB (respected, if the filemanager config upload#fileSizeLimit='auto'). |
-*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
-|									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  
+| connector.maxUploadSize	         | 10							      | any integer                						 | The maximum size for files that can be uploaded in MB (it's respected, if the filemanager config upload#fileSizeLimit='auto'). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.impl 					 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. |
 |									 | .LocalConnector					  | {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}} implementation. | 		|
@@ -85,4 +82,7 @@ Configuration properties
 | connector.userPathBuilderImpl 	 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
 |									 | .ServerPathBuilder				  | {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle | 		|
 |									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
+|									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

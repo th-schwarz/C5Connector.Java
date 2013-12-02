@@ -258,13 +258,4 @@ public class PropertiesLoader {
 	public static String getFilemanagerConfigImpl() {
 		return properties.getProperty("connector.filemanagerConfigImpl");
 	} 
-	
-	/**
-	 * Returns <code>connector.imagePreview</code> property
-	 *
-	 * @return true, if successful
-	 */
-	public static boolean imageViewingEnabled() {
-		return Boolean.valueOf(properties.getProperty("connector.imagePreview"));
-	}
 }

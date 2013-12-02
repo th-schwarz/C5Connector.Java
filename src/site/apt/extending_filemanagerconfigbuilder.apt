@@ -19,7 +19,6 @@ public class GlobalFilemanagerConfigImpl extends GlobalFilemanagerConfig {
   @Override
   protected void postLoadConfigFileHook() {
     Options options = config.getOptions();
-    options.setLang("java");
     options.setFileRoot("/files/");
   }
 }

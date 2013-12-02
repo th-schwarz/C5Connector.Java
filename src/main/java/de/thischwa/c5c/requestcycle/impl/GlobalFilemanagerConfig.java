@@ -28,7 +28,13 @@ import de.thischwa.c5c.resource.filemanager.Options;
  * <li>[filemanager-dir]/scripts/filemanager.config.js.default</li>
  * <li>internal config file</li>
  * </ol>
- * The configuration is loaded globally.
+ * The configuration is loaded globally.<br/>
+ * <br/>
+ * The following defaults are set:
+ * <ul>
+ * <li><i>_comment</i>: Built by the C5Connector.Java</li>
+ * <li><i>options</i>#lang: java</li>
+ * </ul>
  */
 public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 
@@ -41,12 +47,10 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 		if(config == null) {
 			loadConfigFile(servletContext);
 			
-			// set some necessary defaults
+			// set some defaults
 			config.setComment("Built by the C5Connector.Java");
 			Options options = config.getOptions();
 			options.setLang("java");
-			//options.setFileRoot("/");
-			
 			postLoadConfigFileHook();
 		}
 		return config;

@@ -7,8 +7,8 @@ Shared Configuration
   There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>>) for sharing
   the configuration between the frontend (javascript filemanager) and the backend (C5Connector.Java).  
   The {{{./apidocs/de/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<de.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
-  object (read the javadoc carefully) is the corresponding object-oriented map of this configuration file and is respected by every 
-  implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. This configuration
+  object (read the javadoc carefully) is the corresponding object-oriented map of this configuration file and provides basic properties for  
+  the implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. This configuration
   file is commonly built by the default implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}} 
   ({{{./apidocs/de/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<de.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}}).
   

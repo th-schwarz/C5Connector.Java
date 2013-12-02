@@ -90,7 +90,7 @@ public abstract class GenericResponse {
 	/**
 	 * Write the response to the {@link HttpServletResponse} (The character encoding of the {@link HttpServletResponse} will
 	 * be used. Inherited object could overwrite this to write 
-	 * special content. 
+	 * special content or headers.
 	 * 
 	 * @param resp
 	 *            the resp
@@ -98,7 +98,7 @@ public abstract class GenericResponse {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@JsonIgnore
-	public void write(HttpServletResponse resp) throws IOException {
+	void write(HttpServletResponse resp) throws IOException {
 		if (mode != null && mode.getContentType() != null)
 			resp.setContentType(mode.getContentType());
 		OutputStream out = resp.getOutputStream();

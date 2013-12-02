@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.util.StringUtils;
 
 /**
  * <b>The</b> connector servlet of the filemanager. <br/>
@@ -98,13 +99,16 @@ public class ConnectorServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setHeader("Cache-Control", "no-cache");
+		resp.setContentType("application/json");
+
+		if(!StringUtils.isNullOrEmpty(PropertiesLoader.getConnectorDefaultEncoding()))
+			resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
 		if (req.getServletPath().contains("filemanager.config.js")) {
 			// this breaks the request-cycle of this library
 			// but otherwise an extra servlet is needed to serve the config of the filemanager 
 			logger.debug("Filemanager config request.");
-			//resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
-			resp.setContentType("application/json");
-
+			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
@@ -134,8 +138,6 @@ public class ConnectorServlet extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void doRequest(HttpServletRequest req, HttpServletResponse resp, boolean isGetRequest) throws ServletException, IOException {
-		resp.setHeader("Cache-Control", "no-cache");
-
 		GenericResponse response;
 		try {
 			RequestData.beginRequest(req);
