@@ -130,12 +130,12 @@ public class PropertiesLoader {
 	}
 	
 	/**
-	 * Returns <code>connector.default.encoding</code> property.
+	 * Returns <code>connector.defaultEncoding</code> property.
 	 *
 	 * @return the default character encoding of the connector (http response)
 	 */
 	public static String getConnectorDefaultEncoding() {
-		return properties.getProperty("connector.default.encoding");
+		return properties.getProperty("connector.defaultEncoding");
 	}
 	
 	/**
