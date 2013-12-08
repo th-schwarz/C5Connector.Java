@@ -89,7 +89,7 @@ public class LocalConnector implements Connector {
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldStoragePath);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, FilenameUtils.getName(oldStoragePath));
 		}
 		
 		boolean isDirectory = src.isDirectory();
@@ -108,7 +108,7 @@ public class LocalConnector implements Connector {
 		}
 		if(!success) {
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.ErrorRenamingDirectory : FilemanagerException.Key.ErrorRenamingFile;
-			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldStoragePath, sanitizedName);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, FilenameUtils.getName(oldStoragePath), sanitizedName);
 		}
 		return isDirectory;
 	}
@@ -145,7 +145,7 @@ public class LocalConnector implements Connector {
 		if(!parentFolder.exists()) {
 			logger.error("Source file not found: {}", parentFolder.getAbsolutePath());
 			FilemanagerException.Key key = (parentFolder.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, storagePath);
+			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, FilenameUtils.getName(storagePath));
 		}		
 		return parentFolder;
 	}
@@ -156,7 +156,7 @@ public class LocalConnector implements Connector {
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			FilemanagerException.Key key = (file.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.DELETE, key, storagePath);
+			throw new FilemanagerException(FilemanagerAction.DELETE, key, FilenameUtils.getName(storagePath));
 		}
 		boolean success = false;
 		boolean isDir = file.isDirectory();
@@ -170,7 +170,7 @@ public class LocalConnector implements Connector {
 			success = FileUtils.deleteQuietly(file);
 		}
 		if(!success) 
-			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, storagePath);
+			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, FilenameUtils.getName(storagePath));
 		return isDir;
 	}
 
@@ -248,11 +248,11 @@ public class LocalConnector implements Connector {
 		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
-			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlDirectory);
+			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, sanitizedName);
 		try {
 			IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
 		} catch (IOException e) {
-			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, urlDirectory);
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, sanitizedName);
 		}
 	}
 	
