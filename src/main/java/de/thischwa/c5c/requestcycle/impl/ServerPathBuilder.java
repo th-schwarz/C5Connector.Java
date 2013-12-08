@@ -21,17 +21,21 @@ package de.thischwa.c5c.requestcycle.impl;
 
 import javax.servlet.ServletContext;
 
+import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.Context;
-import de.thischwa.c5c.requestcycle.UserPathBuilder;
+import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 
 /**
- * An implementation of the {@link UserPathBuilder} that returns the {@link ServletContext#getRealPath(String)}.
+ * An implementation of the {@link BackendPathBuilder} that returns the {@link ServletContext#getRealPath(String)}.
  */
-public class ServerPathBuilder implements UserPathBuilder {
+public class ServerPathBuilder implements BackendPathBuilder {
 
 	@Override
-	public String getServerPath(String path, Context context, ServletContext servletContext) {
-		return servletContext.getRealPath(path);
+	public String getBackendPath(String urlPath, Context context, ServletContext servletContext) {
+		String storagePath = servletContext.getRealPath(urlPath);
+		if(urlPath.endsWith(Constants.defaultSeparator) && !storagePath.endsWith(Constants.defaultSeparator))
+			storagePath += Constants.defaultSeparator;
+		return storagePath;
 	}
 
 }

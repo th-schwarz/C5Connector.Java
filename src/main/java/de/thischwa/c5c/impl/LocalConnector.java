@@ -48,11 +48,7 @@ import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.ResponseFactory;
-import de.thischwa.c5c.requestcycle.response.mode.Delete;
-import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
-import de.thischwa.c5c.requestcycle.response.mode.Rename;
-import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
@@ -72,28 +68,28 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public List<FileProperties> getFolder(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		File folder = buildAndCheckFolder(urlPath);
-		return constructFromDirRequest(urlPath, folder, needSize, showThumbnailsInGrid);
+	public List<FileProperties> getFolder(String storagePath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		File folder = buildAndCheckFolder(storagePath);
+		return constructFromDirRequest(storagePath, folder, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
-	public FileProperties getInfo(String urlPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
-		File file = buildRealFile(urlPath);
+	public FileProperties getInfo(String storagePath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		File file = buildRealFile(storagePath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
-			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.Key.FileNotExists, urlPath);
+			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.Key.FileNotExists, storagePath);
 		}
 		return constructFileInfo(file, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
-	public Rename rename(String oldPath, String sanitizedName) throws C5CException {
-		File src = buildRealFile(oldPath);
+	public boolean rename(String oldStoragePath, String sanitizedName) throws C5CException {
+		File src = buildRealFile(oldStoragePath);
 		if(!src.exists()) {
 			logger.error("Source file not found: {}", src.getAbsolutePath());
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldStoragePath);
 		}
 		
 		boolean isDirectory = src.isDirectory();
@@ -112,9 +108,9 @@ public class LocalConnector implements Connector {
 		}
 		if(!success) {
 			FilemanagerException.Key key = (src.isDirectory()) ? FilemanagerException.Key.ErrorRenamingDirectory : FilemanagerException.Key.ErrorRenamingFile;
-			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldPath, sanitizedName);
+			throw new FilemanagerException(FilemanagerAction.RENAME, key, oldStoragePath, sanitizedName);
 		}
-		return ResponseFactory.buildRename(oldPath, sanitizedName, isDirectory);
+		return isDirectory;
 	}
 	
 	@Override
@@ -140,38 +136,27 @@ public class LocalConnector implements Connector {
 	/**
 	 * Builds the and check folder.
 	 *
-	 * @param urlPath the url path
+	 * @param storagePath the url path
 	 * @return the file
 	 * @throws FilemanagerException the known exception
 	 */
-	private File buildAndCheckFolder(String urlPath) throws FilemanagerException {
-		File parentFolder = buildRealFile(urlPath);
+	private File buildAndCheckFolder(String storagePath) throws FilemanagerException {
+		File parentFolder = buildRealFile(storagePath);
 		if(!parentFolder.exists()) {
 			logger.error("Source file not found: {}", parentFolder.getAbsolutePath());
 			FilemanagerException.Key key = (parentFolder.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, urlPath);
+			throw new FilemanagerException(FilemanagerAction.CREATEFOLDER, key, storagePath);
 		}		
 		return parentFolder;
 	}
 
-	/**
-	 * Builds the real file.
-	 *
-	 * @param urlPath the url path
-	 * @return the file
-	 */
-	private File buildRealFile(String urlPath) {
-		String path = UserObjectProxy.getUserPath(urlPath);
-		return new File(path);
-	}
-	
 	@Override
-	public Delete delete(String urlPath) throws C5CException {
-		File file = buildRealFile(urlPath);
+	public boolean delete(String storagePath) throws C5CException {
+		File file = buildRealFile(storagePath);
 		if(!file.exists()) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			FilemanagerException.Key key = (file.isDirectory()) ? FilemanagerException.Key.DirectoryNotExist : FilemanagerException.Key.FileNotExists;
-			throw new FilemanagerException(FilemanagerAction.DELETE, key, urlPath);
+			throw new FilemanagerException(FilemanagerAction.DELETE, key, storagePath);
 		}
 		boolean success = false;
 		boolean isDir = file.isDirectory();
@@ -185,24 +170,33 @@ public class LocalConnector implements Connector {
 			success = FileUtils.deleteQuietly(file);
 		}
 		if(!success) 
-			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, urlPath);
-		return ResponseFactory.buildDelete(urlPath, isDir);
+			throw new FilemanagerException(FilemanagerAction.DELETE, FilemanagerException.Key.InvalidDirectoryOrFile, storagePath);
+		return isDir;
 	}
 
+	/**
+	 * Builds the real file.
+	 *
+	 * @param storagePath the url path
+	 * @return the file
+	 */
+	private File buildRealFile(String storagePath) {
+		return new File(storagePath);
+	}
+	
 	/**
 	 * Construct file info.
 	 * 
 	 * @param file the file
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
-	 * @param isDirRequest the is dir request
 	 *
 	 * @return the file info
 	 * @throws C5CException the connector exception
 	 */
 	private FileProperties constructFileInfo(File file, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		try {
-			FileProperties fileProperties = ResponseFactory.buildFileProperties(file.getName(), file.isDirectory(), file.length(), new Date(file.lastModified()));
+			FileProperties fileProperties = FileProperties.buildFileProperties(file.getName(), file.isDirectory(), file.length(), new Date(file.lastModified()));
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String ext = FilenameUtils.getExtension(file.getPath());
 			Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig().getImages().getExtensions();
@@ -250,28 +244,24 @@ public class LocalConnector implements Connector {
 	}
 	
 	@Override
-	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in, Integer maxFileSize) throws C5CException {
+	public void upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException {
 		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
 			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, urlDirectory);
 		try {
-			Long size = IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
-			if(maxFileSize != null && size > maxFileSize.longValue() * 1024 * 1024)
-				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
-			UploadFile uf = ResponseFactory.buildUploadFile(urlDirectory, sanitizedName, size);
-			return uf;
+			IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
 		} catch (IOException e) {
 			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, urlDirectory);
 		}
 	}
 	
 	@Override
-	public DownloadInfo download(String urlPath) throws C5CException {
+	public GenericResponse.DownloadInfo download(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
-			return ResponseFactory.buildDownloadInfo(in, file.length());
+			return GenericResponse.buildDownloadInfo(in, file.length());
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);

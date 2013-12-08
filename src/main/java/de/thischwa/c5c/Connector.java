@@ -25,11 +25,8 @@ import java.util.List;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.ResponseFactory;
-import de.thischwa.c5c.requestcycle.response.mode.Delete;
-import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
-import de.thischwa.c5c.requestcycle.response.mode.Rename;
-import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
+import de.thischwa.c5c.requestcycle.response.GenericResponse;
+import de.thischwa.c5c.requestcycle.response.GenericResponse.DownloadInfo;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
@@ -83,14 +80,14 @@ public interface Connector {
 	/**
 	 * Executes the 'rename'-method of the filemanager.
 	 * 
-	 * @param oldPath
+	 * @param oldStoragePath
 	 *            the requested file to rename, e.g. <code>/UserFiles/Image/logo.png</code>
 	 * @param sanitizedNewName
 	 *            the new (sanitized) name of the file, e.g. <code>img.png</code>
-	 * @return an initialized {@link Rename} object
+	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>  
 	 * @throws C5CException
 	 */
-	public Rename rename(String oldPath, String sanitizedNewName) throws C5CException;
+	public boolean rename(String oldStoragePath, String sanitizedNewName) throws C5CException;
 
 	/**
 	 * Executes the 'addfolder'-method of the filemanger.
@@ -106,12 +103,12 @@ public interface Connector {
 	/**
 	 * Executes the 'delete'-method of the filemanager.
 	 * 
-	 * @param urlPath
+	 * @param storagePath
 	 *            the requested file to delete, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @return an initialized {@link Delete} object
+	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>  
 	 * @throws C5CException
 	 */
-	public Delete delete(String urlPath) throws C5CException;
+	public boolean delete(String storagePath) throws C5CException;
 
 	/**
 	 * Executes the 'add'-method of the filemanager.
@@ -122,20 +119,17 @@ public interface Connector {
 	 *            the (sanitized) name of the folder hat should be created, e.g. <code>logo.png</code>
 	 * @param in
 	 *            {@link InputStream} in which the file data has to put in
-	 * @param maxFileSize
-	 *            the maximum size for files to be uploaded, could be <code>null</code> if it is handled by the filemanager
-	 * @return a {@link UploadFile} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
-	public UploadFile upload(String urlDirectory, String sanitizedName, InputStream in, Integer maxFileSize) throws C5CException;
+	public void upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException;
 
 	/**
 	 * Executes the 'download'-method of the filemanager.
 	 * 
-	 * @param urlPath
+	 * @param storagePath
 	 *            the requested file to download, e.g. <code>/UserFiles/folder/text.pdf</code>
 	 * @return a {@link DownloadInfo} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
-	public DownloadInfo download(String urlPath) throws C5CException;
+	public GenericResponse.DownloadInfo download(String storagePath) throws C5CException;
 }

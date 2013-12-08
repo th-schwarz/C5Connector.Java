@@ -99,27 +99,7 @@ public class ConnectorServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("Cache-Control", "no-cache");
-		resp.setContentType("application/json");
-
-		if(!StringUtils.isNullOrEmpty(PropertiesLoader.getConnectorDefaultEncoding()))
-			resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
-		if (req.getServletPath().contains("filemanager.config.js")) {
-			// this breaks the request-cycle of this library
-			// but otherwise an extra servlet is needed to serve the config of the filemanager 
-			logger.debug("Filemanager config request.");
-			
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
-			} catch (Exception e) {
-				logger.error("Handling of 'filemanager.config.js' failed.", e);
-				throw new RuntimeException(e);
-			} finally {
-				IOUtils.closeQuietly(resp.getOutputStream());
-			}
-		} else
-			doRequest(req, resp, true);
+		doRequest(req, resp, true);
 	}
 
 	@Override
@@ -138,6 +118,29 @@ public class ConnectorServlet extends HttpServlet {
 	 * @throws IOException
 	 */
 	private void doRequest(HttpServletRequest req, HttpServletResponse resp, boolean isGetRequest) throws ServletException, IOException {
+		// set some default headers 
+		resp.setHeader("Cache-Control", "no-cache");
+		resp.setContentType("application/json");
+		if(!StringUtils.isNullOrEmpty(PropertiesLoader.getConnectorDefaultEncoding()))
+			resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
+
+		if(isGetRequest && req.getServletPath().contains("filemanager.config.js")) {
+			// this breaks the request-cycle of this library
+			// but otherwise an extra servlet is needed to serve the config of the filemanager 
+			logger.debug("Filemanager config request.");
+			
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
+			} catch (Exception e) {
+				logger.error("Handling of 'filemanager.config.js' failed.", e);
+				throw new RuntimeException(e);
+			} finally {
+				IOUtils.closeQuietly(resp.getOutputStream());
+			}
+			return;
+		}
+		
 		GenericResponse response;
 		try {
 			RequestData.beginRequest(req);

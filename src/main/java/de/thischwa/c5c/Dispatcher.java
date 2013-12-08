@@ -35,16 +35,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.C5CException;
+import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
+import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.Download;
-import de.thischwa.c5c.requestcycle.response.mode.DownloadInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
+import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
@@ -66,7 +69,7 @@ final class Dispatcher {
 	 * @param connectorClassName FQN of the implementation of the connector 
 	 * @throws RuntimeException if the connector couldn't be instantiated
 	 */
-	Dispatcher(final ServletContext servletContext, String connectorClassName) throws RuntimeException {
+	public Dispatcher(final ServletContext servletContext, String connectorClassName) throws RuntimeException {
 		if (StringUtils.isNullOrEmpty(connectorClassName))
 			throw new RuntimeException("Empty Connector implementation class name not allowed.");
 		else {
@@ -99,48 +102,56 @@ final class Dispatcher {
 			switch (mode) {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
+				String storagePath = buildStoragePath(urlPath);
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getFolder -> urlPath: {}, needSize: {}, showThumbnails: {}", urlPath, needSize, showThumbnailsInGrid);
-				List<FileProperties> props = connector.getFolder(urlPath, needSize, showThumbnailsInGrid);
+				logger.debug("* getFolder -> urlPath: {}, storagePath: {}, needSize: {}, showThumbnails: {}", urlPath, storagePath, needSize, showThumbnailsInGrid);
+				List<FileProperties> props = connector.getFolder(storagePath, needSize, showThumbnailsInGrid);
 				resp = buildFolder(urlPath, props);
 				break;}
 			case INFO: {
 				String urlPath = req.getParameter("path");
+				String storagePath = buildStoragePath(urlPath);
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getInfo -> urlPath: {}, needSize: {}, showThumbnails: {}", urlPath, needSize, showThumbnailsInGrid);
-				FileProperties fp = connector.getInfo(urlPath, needSize, showThumbnailsInGrid);
+				logger.debug("* getInfo -> urlPath: {}, storagePath {}, needSize: {}, showThumbnails: {}", urlPath, storagePath, needSize, showThumbnailsInGrid);
+				FileProperties fp = connector.getInfo(storagePath, needSize, showThumbnailsInGrid);
 				resp = buildInfo(urlPath, fp);
 				break;}
 			case RENAME: {
 				String oldUrlPath = req.getParameter("old");
+				String oldStoragePath = buildStoragePath(oldUrlPath);
 				String newName = req.getParameter("new");
 				String sanitizedName = FileUtils.sanitizeName(newName);
-				logger.debug("* rename -> oldUrlPath: {}, new name: {}, santized new name: {}", oldUrlPath, newName, sanitizedName);
-				resp = connector.rename(oldUrlPath, sanitizedName);
+				logger.debug("* rename -> oldUrlPath: {}, storagePath: {}, new name: {}, santized new name: {}", oldUrlPath, oldStoragePath, newName, sanitizedName);
+				boolean isDirectory = connector.rename(oldStoragePath, sanitizedName);
+				resp = buildRename(oldUrlPath, sanitizedName, isDirectory);
 				break;}
 			case CREATEFOLDER: {
 				String urlPath = req.getParameter("path");
+				String storagePath = buildStoragePath(urlPath);
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
-				logger.debug("* createFolder -> urlPath: {}, name: {}, sanitized name: {}", urlPath, folderName, sanitizedFolderName);
-				connector.createFolder(urlPath, sanitizedFolderName);
-				resp = Dispatcher.buildCreateFolder(urlPath, sanitizedFolderName);
+				logger.debug("* createFolder -> urlPath: {}, storagePath: {}, name: {}, sanitized name: {}", urlPath, storagePath, folderName, sanitizedFolderName);
+				connector.createFolder(storagePath, sanitizedFolderName);
+				resp = buildCreateFolder(urlPath, sanitizedFolderName);
 				break;}
 			case DELETE: {
 				String urlPath = req.getParameter("path");
-				logger.debug("* delete -> urlPath: {}", urlPath);
-				resp = connector.delete(urlPath);
+				String storagePath = buildStoragePath(urlPath);
+				logger.debug("* delete -> urlPath: {}, staragePath: {}", urlPath, storagePath);
+				boolean isDirectory = connector.delete(storagePath);
+				resp = buildDelete(urlPath, isDirectory);
 				break;}
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
-				logger.debug("* download -> urlPath: {}", urlPath);
-				DownloadInfo di = connector.download(urlPath);
-				resp = Dispatcher.buildDownload(urlPath, di.getFileSize(), di.getInputStream());
+				String storagePath = buildStoragePath(urlPath);
+				logger.debug("* download -> urlPath: {}, storagePath", urlPath, storagePath);
+				GenericResponse.DownloadInfo di = connector.download(storagePath);
+				resp = buildDownload(urlPath, di.getFileSize(), di.getInputStream());
 				break;}
 			default: {
-				logger.error("'mode' not found: {}", req.getParameter("mode"));
+				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
 				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));}
 			}
 			resp.setMode(mode);
@@ -150,26 +161,30 @@ final class Dispatcher {
 		}		
 	}
 	
+	private String buildStoragePath(String urlPath) {
+		return UserObjectProxy.getUserPath(urlPath);
+	}
+	
 	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {
-		FolderInfo folderInfo = Dispatcher.buildFolderInfo();
+		FolderInfo folderInfo = buildFolderInfo();
 		if(props == null)
 			return folderInfo;
 		List<FileInfo> infos = new ArrayList<>(props.size());
 		for (FileProperties fileProperties : props) {
-			FileInfo fileInfo = Dispatcher.buildFileInfo(urlPath, fileProperties);
-			Dispatcher.setCapabilities(fileInfo, urlPath);
+			FileInfo fileInfo = buildFileInfo(urlPath, fileProperties);
+			setCapabilities(fileInfo, urlPath);
 			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
-			Dispatcher.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
+			setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
 			infos.add(fileInfo);
-			Dispatcher.add(folderInfo, fileInfo);
+			add(folderInfo, fileInfo);
 		}
 		return folderInfo;
 	}
 	
 	private FileInfo buildInfo(String urlPath, FileProperties props) {
-		FileInfo fileInfo = Dispatcher.buildFileInfo(urlPath, props);
-		Dispatcher.setCapabilities(fileInfo, urlPath);
-		Dispatcher.setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
+		FileInfo fileInfo = buildFileInfo(urlPath, props);
+		setCapabilities(fileInfo, urlPath);
+		setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
 		return fileInfo;
 	}
 
@@ -192,21 +207,28 @@ final class Dispatcher {
 			
 			switch (mode) {
 			case UPLOAD: {
-				String urlPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
+				String currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
+				String storagePath = buildStoragePath(currentPath);
 				Part uploadPart = req.getPart("newfile");
 				String newName = getFileName(uploadPart);
+				
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
-				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", urlPath, fileName, sanitizedName);
-				resp = connector.upload(urlPath, sanitizedName, uploadPart.getInputStream(), maxFileSize);
-				// TODO add file size constraint
+				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", currentPath, fileName, sanitizedName);
+				
+				// check the max. upload size
+				if(uploadPart.getSize() > maxFileSize.longValue() * 1024 * 1024)
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
+				connector.upload(storagePath, sanitizedName, uploadPart.getInputStream());
+				
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
+				resp = new UploadFile(currentPath, sanitizedName);
 				resp.setMode(FilemanagerAction.UPLOAD);
 				return resp;
 				}
 			default: {
-				logger.error("'mode' not found: {}", req.getParameter("mode"));
+				logger.error("Unknown 'mode' for POST: {}", req.getParameter("mode"));
 				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));
 				}
 			}
@@ -233,31 +255,42 @@ final class Dispatcher {
 	    return null;
 	}
 
-	private static void add(FolderInfo folderInfo, FileInfo fileInfo) {
+	private  void add(FolderInfo folderInfo, FileInfo fileInfo) {
 		folderInfo.add(fileInfo);
 	}
+	
+	private Rename buildRename(String urlPath, String newSanitizedName, boolean isDirectory) {
+		return new Rename(urlPath, newSanitizedName, isDirectory);
+	}
+	
+	private Delete buildDelete(String path, boolean isDirectory) {
+		String delPath = path;
+		if (isDirectory && !delPath.endsWith(Constants.defaultSeparator))
+			delPath += Constants.defaultSeparator;
+		return new Delete(delPath);
+	}
 
-	private static FolderInfo buildFolderInfo() {
+	private FolderInfo buildFolderInfo() {
 		return new FolderInfo();
 	}
 
-	private static CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {
+	private CreateFolder buildCreateFolder(String parentUrlPath, String folderName) {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
 
-	private static Download buildDownload(String fullPath, long contentLength, InputStream in) {
+	private Download buildDownload(String fullPath, long contentLength, InputStream in) {
 		return new Download(fullPath, contentLength, in);
 	}
 
-	private static void setPreviewPath(FileInfo fi, String previewPath) {
+	private void setPreviewPath(FileInfo fi, String previewPath) {
 		fi.setPreviewPath(previewPath);
 	}
 
-	private static void setCapabilities(FileInfo fi, String urlPath) {
+	private void setCapabilities(FileInfo fi, String urlPath) {
 		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
 	}
 
-	private static FileInfo buildFileInfo(String urlPath, FileProperties fp) {
+	private FileInfo buildFileInfo(String urlPath, FileProperties fp) {
 		FileInfo fi = new FileInfo(urlPath, fp.isDir());
 		fi.setFileProperties(fp);
 		return fi;

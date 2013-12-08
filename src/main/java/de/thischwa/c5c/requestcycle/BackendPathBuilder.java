@@ -24,15 +24,15 @@ import javax.servlet.ServletContext;
 import de.thischwa.c5c.Connector;
 
 /**
- * Interface for building the path to <i>userfiles</i>. <br/>
+ * Interface for mapping the path from the url-request to the real backend-path. <br/>
  * <br/>
  * <b>Hint:</b> You are free to implement this interface they way you need it. The return value can be global (regardless of a request) or
  * on a per-request basis.
  */
-public interface UserPathBuilder {
+public interface BackendPathBuilder {
 
 	/**
-	 * Returns the server-side absolute path of the <i>userfiles</i>-directory. The provided implementation of {@link Connector} will use
+	 * Returns the absolute bankend-path of the requested url-path. The provided implementation of {@link Connector} will use
 	 * this value to resolve the server-side location of resources. <br/>
 	 * <br/>
 	 * <b>Hint:</b> E.g. {@link Context} and/or {@link ServletContext} can be used to to implement a filesystem storage for each user.
@@ -42,6 +42,6 @@ public interface UserPathBuilder {
 	 * @param servletContext
 	 * @return the constructed server-side path
 	 */
-	public String getServerPath(String urlPath, Context context, ServletContext servletContext);
+	public String getBackendPath(String urlPath, Context context, ServletContext servletContext);
 
 }

@@ -31,7 +31,7 @@ import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.UserPathBuilder;
+import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 import de.thischwa.c5c.util.StringUtils;
@@ -43,7 +43,7 @@ import de.thischwa.c5c.util.VirtualFile;
  * <li>{@link IconResolver}</li>
  * <li>{@link MessageResolver}</li>
  * <li>{@link FilemanagerCapability}</li>
- * <li>{@link UserPathBuilder}</li> 
+ * <li>{@link BackendPathBuilder}</li> 
  * <li>{@link FilemanagerConfigBuilder}</li> 
  * </ul>
  * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the
@@ -62,7 +62,7 @@ public class UserObjectProxy {
 	
 	private static FilemanagerCapability fileCapability;
 	
-	private static UserPathBuilder userPathBuilder;
+	private static BackendPathBuilder userPathBuilder;
 	
 	private static FilemanagerConfigBuilder configBuilder;
 
@@ -119,16 +119,16 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 4. try to initialize the UserPathBuilder
+		// 4. try to initialize the BackendPathBuilder
 		className = PropertiesLoader.getUserPathBuilderImpl();
 		if(StringUtils.isNullOrEmpty(className))
-			throw new RuntimeException("Empty UserPathBuilder implementation class name! Depending property must be set!");
+			throw new RuntimeException("Empty BackendPathBuilder implementation class name! Depending property must be set!");
 		try {
 			Class<?> clazz = Class.forName(className);
-			userPathBuilder = (UserPathBuilder) clazz.newInstance();
-			logger.info("UserPathBuilder initialized to {}", className);
+			userPathBuilder = (BackendPathBuilder) clazz.newInstance();
+			logger.info("BackendPathBuilder initialized to {}", className);
 		} catch (Throwable e) {
-			String msg = "UserPathBuilder couldn't be initialized.";
+			String msg = "BackendPathBuilder couldn't be initialized.";
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
@@ -155,7 +155,7 @@ public class UserObjectProxy {
 	 * @return the url-path of the desired {@link VirtualFile}
 	 * @see IconResolver#getIconPath(VirtualFile)
 	 */
-	static String getIconPath(final VirtualFile vf) {
+	public static String getIconPath(final VirtualFile vf) {
 		return iconResolver.getIconPath(vf);
 	}
 	
@@ -186,10 +186,10 @@ public class UserObjectProxy {
 	 * @param urlPath the url-path for which to retrieve the server-side path
 	 * 
 	 * @return the server-side path to the desired url-path
-	 * @see UserPathBuilder#getServerPath(String, Context, ServletContext)
+	 * @see BackendPathBuilder#getBackendPath(String, Context, ServletContext)
 	 */
 	public static String getUserPath(final String urlPath) {
-		return userPathBuilder.getServerPath(urlPath, RequestData.getContext(), servletContext);
+		return userPathBuilder.getBackendPath(urlPath, RequestData.getContext(), servletContext);
 	}
 	
 	/**

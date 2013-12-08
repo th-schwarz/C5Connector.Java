@@ -59,4 +59,20 @@ public final class FileProperties extends FileInfoProperties {
 	public void setDir(boolean isDir) {
 		this.isDir = isDir;
 	}
+
+	/**
+	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a file for the filemanager.
+	 * 
+	 * @param name
+	 *            the name of the file
+	 * @param isDir TODO
+	 * @param size
+	 *            the absolute size of the file
+	 * @param modified
+	 *            the date the file was last modified
+	 * @return The initialized {@link FileInfoProperties}.
+	 */
+	public static FileProperties buildFileProperties(String name, boolean isDir, long size, Date modified) {
+		return (isDir) ? new FileProperties(name, modified) : new FileProperties(name, size, modified);
+	}
 }
