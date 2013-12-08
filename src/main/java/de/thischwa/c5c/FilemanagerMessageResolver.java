@@ -90,6 +90,6 @@ public class FilemanagerMessageResolver implements MessageResolver {
 		Map<String, String> messages = messageStore.get(lang);
 		if(!messages.containsKey(key.getPropertyName()))
 			throw new IllegalArgumentException("Message key not found: " + key.getPropertyName());
-		return messages.get(key);
+		return messages.get(key.getPropertyName());
 	}
 }
