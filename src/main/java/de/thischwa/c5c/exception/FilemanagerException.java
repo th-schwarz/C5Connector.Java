@@ -30,7 +30,7 @@ public class FilemanagerException extends C5CException {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/** The keys of the localized messages of the filemanger. */
+	/** The keys of the localized messages of the filemanager. */
 	public enum Key {
 		AllowedFileType("ALLOWED_FILE_TYPE"),
 		AuthorizationRequired("AUTHORIZATION_REQUIRED"),
@@ -73,6 +73,8 @@ public class FilemanagerException extends C5CException {
 
 	private static String buildMessage(Key key, String... params) {
 		String rawMsg = UserObjectProxy.getFilemanagerErrorMessage(key);
+		if(rawMsg == null)
+			return String.format("No message found for key: %s", key);
 		String msg = (params == null || params.length == 0) ? rawMsg : String.format(rawMsg, ((Object[]) params));
 		return msg;
 	}

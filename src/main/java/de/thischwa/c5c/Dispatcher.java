@@ -69,7 +69,7 @@ final class Dispatcher {
 	 * @param connectorClassName FQN of the implementation of the connector 
 	 * @throws RuntimeException if the connector couldn't be instantiated
 	 */
-	public Dispatcher(final ServletContext servletContext, String connectorClassName) throws RuntimeException {
+	Dispatcher(final ServletContext servletContext, String connectorClassName) throws RuntimeException {
 		if (StringUtils.isNullOrEmpty(connectorClassName))
 			throw new RuntimeException("Empty Connector implementation class name not allowed.");
 		else {
@@ -202,9 +202,9 @@ final class Dispatcher {
 		Integer maxFileSize = (UserObjectProxy.getFilemanagerConfig(req).getUpload().isFileSizeLimitAuto())
 				? PropertiesLoader.getMaxUploadSize()
 				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
+				
+		GenericResponse resp = null;
 		try {
-			GenericResponse resp = null;
-			
 			switch (mode) {
 			case UPLOAD: {
 				String currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
@@ -233,8 +233,10 @@ final class Dispatcher {
 				}
 			}
 		} catch (C5CException e) {
-			logger.error("A ConnectionException was thrown while uploading: " + e.getMessage(), e);
-			return ErrorResponseFactory.buildException(e);
+			GenericResponse genericResp = ErrorResponseFactory.buildException(e);
+			// the exception must be wrap into an UploadFile because of the special response handling of upload
+			genericResp.setMode(FilemanagerAction.UPLOAD);
+			return genericResp;
 		} catch (ServletException e) {
 			logger.error("A ServletException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
