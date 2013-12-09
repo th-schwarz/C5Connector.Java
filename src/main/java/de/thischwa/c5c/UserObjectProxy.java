@@ -34,8 +34,11 @@ import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
+import de.thischwa.c5c.resource.filemanager.Icons;
+import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
+import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
  * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -58,6 +61,8 @@ public class UserObjectProxy {
 	
 	private static IconResolver iconResolver;
 	
+	private static boolean iconResolverInitialized = false;
+	
 	private static MessageResolver messageHolder;
 	
 	private static FilemanagerCapability fileCapability;
@@ -74,24 +79,9 @@ public class UserObjectProxy {
 	 */
 	static void init(ServletContext servletContext) throws RuntimeException {
 		UserObjectProxy.servletContext = servletContext;
-		
-		// 1. try to instantiate the IconResolver object
-		String className = PropertiesLoader.getIconResolverImpl();
-		if (StringUtils.isNullOrEmptyOrBlank(className))
-			throw new RuntimeException("Empty IconResolver implementation class name! Depending property must be set!");
-		try {
-			Class<?> clazz = Class.forName(className);
-			iconResolver = (IconResolver) clazz.newInstance();
-			iconResolver.setServletContext(servletContext);
-			logger.info("IconResolver initialized to {}", className);
-		} catch (Throwable e) {
-			String msg = String.format("IconResolver implementation [%s] couldn't be instantiated.", className);
-			logger.error(msg);
-			throw new RuntimeException(msg, e);
-		}
 
-		// 2. try to instantiate to FileCapacity
-		className = PropertiesLoader.getFileCapabilityImpl();
+		// 1. try to instantiate to FileCapacity
+		String className = PropertiesLoader.getFileCapabilityImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerCapability implementation class name! Depending property must be set!");
 		try {
@@ -104,7 +94,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 3. try to initialize the MessageResolver
+		// 2. try to initialize the MessageResolver
 		className = PropertiesLoader.getMessageResolverImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty MessageResolver implementation class name! Depending property must be set!");
@@ -119,7 +109,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 		
-		// 4. try to initialize the BackendPathBuilder
+		// 3. try to initialize the BackendPathBuilder
 		className = PropertiesLoader.getUserPathBuilderImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty BackendPathBuilder implementation class name! Depending property must be set!");
@@ -133,7 +123,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 
-		// 5. try to initialize the FilemanagerConfigBuilder
+		// 4. try to initialize the FilemanagerConfigBuilder
 		className = PropertiesLoader.getFilemanagerConfigImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerConfigBuilder implementation class name! Depending property must be set!");
@@ -143,6 +133,20 @@ public class UserObjectProxy {
 			logger.info("FilemanagerConfigBuilder initialized to {}", className);
 		} catch (Throwable e) {
 			String msg = "FilemanagerConfigBuilder couldn't be initialized.";
+			logger.error(msg);
+			throw new RuntimeException(msg, e);
+		}
+
+		// 1. try to instantiate the IconResolver object
+		className = PropertiesLoader.getIconResolverImpl();
+		if (StringUtils.isNullOrEmptyOrBlank(className))
+			throw new RuntimeException("Empty IconResolver implementation class name! Depending property must be set!");
+		try {
+			Class<?> clazz = Class.forName(className);
+			iconResolver = (IconResolver) clazz.newInstance();
+			logger.info("IconResolver initialized to {}", className);
+		} catch (Throwable e) {
+			String msg = String.format("IconResolver implementation [%s] couldn't be instantiated.", className);
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
@@ -156,7 +160,22 @@ public class UserObjectProxy {
 	 * @see IconResolver#getIconPath(VirtualFile)
 	 */
 	public static String getIconPath(final VirtualFile vf) {
-		return iconResolver.getIconPath(vf);
+		initIconResolver();
+		return (vf.getType() == Type.directory) ?
+				iconResolver.getIconPathForDirectory() : iconResolver.getIconPath(vf.getExtension());
+	}
+	
+	// this is needed, because the config of the filemanager is request-based
+	private static void initIconResolver() {
+		if(iconResolverInitialized)
+			return;
+		
+		Icons icons = getFilemanagerConfig().getIcons();
+
+		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
+		fullIconPath.addFolder(icons.getPath());
+		iconResolver.init(servletContext, fullIconPath.toString(), icons.getDefaultIcon(), icons.getDirectory());
+		iconResolverInitialized = true;
 	}
 	
 	/**

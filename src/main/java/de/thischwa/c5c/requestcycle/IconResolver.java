@@ -21,7 +21,6 @@ package de.thischwa.c5c.requestcycle;
 
 import javax.servlet.ServletContext;
 
-import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
@@ -34,16 +33,22 @@ public interface IconResolver {
 	public static final String key_directory = Type.directory.toString().toLowerCase();
 
 	/** GenericResponse key to signal an unknown file. */
-	public static final String key_unknown = "unknown";
-
-	public void setServletContext(ServletContext servletContext);
+	public static final String key_default = "unknown";
 
 	/**
-	 * Obtains the url-path of the requested file.
+	 * Initialization.
 	 * 
-	 * @param vf
-	 *            A {@link VirtualFile} that represents the requested file.
-	 * @return the url-path of the requested file
+	 * @param servletContext
+	 * @param iconPath
+	 *            the full url-path to the icons, e.g. '/filemanager/images/fileicons/
+	 * @param defaultIcon
+	 *            filename of the default icon
+	 * @param directoryIcon
+	 *            filename of the icons for directories
 	 */
-	public String getIconPath(VirtualFile vf);
+	public void init(ServletContext servletContext, String iconPath, String defaultIcon, String directoryIcon);
+
+	public String getIconPath(String extension);
+
+	public String getIconPathForDirectory();
 }

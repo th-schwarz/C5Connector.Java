@@ -32,8 +32,6 @@ import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.StringUtils;
-import de.thischwa.c5c.util.VirtualFile;
-import de.thischwa.c5c.util.VirtualFile.Type;
 
 /**
  * The default implementation of {@link IconResolver} which resolves the icons from the c5 filemanager. 
@@ -41,14 +39,10 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  */
 public class FilemanagerIconResolver implements IconResolver {
 	
-	/** The icon path inside the filemanager. */
-	protected static String iconPath = "images/fileicons";
-	
 	private Map<String, String> iconsPerType = new HashMap<>();
 	
-	public void setServletContext(ServletContext servletContext) throws RuntimeException {
-		Path fileSystemPath = new Path(PropertiesLoader.getFilemanagerPath());
-		fileSystemPath.addFolder(iconPath);
+	public void init(ServletContext servletContext, String iconPath, String defaultIcon, String directoryIcon) throws RuntimeException {
+		Path fileSystemPath = new Path(iconPath);
 
 		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
 		if(!iconFolder.exists())
@@ -62,29 +56,27 @@ public class FilemanagerIconResolver implements IconResolver {
 		else {
 			urlPath = new Path(fileSystemPath.toString());
 		}
-		collectIcons(iconFolder, urlPath);
-	}
-	
-	protected void collectIcons(final File iconFolder, final Path urlPath) {
+
 		for(File icon : iconFolder.listFiles(new IconNameFilter())) {
 			String knownExtension = FilenameUtils.getBaseName(icon.getName());
 			iconsPerType.put(knownExtension, urlPath.addFile(icon.getName()));
 		}
 		
-		iconsPerType.put(IconResolver.key_directory, urlPath.addFile("_Open.png"));
-		iconsPerType.put(IconResolver.key_unknown, urlPath.addFile("default.png"));
+		iconsPerType.put(IconResolver.key_directory, urlPath.addFile(directoryIcon));
+		iconsPerType.put(IconResolver.key_default, urlPath.addFile(defaultIcon));
 	}
 	
 	@Override
-	public String getIconPath(VirtualFile vf) {
-		if(vf.getType() == Type.directory)
-			return iconsPerType.get(IconResolver.key_directory);
-		if(vf.getExtension() == null || !iconsPerType.containsKey(vf.getExtension().toLowerCase()))
-			return iconsPerType.get(IconResolver.key_unknown);
-		return iconsPerType.get(vf.getExtension().toLowerCase());
+	public String getIconPath(final String extension) {
+		if(extension == null || !iconsPerType.containsKey(extension.toLowerCase()))
+			return iconsPerType.get(IconResolver.key_default);
+		return iconsPerType.get(extension.toLowerCase());
 	}
-
 	
+	@Override
+	public String getIconPathForDirectory() {
+		return iconsPerType.get(IconResolver.key_directory);
+	}
 	
 	private class IconNameFilter implements FilenameFilter {
 		
@@ -92,6 +84,5 @@ public class FilemanagerIconResolver implements IconResolver {
 		public boolean accept(File dir, String name) {
 			return !name.contains("_") && name.endsWith("png");
 		}
-		
 	}
 }
