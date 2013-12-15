@@ -42,13 +42,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
+import de.thischwa.c5c.DownloadInfo;
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
@@ -255,13 +255,13 @@ public class LocalConnector implements Connector {
 			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.InvalidFileUpload, sanitizedName);
 		}
 	}
-	
+
 	@Override
-	public GenericResponse.DownloadInfo download(String urlPath) throws C5CException {
+	public void download(String urlPath, DownloadInfo downloadInfo) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
-			return GenericResponse.buildDownloadInfo(in, file.length());
+			downloadInfo.init(in, file.length());
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);

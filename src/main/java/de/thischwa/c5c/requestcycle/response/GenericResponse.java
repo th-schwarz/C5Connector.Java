@@ -20,7 +20,6 @@
 package de.thischwa.c5c.requestcycle.response;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
@@ -123,40 +122,5 @@ public class GenericResponse {
 	@Override
 	public String toString() {
 		return serialize(this);
-	}
-
-	/**
-	 * Builds the {@link DownloadInfo}.
-	 * 
-	 * @param in
-	 *            {@link InputStream} in which the file data has to put
-	 * @param fileSize
-	 *            the absolute size of the file
-	 * @return The initialized {@link DownloadInfo}.
-	 */
-	public static DownloadInfo buildDownloadInfo(final InputStream in, long fileSize) {
-		return new DownloadInfo(in, fileSize);
-	}
-	
-	/**
-	 * Simple container object to hold data which is relevant for download. 
-	 */
-	public static class DownloadInfo {
-		
-		private InputStream in;
-		private long fileSize;
-		
-		private DownloadInfo(InputStream in, long fileSize) {
-			this.in = in;
-			this.fileSize = fileSize;
-		}
-
-		public InputStream getInputStream() {
-			return in;
-		}
-		
-		public long getFileSize() {
-			return fileSize;
-		}
 	}
 }

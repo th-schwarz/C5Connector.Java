@@ -25,8 +25,6 @@ import java.util.List;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.response.FileProperties;
-import de.thischwa.c5c.requestcycle.response.GenericResponse;
-import de.thischwa.c5c.requestcycle.response.GenericResponse.DownloadInfo;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
@@ -84,7 +82,7 @@ public interface Connector {
 	 *            the requested file to rename, e.g. <code>/UserFiles/Image/logo.png</code>
 	 * @param sanitizedNewName
 	 *            the new (sanitized) name of the file, e.g. <code>img.png</code>
-	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>  
+	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
 	public boolean rename(String oldStoragePath, String sanitizedNewName) throws C5CException;
@@ -105,7 +103,7 @@ public interface Connector {
 	 * 
 	 * @param storagePath
 	 *            the requested file to delete, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>  
+	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
 	public boolean delete(String storagePath) throws C5CException;
@@ -128,8 +126,10 @@ public interface Connector {
 	 * 
 	 * @param storagePath
 	 *            the requested file to download, e.g. <code>/UserFiles/folder/text.pdf</code>
-	 * @return a {@link DownloadInfo} object prefilled with data of the requested file
+	 * @param downloadInfo
+	 *            an instantiated {@link DownloadInfo}, which has to be filled by the implemented classes. Use
+	 *            {@link DownloadInfo#init(InputStream, long)} to set the required data
 	 * @throws C5CException
 	 */
-	public GenericResponse.DownloadInfo download(String storagePath) throws C5CException;
+	public void download(String storagePath, DownloadInfo downloadInfo) throws C5CException;
 }

@@ -20,7 +20,6 @@
 package de.thischwa.c5c;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,8 +146,9 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				String storagePath = buildStoragePath(urlPath);
 				logger.debug("* download -> urlPath: {}, storagePath", urlPath, storagePath);
-				GenericResponse.DownloadInfo di = connector.download(storagePath);
-				resp = buildDownload(urlPath, di.getFileSize(), di.getInputStream());
+				DownloadInfo di = new DownloadInfo();
+				connector.download(storagePath, di);
+				resp = buildDownload(storagePath, di);
 				break;}
 			default: {
 				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
@@ -280,8 +280,8 @@ final class Dispatcher {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
 
-	private Download buildDownload(String fullPath, long contentLength, InputStream in) {
-		return new Download(fullPath, contentLength, in);
+	private Download buildDownload(String fullPath, DownloadInfo di) {
+		return new Download(fullPath, di.getFileSize(), di.getInputStream());
 	}
 
 	private void setPreviewPath(FileInfo fi, String previewPath) {
