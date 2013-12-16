@@ -17,41 +17,29 @@
  * 
  * == END LICENSE ==
  */
-package de.thischwa.c5c.requestcycle.response;
+package de.thischwa.c5c;
 
+import java.io.InputStream;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 
 /**
- * Object to hold the properties of a file or folder. It is used for the response of a get-request of an implementation of the
- * {@link Connector}.
+ * Factory class for building response objects. 
  */
-public final class FileProperties extends FileInfoProperties {
+public final class ResponseFactory {
 
-	private boolean isDir;
-
-	private FileProperties(String name, Date modified) {
-		super(name, modified);
-		isDir = true;
-	}
-
-	private FileProperties(String name, long size, Date modified) {
-		super(name, size, modified);
-		isDir = false;
-	}
-
-	private FileProperties(String name, int width, int height, long size, Date modified) {
-		super(name, width, height, size, modified);
-		isDir = false;
-	}
-
-	@JsonIgnore
-	public boolean isDir() {
-		return isDir;
+	/**
+	 * Builds the {@link DownloadInfo} which holds the data for the response of the download.
+	 * 
+	 * @param in {@link InputStream} of the file to download
+	 * @param fileSize size of the file to download
+	 * @return The initialized {@link DownloadInfo}.
+	 */
+	public static DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
+		return new DownloadInfo(in, fileSize);
 	}
 
 	/**
@@ -99,5 +87,56 @@ public final class FileProperties extends FileInfoProperties {
 	 */
 	public static FileProperties buildForImage(String name, int width, int height, long size, Date modified) {
 		return new FileProperties(name, width, height, size, modified);
+	}
+
+	/**
+	 * Simple container object to hold data which is needed for the download action.
+	 */
+	public static class DownloadInfo {
+
+		private InputStream in;
+		private long fileSize;
+
+		DownloadInfo(InputStream in, long fileSize) {
+			this.in = in;
+			this.fileSize = fileSize;
+		}
+
+		public InputStream getInputStream() {
+			return in;
+		}
+
+		public long getFileSize() {
+			return fileSize;
+		}
+	}
+	
+	/**
+	 * Object to hold the properties of a file or folder. It is used for the response of a get-request of an implementation of the
+	 * {@link Connector}.
+	 */
+	public static class FileProperties extends FileInfoProperties {
+
+		private boolean isDir;
+
+		FileProperties(String name, Date modified) {
+			super(name, modified);
+			isDir = true;
+		}
+
+		FileProperties(String name, long size, Date modified) {
+			super(name, size, modified);
+			isDir = false;
+		}
+
+		FileProperties(String name, int width, int height, long size, Date modified) {
+			super(name, width, height, size, modified);
+			isDir = false;
+		}
+
+		@JsonIgnore
+		public boolean isDir() {
+			return isDir;
+		}
 	}
 }

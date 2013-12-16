@@ -23,10 +23,11 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+import de.thischwa.c5c.ResponseFactory.DownloadInfo;
+import de.thischwa.c5c.ResponseFactory.FileProperties;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
-import de.thischwa.c5c.requestcycle.response.FileProperties;
 
 /**
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
@@ -61,7 +62,9 @@ public interface Connector {
 	 * @param imageExtensions
 	 *            allowed extensions for images
 	 * @return a list of {@link FileProperties} objects prefilled with data of the files inside the requested folder. To initialize this
-	 *         object use {@link FileProperties#buildForFile(String, long, java.util.Date)}, {@link FileProperties#buildForDirectory(String, java.util.Date)} or {@link FileProperties#buildForImage(String, int, int, long, java.util.Date)}
+	 *         object use {@link ResponseFactory#buildForFile(String, long, java.util.Date)},
+	 *         {@link ResponseFactory#buildForDirectory(String, java.util.Date)} or
+	 *         {@link ResponseFactory#buildForImage(String, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
 	public List<FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
@@ -136,10 +139,9 @@ public interface Connector {
 	 * 
 	 * @param backendPath
 	 *            the requested file to download, e.g. <code>/UserFiles/folder/text.pdf</code>
-	 * @param downloadInfo
-	 *            an instantiated {@link DownloadInfo}. Use {@link DownloadInfo#init(InputStream, long)} to set the required data for the
-	 *            down load action
+	 * @return {@link DownloadInfo} which holds the required data for the download action. Use
+	 *         {@link ResponseFactory#buildDownloadInfo(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public void download(String backendPath, DownloadInfo downloadInfo) throws C5CException;
+	public DownloadInfo download(String backendPath) throws C5CException;
 }

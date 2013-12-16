@@ -34,12 +34,13 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.thischwa.c5c.ResponseFactory.DownloadInfo;
+import de.thischwa.c5c.ResponseFactory.FileProperties;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
 import de.thischwa.c5c.requestcycle.response.mode.Delete;
@@ -148,8 +149,7 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
-				DownloadInfo di = new DownloadInfo();
-				connector.download(backendPath, di);
+				DownloadInfo di = connector.download(backendPath);
 				resp = buildDownload(backendPath, di);
 				break;}
 			default: {
@@ -164,7 +164,7 @@ final class Dispatcher {
 	}
 	
 	private String buildBackendPath(String urlPath) {
-		return UserObjectProxy.getUserPath(urlPath);
+		return UserObjectProxy.getBackendPath(urlPath);
 	}
 	
 	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {

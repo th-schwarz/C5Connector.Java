@@ -207,7 +207,7 @@ public class UserObjectProxy {
 	 * @return the server-side path to the desired url-path
 	 * @see BackendPathBuilder#getBackendPath(String, Context, ServletContext)
 	 */
-	public static String getUserPath(final String urlPath) {
+	static String getBackendPath(final String urlPath) {
 		return userPathBuilder.getBackendPath(urlPath, RequestData.getContext(), servletContext);
 	}
 	

@@ -42,12 +42,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.Connector;
-import de.thischwa.c5c.DownloadInfo;
 import de.thischwa.c5c.FilemanagerAction;
+import de.thischwa.c5c.ResponseFactory;
+import de.thischwa.c5c.ResponseFactory.FileProperties;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
-import de.thischwa.c5c.requestcycle.response.FileProperties;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.core.SimpleImageInfoWrapper;
@@ -203,10 +203,10 @@ public class LocalConnector implements Connector {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(file);
 				Dimension dim = dp.getDimension();
-				fileProperties = FileProperties.buildForImage(file.getName(), dim.width, dim.height, file.length(), lastModified);
+				fileProperties = ResponseFactory.buildForImage(file.getName(), dim.width, dim.height, file.length(), lastModified);
 			} else {
-				 fileProperties = (file.isDirectory()) ? FileProperties.buildForDirectory(file.getName(), lastModified)
-						 :FileProperties.buildForFile(file.getName(), file.length(), lastModified);
+				 fileProperties = (file.isDirectory()) ? ResponseFactory.buildForDirectory(file.getName(), lastModified)
+						 :ResponseFactory.buildForFile(file.getName(), file.length(), lastModified);
 			}
 			return fileProperties;
 		} catch (SecurityException e) {
@@ -233,7 +233,7 @@ public class LocalConnector implements Connector {
 		// add dirs
 		File[] fileList = dir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
 		for (File file : fileList) {
-			FileProperties fp = FileProperties.buildForDirectory(file.getName(), new Date(file.lastModified()));
+			FileProperties fp = ResponseFactory.buildForDirectory(file.getName(), new Date(file.lastModified()));
 			props.add(fp);
 		}
 
@@ -259,11 +259,11 @@ public class LocalConnector implements Connector {
 	}
 
 	@Override
-	public void download(String urlPath, DownloadInfo downloadInfo) throws C5CException {
+	public de.thischwa.c5c.ResponseFactory.DownloadInfo download(String urlPath) throws C5CException {
 		File file = buildRealFile(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(file));
-			downloadInfo.init(in, file.length());
+			return ResponseFactory.buildDownloadInfo(in, file.length());
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.getAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);
