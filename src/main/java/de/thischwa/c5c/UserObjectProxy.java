@@ -157,7 +157,7 @@ public class UserObjectProxy {
 	 * @param vf the {@link VirtualFile} for which to retrieve the url-path of the icon
 	 * 
 	 * @return the url-path of the desired {@link VirtualFile}
-	 * @see IconResolver#getIconPath(VirtualFile)
+	 * @see IconResolver
 	 */
 	public static String getIconPath(final VirtualFile vf) {
 		initIconResolver();
@@ -230,7 +230,7 @@ public class UserObjectProxy {
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
-	public static FilemanagerConfig getFilemanagerConfig() {
+	static FilemanagerConfig getFilemanagerConfig() {
 		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
 	}
 }

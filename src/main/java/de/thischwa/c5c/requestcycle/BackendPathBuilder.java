@@ -24,7 +24,7 @@ import javax.servlet.ServletContext;
 import de.thischwa.c5c.Connector;
 
 /**
- * Interface for mapping the path from the url-request to the real backend-path. <br/>
+ * Interface for mapping the path from the url-request to the backend-path. <br/>
  * <br/>
  * <b>Hint:</b> You are free to implement this interface they way you need it. The return value can be global (regardless of a request) or
  * on a per-request basis.

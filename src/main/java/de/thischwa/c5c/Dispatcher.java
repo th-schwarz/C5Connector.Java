@@ -22,6 +22,7 @@ package de.thischwa.c5c;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -96,59 +97,60 @@ final class Dispatcher {
 		Context ctx = RequestData.getContext();
 		FilemanagerAction mode = ctx.getMode();
 		HttpServletRequest req = RequestData.getContext().getServletRequest();
+		Set<String> allowedImageExtensions = UserObjectProxy.getFilemanagerConfig().getImages().getExtensions();
 		try {
 			GenericResponse resp = null;
 			switch (mode) {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
-				String storagePath = buildStoragePath(urlPath);
+				String backendPath = buildBackendPath(urlPath);
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getFolder -> urlPath: {}, storagePath: {}, needSize: {}, showThumbnails: {}", urlPath, storagePath, needSize, showThumbnailsInGrid);
-				List<FileProperties> props = connector.getFolder(storagePath, needSize, showThumbnailsInGrid);
+				logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}, showThumbnails: {}", urlPath, backendPath, needSize, showThumbnailsInGrid);
+				List<FileProperties> props = connector.getFolder(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
 				resp = buildFolder(urlPath, props);
 				break;}
 			case INFO: {
 				String urlPath = req.getParameter("path");
-				String storagePath = buildStoragePath(urlPath);
+				String backendPath = buildBackendPath(urlPath);
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
-				logger.debug("* getInfo -> urlPath: {}, storagePath {}, needSize: {}, showThumbnails: {}", urlPath, storagePath, needSize, showThumbnailsInGrid);
-				FileProperties fp = connector.getInfo(storagePath, needSize, showThumbnailsInGrid);
+				logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}, showThumbnails: {}", urlPath, backendPath, needSize, showThumbnailsInGrid);
+				FileProperties fp = connector.getInfo(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
 				resp = buildInfo(urlPath, fp);
 				break;}
 			case RENAME: {
 				String oldUrlPath = req.getParameter("old");
-				String oldStoragePath = buildStoragePath(oldUrlPath);
+				String oldBackendPath = buildBackendPath(oldUrlPath);
 				String newName = req.getParameter("new");
 				String sanitizedName = FileUtils.sanitizeName(newName);
-				logger.debug("* rename -> oldUrlPath: {}, storagePath: {}, new name: {}, santized new name: {}", oldUrlPath, oldStoragePath, newName, sanitizedName);
-				boolean isDirectory = connector.rename(oldStoragePath, sanitizedName);
+				logger.debug("* rename -> oldUrlPath: {}, backendPath: {}, new name: {}, santized new name: {}", oldUrlPath, oldBackendPath, newName, sanitizedName);
+				boolean isDirectory = connector.rename(oldBackendPath, sanitizedName);
 				resp = buildRename(oldUrlPath, sanitizedName, isDirectory);
 				break;}
 			case CREATEFOLDER: {
 				String urlPath = req.getParameter("path");
-				String storagePath = buildStoragePath(urlPath);
+				String backendPath = buildBackendPath(urlPath);
 				String folderName = req.getParameter("name");
 				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
-				logger.debug("* createFolder -> urlPath: {}, storagePath: {}, name: {}, sanitized name: {}", urlPath, storagePath, folderName, sanitizedFolderName);
-				connector.createFolder(storagePath, sanitizedFolderName);
+				logger.debug("* createFolder -> urlPath: {}, backendPath: {}, name: {}, sanitized name: {}", urlPath, backendPath, folderName, sanitizedFolderName);
+				connector.createFolder(backendPath, sanitizedFolderName);
 				resp = buildCreateFolder(urlPath, sanitizedFolderName);
 				break;}
 			case DELETE: {
 				String urlPath = req.getParameter("path");
-				String storagePath = buildStoragePath(urlPath);
-				logger.debug("* delete -> urlPath: {}, staragePath: {}", urlPath, storagePath);
-				boolean isDirectory = connector.delete(storagePath);
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* delete -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				boolean isDirectory = connector.delete(backendPath);
 				resp = buildDelete(urlPath, isDirectory);
 				break;}
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
-				String storagePath = buildStoragePath(urlPath);
-				logger.debug("* download -> urlPath: {}, storagePath", urlPath, storagePath);
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
 				DownloadInfo di = new DownloadInfo();
-				connector.download(storagePath, di);
-				resp = buildDownload(storagePath, di);
+				connector.download(backendPath, di);
+				resp = buildDownload(backendPath, di);
 				break;}
 			default: {
 				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
@@ -161,7 +163,7 @@ final class Dispatcher {
 		}		
 	}
 	
-	private String buildStoragePath(String urlPath) {
+	private String buildBackendPath(String urlPath) {
 		return UserObjectProxy.getUserPath(urlPath);
 	}
 	
@@ -208,7 +210,7 @@ final class Dispatcher {
 			switch (mode) {
 			case UPLOAD: {
 				String currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
-				String storagePath = buildStoragePath(currentPath);
+				String backendPath = buildBackendPath(currentPath);
 				Part uploadPart = req.getPart("newfile");
 				String newName = getFileName(uploadPart);
 				
@@ -220,7 +222,7 @@ final class Dispatcher {
 				// check the max. upload size
 				if(uploadPart.getSize() > maxFileSize.longValue() * 1024 * 1024)
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
-				connector.upload(storagePath, sanitizedName, uploadPart.getInputStream());
+				connector.upload(backendPath, sanitizedName, uploadPart.getInputStream());
 				
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp = new UploadFile(currentPath, sanitizedName);
