@@ -208,15 +208,17 @@ final class Dispatcher {
 				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
 		boolean overwrite = UserObjectProxy.getFilemanagerConfig(req).getUpload().isOverwrite();
 				
-		GenericResponse resp = null;
+		UploadFile resp = null;
 		InputStream in = null;
+		String currentPath = null;
+		String newName = null;
 		try {
 			switch (mode) {
 			case UPLOAD: {
-				String currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
+				currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
 				String backendPath = buildBackendPath(currentPath);
 				Part uploadPart = req.getPart("newfile");
-				String newName = getFileName(uploadPart);
+				newName = getFileName(uploadPart);
 				
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
@@ -224,7 +226,7 @@ final class Dispatcher {
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", currentPath, fileName, sanitizedName);
 				
 				// check 'overwrite' and unambiguity
-				String uniqueName = getUniqueName(sanitizedName);
+				String uniqueName = getUniqueName(backendPath, sanitizedName);
 				if(!overwrite && !uniqueName.equals(sanitizedName)) {
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileAlreadyExists, sanitizedName);
 				}
@@ -247,23 +249,26 @@ final class Dispatcher {
 				}
 			}
 		} catch (C5CException e) {
-			GenericResponse genericResp = ErrorResponseFactory.buildException(e);
-			// the exception must be wrap into an UploadFile because of the special response handling of upload
-			genericResp.setMode(FilemanagerAction.UPLOAD);
-			return genericResp;
+			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage());
 		} catch (ServletException e) {
 			logger.error("A ServletException was thrown while uploading: " + e.getMessage(), e);
-			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
+			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
 		} catch (IOException e) {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
-			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
+			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
+		
+		if(currentPath != null)
+			resp.setPath(currentPath);
+		if(newName != null)
+			resp.setName(newName);
+		return resp;
 	}
 	
-	private String getUniqueName(String name) throws C5CException {
-		List<FileProperties> props = connector.getFolder(name, false, false, null);
+	private String getUniqueName(String backendPath, String name) throws C5CException {
+		List<FileProperties> props = connector.getFolder(backendPath, false, false, null);
 		Set<String> existingNames = new HashSet<>();
 		for(FileProperties fp : props) {
 			existingNames.add(fp.getName());

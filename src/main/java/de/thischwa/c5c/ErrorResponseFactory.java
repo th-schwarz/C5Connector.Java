@@ -22,6 +22,7 @@ package de.thischwa.c5c;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
+import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 
 /**
  * Factory for building error responses, - for internal use only.
@@ -38,8 +39,19 @@ class ErrorResponseFactory {
 		if(e instanceof FilemanagerException) {
 			return buildErrorResponse(e.getMessage(), GenericResponse.DEFAULT_ERROR_CODE);
 		}
-		String msg = (e.getMode() == null) ? e.getMessage() : String.format("While executing [{}]: {}", e.getMode().toString(), e.getMessage());
+		String msg = (e.getMode() == null) ? e.getMessage()
+				: String.format("While executing [{}]: {}", e.getMode().toString(), e.getMessage());
 		return buildErrorResponse(msg, 1000);
+	}
+	
+	static UploadFile buildErrorResponseForUpload(String message) {
+		return buildErrorResponseForUpload(message, GenericResponse.DEFAULT_ERROR_CODE);
+	}
+
+	static UploadFile buildErrorResponseForUpload(String message, int code) {
+		UploadFile uf = new UploadFile(message, code);
+		uf.setMode(FilemanagerAction.UPLOAD);
+		return uf;
 	}
 
 	private static class ErrorResponse extends GenericResponse {

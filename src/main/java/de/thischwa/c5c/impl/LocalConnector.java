@@ -188,7 +188,7 @@ public class LocalConnector implements Connector {
 	 * 
 	 * @param file the file
 	 * @param needSize the need size
-	 * @param showThumbnailsInGrid the show thumbnails in grid
+	 * @param showThumbnailsInGrid the show thumbnails in grid, can null
 	 * @param imageExtensions allowed extensions for images
 	 * @return the file info
 	 * @throws C5CException the connector exception
@@ -199,7 +199,7 @@ public class LocalConnector implements Connector {
 			Date lastModified = new Date(file.lastModified());
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String ext = FilenameUtils.getExtension(file.getPath());
-			if(!StringUtils.isNullOrEmptyOrBlank(ext) && imageExtensions.contains(ext)) {
+			if(imageExtensions!=null && !StringUtils.isNullOrEmptyOrBlank(ext) && imageExtensions.contains(ext)) {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(file);
 				Dimension dim = dp.getDimension();

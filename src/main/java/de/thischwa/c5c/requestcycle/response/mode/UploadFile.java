@@ -40,10 +40,18 @@ public final class UploadFile extends GenericResponse {
 		if(!StringUtils.isNullOrEmpty(this.path) && !this.path.endsWith(Constants.defaultSeparator))
 			this.path += Constants.defaultSeparator;
 	}
+	
+	public UploadFile(String errorMessage, int errorCode) {
+		setError(errorMessage, errorCode);
+	}
 
 	@JsonProperty("Path")
 	public String getPath() {
 		return path;
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	@JsonProperty("Name")
@@ -51,6 +59,10 @@ public final class UploadFile extends GenericResponse {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	@Override
 	public String toString() {
 		String jsonStr = super.toString();
