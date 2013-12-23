@@ -20,7 +20,9 @@
 package de.thischwa.c5c;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -204,8 +206,10 @@ final class Dispatcher {
 		Integer maxFileSize = (UserObjectProxy.getFilemanagerConfig(req).getUpload().isFileSizeLimitAuto())
 				? PropertiesLoader.getMaxUploadSize()
 				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
+		boolean overwrite = UserObjectProxy.getFilemanagerConfig(req).getUpload().isOverwrite();
 				
 		GenericResponse resp = null;
+		InputStream in = null;
 		try {
 			switch (mode) {
 			case UPLOAD: {
@@ -219,10 +223,18 @@ final class Dispatcher {
 				String sanitizedName = FileUtils.sanitizeName(fileName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", currentPath, fileName, sanitizedName);
 				
+				// check 'overwrite' and unambiguity
+				String uniqueName = getUniqueName(sanitizedName);
+				if(!overwrite && !uniqueName.equals(sanitizedName)) {
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileAlreadyExists, sanitizedName);
+				}
+				sanitizedName = uniqueName;
+				
 				// check the max. upload size
 				if(uploadPart.getSize() > maxFileSize.longValue() * 1024 * 1024)
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
-				connector.upload(backendPath, sanitizedName, uploadPart.getInputStream());
+				in = uploadPart.getInputStream();
+				connector.upload(backendPath, sanitizedName, in);
 				
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp = new UploadFile(currentPath, sanitizedName);
@@ -245,15 +257,25 @@ final class Dispatcher {
 		} catch (IOException e) {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
 			return ErrorResponseFactory.buildErrorResponse(e.getMessage(), 200);
-		} 
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	private String getUniqueName(String name) throws C5CException {
+		List<FileProperties> props = connector.getFolder(name, false, false, null);
+		Set<String> existingNames = new HashSet<>();
+		for(FileProperties fp : props) {
+			existingNames.add(fp.getName());
+		}
+		return StringUtils.getUniqueName(existingNames, name);
 	}
 
 	private String getFileName(final Part part) {
 	    final String partHeader = part.getHeader("content-disposition");
 	    for (String content : partHeader.split(";")) {
 	        if (content.trim().startsWith("filename")) {
-	            return content.substring(
-	                    content.indexOf('=') + 1).trim().replace("\"", "");
+	            return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
 	        }
 	    }
 	    return null;

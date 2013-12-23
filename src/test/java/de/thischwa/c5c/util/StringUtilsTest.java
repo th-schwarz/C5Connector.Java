@@ -23,6 +23,10 @@ package de.thischwa.c5c.util;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 public class StringUtilsTest {
@@ -82,5 +86,15 @@ public class StringUtilsTest {
 
 		query = "path=%2ffolder&file=img.png";
 		assertEquals(2, StringUtils.divideAndDecodeQueryString(query).size());
+	}
+	
+	@Test
+	public void testUniqueName() {
+		Set<String> existingNames = new HashSet<>(Arrays.asList("name.ext", "name_1.ext", "file", "name_2.ext"));
+		
+		assertEquals("name_3.ext", StringUtils.getUniqueName(existingNames, "name.ext"));
+		assertEquals("file_1", StringUtils.getUniqueName(existingNames, "file"));
+
+		assertEquals("file.ext", StringUtils.getUniqueName(existingNames, "file.ext"));
 	}
 }

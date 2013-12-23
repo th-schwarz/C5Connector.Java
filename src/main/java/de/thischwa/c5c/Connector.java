@@ -129,7 +129,7 @@ public interface Connector {
 	 * @param sanitizedName
 	 *            the (sanitized) name of the folder hat should be created, e.g. <code>logo.png</code>
 	 * @param in
-	 *            {@link InputStream} in which the file data has to put in
+	 *            {@link InputStream} that contains the file data, it will be closed by the caller
 	 * @throws C5CException
 	 */
 	public void upload(String backendDirectory, String sanitizedName, InputStream in) throws C5CException;

@@ -250,7 +250,7 @@ public class LocalConnector implements Connector {
 		File parentFolder = buildAndCheckFolder(urlDirectory);
 		File fileToSave = new File(parentFolder, sanitizedName);
 		if(fileToSave.exists())
-			throw new FilemanagerException(FilemanagerException.Key.FileAlreadyExists, sanitizedName);
+			throw new IllegalArgumentException(String.format("File [%s] already exists.", sanitizedName));
 		try {
 			IOUtils.copyLarge(in, new FileOutputStream(fileToSave));
 		} catch (IOException e) {

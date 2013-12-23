@@ -24,6 +24,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.io.FilenameUtils;
 
 import de.thischwa.c5c.resource.PropertiesLoader;
 
@@ -85,5 +88,22 @@ public class StringUtils {
 			params.put(key, val);
 		}
 		return params;
+	}
+	
+	public static String getUniqueName(Set<String> existingNames, String name) {
+		if(!existingNames.contains(name))
+			return name;
+		
+		int count = 1;
+		String ext = FilenameUtils.getExtension(name);
+		String baseName = FilenameUtils.getBaseName(name);
+		String tmpName;
+		do {
+			tmpName = String.format("%s_%d", baseName, count);
+			if(!_isNullOrEmpty(ext))
+				tmpName = String.format("%s.%s", tmpName, ext);
+			count ++;
+		} while(existingNames.contains(tmpName));
+		return tmpName;
 	}
 }

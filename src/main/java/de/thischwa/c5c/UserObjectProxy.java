@@ -159,7 +159,7 @@ public class UserObjectProxy {
 	 * @return the url-path of the desired {@link VirtualFile}
 	 * @see IconResolver
 	 */
-	public static String getIconPath(final VirtualFile vf) {
+	static String getIconPath(final VirtualFile vf) {
 		initIconResolver();
 		return (vf.getType() == Type.directory) ?
 				iconResolver.getIconPathForDirectory() : iconResolver.getIconPath(vf.getExtension());
