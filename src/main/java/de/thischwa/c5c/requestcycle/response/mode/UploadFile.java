@@ -22,6 +22,7 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.StringUtils;
 
@@ -35,6 +36,7 @@ public final class UploadFile extends GenericResponse {
 	private String name;
 	
 	public UploadFile(String path, String name) {
+		super(FilemanagerAction.UPLOAD);
 		this.path = path;
 		this.name = name;
 		if(!StringUtils.isNullOrEmpty(this.path) && !this.path.endsWith(Constants.defaultSeparator))
@@ -42,6 +44,7 @@ public final class UploadFile extends GenericResponse {
 	}
 	
 	public UploadFile(String errorMessage, int errorCode) {
+		super(FilemanagerAction.UPLOAD);
 		setError(errorMessage, errorCode);
 	}
 

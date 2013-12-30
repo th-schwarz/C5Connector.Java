@@ -50,7 +50,11 @@ public class GenericResponse {
 	/** The error code. */
 	private int errorCode = DEFAULT_NO_ERROR_CODE;
 
-	private FilemanagerAction mode = null;
+	private FilemanagerAction mode;
+	
+	protected GenericResponse(FilemanagerAction mode) {
+		this.mode = mode;
+	}
 
 	public void setError(String error, int errorCode) {
 		this.error = error;
@@ -80,11 +84,6 @@ public class GenericResponse {
 	@JsonIgnore
 	public FilemanagerAction getMode() {
 		return mode;
-	}
-
-	@JsonIgnore
-	public void setMode(FilemanagerAction mode) {
-		this.mode = mode;
 	}
 
 	/**

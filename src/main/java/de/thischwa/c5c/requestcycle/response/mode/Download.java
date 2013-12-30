@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
@@ -44,6 +45,7 @@ public final class Download extends GenericResponse {
 	private InputStream in;
 
 	public Download(String fullPath, long contentLength, InputStream in) {
+		super(FilemanagerAction.DOWNLOAD);
 		this.fullPath = fullPath;
 		this.contentLength = contentLength;
 		this.in = in;

@@ -122,12 +122,12 @@ public interface Connector {
 	public boolean delete(String backendPath) throws C5CException;
 
 	/**
-	 * Executes the 'add'-method of the filemanager.
+	 * Executes the 'add'-method of the filemanager. The implementation has to overwrite the file, if there exists one with the same name.
 	 * 
 	 * @param backendDirectory
 	 *            the path to the directory, in which the new folder has to be created, e.g. <code>/UserFiles/</code>
 	 * @param sanitizedName
-	 *            the (sanitized) name of the folder hat should be created, e.g. <code>logo.png</code>
+	 *            the (sanitized) name of the file that should be created, e.g. <code>logo.png</code>
 	 * @param in
 	 *            {@link InputStream} that contains the file data, it will be closed by the caller
 	 * @throws C5CException

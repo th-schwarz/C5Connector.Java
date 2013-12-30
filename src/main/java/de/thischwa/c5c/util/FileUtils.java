@@ -19,9 +19,6 @@
  */
 package de.thischwa.c5c.util;
 
-import java.io.File;
-
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * General file-based utilities.
@@ -68,41 +65,5 @@ public class FileUtils {
 	 */
 	public static boolean isSingleExtension(final String filename) {
 		return filename.matches("[^\\.]+\\.[^\\.]+");
-	}
-
-	/**
-	 * Checks a directory for existence and creates it if non-existent.
-	 * 
-	 * @param dir
-	 *            directory to check/create
-	 */
-	public static void checkDirAndCreate(File dir) {
-		if (!dir.exists())
-			dir.mkdirs();
-	}
-
-	/**
-	 * Iterates over a base name and returns the first non-existent file.<br />
-	 * This method extracts a file's base name, iterates over it until the first
-	 * non-existent appearance with <code>basename(n).ext</code>. Where n is a
-	 * positive integer starting from one.
-	 * 
-	 * @param file the base file
-	 * @return the first non-existent file
-	 */
-	public static File getUniqueFile(final File file) {
-		if (!file.exists())
-			return file;
-
-		File tmpFile = new File(file.getAbsolutePath());
-		File parentDir = tmpFile.getParentFile();
-		int count = 1;
-		String extension = FilenameUtils.getExtension(tmpFile.getName());
-		String baseName = FilenameUtils.getBaseName(tmpFile.getName());
-		do {
-			String fileName = String.format("%s(%d).%s", baseName, count, extension);
-			tmpFile = new File(parentDir, fileName);
-		} while (tmpFile.exists());
-		return tmpFile;
 	}
 }

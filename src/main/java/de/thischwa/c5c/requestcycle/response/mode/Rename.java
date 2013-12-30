@@ -22,6 +22,7 @@ package de.thischwa.c5c.requestcycle.response.mode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.VirtualFile;
@@ -40,6 +41,7 @@ public final class Rename extends GenericResponse {
 	private String newName;
 	
 	public Rename(String oldFullPath, String newName, boolean isDirectory) {
+		super(FilemanagerAction.RENAME);
 		this.oldFullPath = oldFullPath;
 		this.newName = newName;
 		VirtualFile oldVF = new VirtualFile(oldFullPath);

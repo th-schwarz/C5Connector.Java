@@ -21,6 +21,7 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
@@ -33,6 +34,7 @@ public final class CreateFolder extends GenericResponse {
 	private String folderName;
 	
 	public CreateFolder(String parentUrlPath, String folderName) {
+		super(FilemanagerAction.CREATEFOLDER);
 		this.parentUrlPath = parentUrlPath;
 		this.folderName = folderName;
 	}

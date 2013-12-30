@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
@@ -33,6 +34,7 @@ public final class FolderInfo extends GenericResponse {
 	private Map<String, FileInfo> folderItems;
 
 	public FolderInfo() {
+		super(FilemanagerAction.FOLDER);
 		folderItems = new LinkedHashMap<>();
 	}
 

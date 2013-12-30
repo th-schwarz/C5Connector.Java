@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.Constants;
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.util.Path;
@@ -53,6 +54,7 @@ public final class FileInfo extends GenericResponse {
 	private String previewPath;
 
 	public FileInfo(String path, boolean isDir) {
+		super(FilemanagerAction.INFO);
 		capabilities = new ArrayList<>();
 		virtualFile = new VirtualFile(path, isDir);
 		this.path = path;

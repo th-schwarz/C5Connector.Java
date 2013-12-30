@@ -158,7 +158,6 @@ final class Dispatcher {
 				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
 				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));}
 			}
-			resp.setMode(mode);
 			return resp;
 		} catch (C5CException e) {
 			return ErrorResponseFactory.buildException(e);
@@ -223,6 +222,8 @@ final class Dispatcher {
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
+				if(!overwrite)
+					sanitizedName = getUniqueName(backendPath, sanitizedName);
 				logger.debug("* upload -> currentpath: {}, filename: {}, sanitized filename: {}", currentPath, fileName, sanitizedName);
 				
 				// check 'overwrite' and unambiguity
@@ -240,7 +241,6 @@ final class Dispatcher {
 				
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp = new UploadFile(currentPath, sanitizedName);
-				resp.setMode(FilemanagerAction.UPLOAD);
 				return resp;
 				}
 			default: {

@@ -21,6 +21,7 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
@@ -31,6 +32,7 @@ public final class Delete extends GenericResponse {
 	private String fullPath;
 
 	public Delete(String fullPath) {
+		super(FilemanagerAction.DELETE);
 		this.fullPath = fullPath;
 	}
 	
