@@ -13,6 +13,7 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
 * 0.3-SNAPSHOT
   * updated jackson to 2.2.2
   * issue #14 IconResolver must respect the properties of 'icons'-section 
+  * issue #11 Simplify the connector API 
   * issue #10 Revision of the JSON-responses
   * issue #9 A directory couldn't be deleted
   * issue #5 Configuration of the filemanager in pure Java 
