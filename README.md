@@ -2,7 +2,7 @@
 
 The Java backend for the [filemanager of corefive](http://github.com/simogeo/Filemanager).
 
-C5Connector.Java is distributed under the [LGPL](http://www.gnu.org/licenses/lgpl-3.0.html) and [MPL](http://www.mozilla.org/MPL/2.0/) Open Source licenses. This **dual copyleft licensing model** is flexible and allows you to choose the license that is best suited for your needs. The Open Source licenses are intended for:
+C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/) Open Source licenses. The Open Source license is intended for:
 
 * Integrating C5Connector.Java into Open Source software.
 * Personal and educational use of C5Connector.Java.

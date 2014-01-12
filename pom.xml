@@ -5,13 +5,9 @@
 	<version>0.3-SNAPSHOT</version>
 	<description>The Java backend for the filemanager of corefive.</description>
 	<name>C5Connector.Java</name>
-	<url>http://th-schwarz.github.io/C5Connector.Java</url>
+	<url>http://th-schwarz.github.io/C5Connector.Java/</url>
 	<inceptionYear>2012</inceptionYear>
 	<licenses>
-		<license>
-			<name>LGPL</name>
-			<url>LICENSE_LGPL.txt</url>
-		</license>
 		<license>
 			<name>MPL</name>
 			<comments>A business-friendly OSS license</comments>
