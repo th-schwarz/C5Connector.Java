@@ -12,7 +12,7 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
 
 * 0.3-SNAPSHOT
   * updated jackson to 2.2.2
-  * th-schwarz/C5Connector.Java#14 IconResolver must respect the properties of 'icons'-section 
+  * issue th-schwarz/C5Connector.Java#14 IconResolver must respect the properties of 'icons'-section 
   * th-schwarz/C5Connector.Java#10 Revision of the JSON-responses
   * th-schwarz/C5Connector.Java#9 A directory couldn't be deleted
   * th-schwarz/C5Connector.Java#5 Configuration of the filemanager in pure Java 
