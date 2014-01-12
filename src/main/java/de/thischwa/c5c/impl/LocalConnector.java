@@ -38,14 +38,10 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jetty.server.Connector;
 
-import de.thischwa.c5c.Connector;
 import de.thischwa.c5c.FilemanagerAction;
-import de.thischwa.c5c.ResponseFactory;
-import de.thischwa.c5c.ResponseFactory.DownloadInfo;
-import de.thischwa.c5c.ResponseFactory.FileProperties;
+import de.thischwa.c5c.GenericConnector;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
@@ -59,22 +55,16 @@ import de.thischwa.jii.exception.ReadException;
  * It's a real local filesystem backend connector. The file access is translated as-is
  * to the local filesystem. A servlet context is respected, if it exists.
  */
-public class LocalConnector implements Connector {
-	
-	private static Logger logger = LoggerFactory.getLogger(LocalConnector.class);
-	
-	public void init() {
-		logger.info("*** {} sucessful initialized.", this.getClass().getName());
-	}
+public class LocalConnector extends GenericConnector {
 	
 	@Override
-	public List<FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
 		Path folder = buildAndCheckFolder(backendPath);
 		return constructFromDirRequest(folder, needSize, showThumbnailsInGrid, imageExtensions);
 	}
 	
 	@Override
-	public FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
 		Path path = buildRealPath(backendPath);
 		if(!Files.exists(path)) {
 			logger.error("Requested file not exits: {}", path.toAbsolutePath());
@@ -189,7 +179,7 @@ public class LocalConnector implements Connector {
 	 */
 	private FileProperties constructFileInfo(Path path, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
 		try {
-			FileProperties fileProperties;
+			GenericConnector.FileProperties fileProperties;
 			Date lastModified = new Date(Files.getLastModifiedTime(path).toMillis());
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String fileName = path.getFileName().toString();
@@ -199,10 +189,10 @@ public class LocalConnector implements Connector {
 				IDimensionProvider dp = new SimpleImageInfoWrapper();
 				dp.set(path.toFile());
 				Dimension dim = dp.getDimension();
-				fileProperties = ResponseFactory.buildForImage(fileName, dim.width, dim.height, size, lastModified);
+				fileProperties = GenericConnector.buildForImage(fileName, dim.width, dim.height, size, lastModified);
 			} else {
-				 fileProperties = (Files.isDirectory(path)) ? ResponseFactory.buildForDirectory(fileName, lastModified)
-						 : ResponseFactory.buildForFile(fileName, size, lastModified);
+				 fileProperties = (Files.isDirectory(path)) ? buildForDirectory(fileName, lastModified)
+						 : buildForFile(fileName, size, lastModified);
 			}
 			return fileProperties;
 		} catch (FileNotFoundException e) {
@@ -233,7 +223,7 @@ public class LocalConnector implements Connector {
 				public boolean accept(Path entry) throws IOException {
 					return Files.isDirectory(entry);
 				}})) {
-				FileProperties fp = ResponseFactory.buildForDirectory(d.getFileName().toString(), new Date(Files.getLastModifiedTime(d).toMillis()));
+				FileProperties fp = buildForDirectory(d.getFileName().toString(), new Date(Files.getLastModifiedTime(d).toMillis()));
 				props.add(fp);
 			}
 		} catch (IOException | SecurityException e) {
@@ -273,7 +263,7 @@ public class LocalConnector implements Connector {
 		Path file = buildRealPath(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(Files.newInputStream(file, StandardOpenOption.READ));
-			return ResponseFactory.buildDownloadInfo(in, Files.size(file));
+			return buildDownloadInfo(in, Files.size(file));
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.toAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);

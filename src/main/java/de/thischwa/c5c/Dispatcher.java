@@ -33,11 +33,10 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.server.Connector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.thischwa.c5c.ResponseFactory.DownloadInfo;
-import de.thischwa.c5c.ResponseFactory.FileProperties;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
@@ -63,7 +62,7 @@ import de.thischwa.c5c.util.VirtualFile;
 final class Dispatcher {
 	private static Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 	
-	private Connector connector;
+	private GenericConnector connector;
 	
 	/**
 	 * Instantiates and initializes the implementation of the {@link Connector}.
@@ -78,7 +77,7 @@ final class Dispatcher {
 		else {
 			try {
 				Class<?> clazz = Class.forName(connectorClassName);
-				connector = (Connector) clazz.newInstance();
+				connector = (GenericConnector) clazz.newInstance();
 				logger.info("Connector instantiated to {}", connectorClassName);
 			} catch (Throwable e) {
 				String msg = String.format("Connector implementation [%s] couldn't be instatiated.", connectorClassName);
@@ -110,7 +109,7 @@ final class Dispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
 				logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}, showThumbnails: {}", urlPath, backendPath, needSize, showThumbnailsInGrid);
-				List<FileProperties> props = connector.getFolder(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
+				List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
 				resp = buildFolder(urlPath, props);
 				break;}
 			case INFO: {
@@ -119,7 +118,7 @@ final class Dispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs")); 
 				logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}, showThumbnails: {}", urlPath, backendPath, needSize, showThumbnailsInGrid);
-				FileProperties fp = connector.getInfo(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
+				GenericConnector.FileProperties fp = connector.getInfo(backendPath, needSize, showThumbnailsInGrid, allowedImageExtensions);
 				resp = buildInfo(urlPath, fp);
 				break;}
 			case RENAME: {
@@ -151,7 +150,7 @@ final class Dispatcher {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
-				DownloadInfo di = connector.download(backendPath);
+				GenericConnector.DownloadInfo di = connector.download(backendPath);
 				resp = buildDownload(backendPath, di);
 				break;}
 			default: {
@@ -168,12 +167,12 @@ final class Dispatcher {
 		return UserObjectProxy.getBackendPath(urlPath);
 	}
 	
-	private FolderInfo buildFolder(String urlPath, List<FileProperties> props) {
+	private FolderInfo buildFolder(String urlPath, List<GenericConnector.FileProperties> props) {
 		FolderInfo folderInfo = buildFolderInfo();
 		if(props == null)
 			return folderInfo;
 		List<FileInfo> infos = new ArrayList<>(props.size());
-		for (FileProperties fileProperties : props) {
+		for (GenericConnector.FileProperties fileProperties : props) {
 			FileInfo fileInfo = buildFileInfo(urlPath, fileProperties);
 			setCapabilities(fileInfo, urlPath);
 			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
@@ -184,7 +183,7 @@ final class Dispatcher {
 		return folderInfo;
 	}
 	
-	private FileInfo buildInfo(String urlPath, FileProperties props) {
+	private FileInfo buildInfo(String urlPath, GenericConnector.FileProperties props) {
 		FileInfo fileInfo = buildFileInfo(urlPath, props);
 		setCapabilities(fileInfo, urlPath);
 		setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
@@ -268,9 +267,9 @@ final class Dispatcher {
 	}
 	
 	private String getUniqueName(String backendPath, String name) throws C5CException {
-		List<FileProperties> props = connector.getFolder(backendPath, false, false, null);
+		List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false, false, null);
 		Set<String> existingNames = new HashSet<>();
-		for(FileProperties fp : props) {
+		for(GenericConnector.FileProperties fp : props) {
 			existingNames.add(fp.getName());
 		}
 		return StringUtils.getUniqueName(existingNames, name);
@@ -309,7 +308,7 @@ final class Dispatcher {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
 
-	private Download buildDownload(String fullPath, DownloadInfo di) {
+	private Download buildDownload(String fullPath, GenericConnector.DownloadInfo di) {
 		return new Download(fullPath, di.getFileSize(), di.getInputStream());
 	}
 
@@ -321,7 +320,7 @@ final class Dispatcher {
 		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
 	}
 
-	private FileInfo buildFileInfo(String urlPath, FileProperties fp) {
+	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
 		FileInfo fi = new FileInfo(urlPath, fp.isDir());
 		fi.setFileProperties(fp);
 		return fi;

@@ -22,7 +22,8 @@ package de.thischwa.c5c.requestcycle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import de.thischwa.c5c.Connector;
+import org.eclipse.jetty.server.Connector;
+
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 
 /**
