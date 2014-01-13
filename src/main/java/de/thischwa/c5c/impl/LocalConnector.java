@@ -29,7 +29,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.eclipse.jetty.server.Connector;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.GenericConnector;
@@ -42,7 +41,7 @@ import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
 
 /**
- * The default implementation of the {@link Connector} interface. 
+ * The default implementation of the connector servlet.
  * It's a real local filesystem backend connector. The file access is translated as-is
  * to the local filesystem. A servlet context is respected, if it exists.
  */

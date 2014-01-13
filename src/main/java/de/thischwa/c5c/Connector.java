@@ -4,30 +4,31 @@
  * works like a transparent VFS or proxy.
  * Copyright (C) Thilo Schwarz
  * 
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * == BEGIN LICENSE ==
+ * 
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ * 
+ *  - GNU Lesser General Public License Version 3.0 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl-3.0.html
+ * 
+ *  - Mozilla Public License Version 2.0 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/2.0/
+ * 
+ * == END LICENSE ==
  */
 package de.thischwa.c5c;
 
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
-import de.thischwa.c5c.impl.LocalConnector;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
-import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 
 /**
- * The backend base class for the connector servlet of the filemanager of corefive. <br/>
+ * The backend interface for the connector servlet of the filemanager of corefive. <br/>
  * In general a connector serves and manages files and folders accessed through the filemanager on an arbitrary backend system. The
  * connector will retrieve a valid request. 'Valid' means in terms of correct and reasonable parameters.<br/>
  * Most of the methods get a parameter named 'backendPath' or similar. This is the requested url-path mapped to a o path of the backend by
@@ -36,69 +37,15 @@ import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
  * <b>Hint for implementations:</b> For throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful
  * constructors are provided.
  */
-public abstract class GenericConnector implements Connector {
-	
-	protected static Logger logger = LoggerFactory.getLogger(LocalConnector.class);
+public interface Connector {
 
 	/**
-	 * Simple container object to hold data which is needed for the download action.
-	 */
-	public static class DownloadInfo {
-	
-		private InputStream in;
-		private long fileSize;
-	
-		DownloadInfo(InputStream in, long fileSize) {
-			this.in = in;
-			this.fileSize = fileSize;
-		}
-	
-		public InputStream getInputStream() {
-			return in;
-		}
-	
-		public long getFileSize() {
-			return fileSize;
-		}
-	}
-
-	/**
-	 * Object to hold the properties of a file or folder. It is used for the response of a get-request.
-	 */
-	public static class FileProperties extends FileInfoProperties {
-	
-		private boolean isDir;
-	
-		FileProperties(String name, Date modified) {
-			super(name, modified);
-			isDir = true;
-		}
-	
-		FileProperties(String name, long size, Date modified) {
-			super(name, size, modified);
-			isDir = false;
-		}
-	
-		FileProperties(String name, int width, int height, long size, Date modified) {
-			super(name, width, height, size, modified);
-			isDir = false;
-		}
-	
-		@JsonIgnore
-		public boolean isDir() {
-			return isDir;
-		}
-	}
-
-	/**
-	 * Initializes the connector. Can be overridden by the inherited object.
+	 * Initializes the connector.
 	 * 
 	 * @throws Exception
 	 *             if the initialization fails.
 	 */
-	public void init() throws RuntimeException {
-		logger.info("*** {} sucessful initialized.", this.getClass().getName());
-	}
+	public void init() throws RuntimeException;
 
 	/**
 	 * Executes the 'getfolder'-method of the filemanager.
@@ -118,7 +65,7 @@ public abstract class GenericConnector implements Connector {
 	 *         {@link GenericConnector#buildForImage(String, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
-	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
+	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
 			throws C5CException;
 
 	/**
@@ -137,9 +84,7 @@ public abstract class GenericConnector implements Connector {
 	 * @throws C5CException
 	 */
 	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
-			throws C5CException {
-		return null;
-	}
+			throws C5CException;
 
 	/**
 	 * Executes the 'rename'-method of the filemanager.
@@ -151,7 +96,7 @@ public abstract class GenericConnector implements Connector {
 	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
-	public abstract boolean rename(String oldBackendPath, String sanitizedNewName) throws C5CException;
+	public boolean rename(String oldBackendPath, String sanitizedNewName) throws C5CException;
 
 	/**
 	 * Executes the 'addfolder'-method of the filemanger.
@@ -162,7 +107,7 @@ public abstract class GenericConnector implements Connector {
 	 *            the (sanitized) name of the folder hat should be created, e.g. <code>new_folder</code>
 	 * @throws C5CException
 	 */
-	public abstract void createFolder(String backendDirectory, String sanitizedName) throws C5CException;
+	public void createFolder(String backendDirectory, String sanitizedName) throws C5CException;
 
 	/**
 	 * Executes the 'delete'-method of the filemanager.
@@ -172,7 +117,7 @@ public abstract class GenericConnector implements Connector {
 	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
-	public abstract boolean delete(String backendPath) throws C5CException;
+	public boolean delete(String backendPath) throws C5CException;
 
 	/**
 	 * Executes the 'add'-method of the filemanager. The implementation has to overwrite the file, if there exists one with the same name.
@@ -185,7 +130,7 @@ public abstract class GenericConnector implements Connector {
 	 *            {@link InputStream} that contains the file data, it will be closed by the caller
 	 * @throws C5CException
 	 */
-	public abstract void upload(String backendDirectory, String sanitizedName, InputStream in) throws C5CException;
+	public void upload(String backendDirectory, String sanitizedName, InputStream in) throws C5CException;
 
 	/**
 	 * Executes the 'download'-method of the filemanager.
@@ -196,63 +141,5 @@ public abstract class GenericConnector implements Connector {
 	 *         {@link GenericConnector#buildDownloadInfo(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public abstract GenericConnector.DownloadInfo download(String backendPath) throws C5CException;
-
-	/**
-	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a image of the filemanager.
-	 * 
-	 * @param name
-	 *            the name of the file
-	 * @param width
-	 *            the width of the image
-	 * @param height
-	 *            the height of the image
-	 * @param size
-	 *            the absolute size of the file
-	 * @param modified
-	 *            the date the file was last modified
-	 * @return The initialized {@link FileInfoProperties}.
-	 */
-	protected static GenericConnector.FileProperties buildForImage(String name, int width, int height, long size, Date modified) {
-		return new GenericConnector.FileProperties(name, width, height, size, modified);
-	}
-
-	/**
-	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a file of the filemanager.
-	 * 
-	 * @param name
-	 *            the name of the file
-	 * @param size
-	 *            the absolute size of the file
-	 * @param modified
-	 *            the date the file was last modified
-	 * @return The initialized {@link FileInfoProperties}.
-	 */
-	protected static GenericConnector.FileProperties buildForFile(String name, long size, Date modified) {
-		return new GenericConnector.FileProperties(name, size, modified);
-	}
-
-	/**
-	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a directory of the filemanager.
-	 * 
-	 * @param name
-	 *            the name of the file
-	 * @param modified
-	 *            the date the file was last modified
-	 * @return The initialized {@link FileInfoProperties}.
-	 */
-	protected static GenericConnector.FileProperties buildForDirectory(String name, Date modified) {
-		return new GenericConnector.FileProperties(name, modified);
-	}
-
-	/**
-	 * Builds the {@link GenericConnector.DownloadInfo} which holds the data for the response of the download.
-	 * 
-	 * @param in {@link InputStream} of the file to download
-	 * @param fileSize size of the file to download
-	 * @return The initialized {@link GenericConnector.DownloadInfo}.
-	 */
-	protected static GenericConnector.DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
-		return new GenericConnector.DownloadInfo(in, fileSize);
-	}
+	public GenericConnector.DownloadInfo download(String backendPath) throws C5CException;
 }

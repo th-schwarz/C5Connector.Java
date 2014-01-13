@@ -12,7 +12,8 @@ package de.thischwa.c5c.requestcycle;
 
 import javax.servlet.ServletContext;
 
-import org.eclipse.jetty.server.Connector;
+import de.thischwa.c5c.Connector;
+
 
 /**
  * Interface for mapping the path from the url-request to the backend-path. <br/>

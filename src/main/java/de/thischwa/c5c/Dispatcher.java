@@ -24,7 +24,6 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Connector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,16 +46,16 @@ import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 
 /**
- * Dispatches the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
- * {@link Connector} interface. The parameters of the request will be prepared before dispatching them to connector. 
+ * Dispatches the request from the 'main' servlet {@link ConnectorServlet} to the implementation of the object
+ * which extends the {@link Connector}. The parameters of the request will be prepared before dispatching them to connector. 
  */
 final class Dispatcher {
 	private static Logger logger = LoggerFactory.getLogger(Dispatcher.class);
 	
-	private GenericConnector connector;
+	private Connector connector;
 	
 	/**
-	 * Instantiates and initializes the implementation of the {@link Connector}.
+	 * Instantiates and initializes the connector (object which extends the {@link GenericConnector});
 	 * 
 	 * @param servletContext the servlet context
 	 * @param connectorClassName FQN of the implementation of the connector 
@@ -68,7 +67,7 @@ final class Dispatcher {
 		else {
 			try {
 				Class<?> clazz = Class.forName(connectorClassName);
-				connector = (GenericConnector) clazz.newInstance();
+				connector = (Connector) clazz.newInstance();
 				logger.info("Connector instantiated to {}", connectorClassName);
 			} catch (Throwable e) {
 				String msg = String.format("Connector implementation [%s] couldn't be instatiated.", connectorClassName);
