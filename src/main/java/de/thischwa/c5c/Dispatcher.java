@@ -41,6 +41,7 @@ import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.PropertiesLoader;
+import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 import de.thischwa.c5c.util.FileUtils;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
@@ -190,11 +191,12 @@ final class Dispatcher {
 		Context ctx = RequestData.getContext();
 		FilemanagerAction mode = ctx.getMode();
 		HttpServletRequest req = RequestData.getContext().getServletRequest();
+		FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
 
-		Integer maxFileSize = (UserObjectProxy.getFilemanagerConfig(req).getUpload().isFileSizeLimitAuto())
+		Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto())
 				? PropertiesLoader.getMaxUploadSize()
-				: UserObjectProxy.getFilemanagerConfig(req).getUpload().getFileSizeLimit();
-		boolean overwrite = UserObjectProxy.getFilemanagerConfig(req).getUpload().isOverwrite();
+				: conf.getUpload().getFileSizeLimit();
+		boolean overwrite = conf.getUpload().isOverwrite();
 				
 		UploadFile resp = null;
 		InputStream in = null;
@@ -207,7 +209,13 @@ final class Dispatcher {
 				String backendPath = buildBackendPath(currentPath);
 				Part uploadPart = req.getPart("newfile");
 				newName = getFileName(uploadPart);
-				
+
+				// check image only
+				String ext = FilenameUtils.getExtension(newName);
+				boolean isImageExt = conf.getImages().getExtensions().contains(ext);
+				if(conf.getUpload().isImagesOnly() && !isImageExt)
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+					
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
@@ -226,6 +234,11 @@ final class Dispatcher {
 				if(uploadPart.getSize() > maxFileSize.longValue() * 1024 * 1024)
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan, maxFileSize.toString());
 				in = uploadPart.getInputStream();
+				
+				// check if the file is really an image
+				if(isImageExt && !FileUtils.isImage(UserObjectProxy.getImageDimensionProvider(), in)) 
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+				
 				connector.upload(backendPath, sanitizedName, in);
 				
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());

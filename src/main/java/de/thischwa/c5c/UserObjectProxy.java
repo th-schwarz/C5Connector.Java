@@ -30,6 +30,7 @@ import de.thischwa.c5c.util.Path;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
+import de.thischwa.jii.IDimensionProvider;
 
 /**
  * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -61,6 +62,8 @@ public class UserObjectProxy {
 	private static BackendPathBuilder userPathBuilder;
 	
 	private static FilemanagerConfigBuilder configBuilder;
+	
+	private static IDimensionProvider imageDimensionProvider;
 
 	/**
 	 * Instantiates all user-objects.
@@ -128,7 +131,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 
-		// 1. try to instantiate the IconResolver object
+		// 5. try to instantiate the IconResolver object
 		className = PropertiesLoader.getIconResolverImpl();
 		if (StringUtils.isNullOrEmptyOrBlank(className))
 			throw new RuntimeException("Empty IconResolver implementation class name! Depending property must be set!");
@@ -138,6 +141,20 @@ public class UserObjectProxy {
 			logger.info("IconResolver initialized to {}", className);
 		} catch (Throwable e) {
 			String msg = String.format("IconResolver implementation [%s] couldn't be instantiated.", className);
+			logger.error(msg);
+			throw new RuntimeException(msg, e);
+		}
+		
+		// 6. try to instantiate the DimensionProvider object 
+		className = PropertiesLoader.getDimensionProviderImpl();
+		if (StringUtils.isNullOrEmptyOrBlank(className))
+			throw new RuntimeException("Empty DimensionProvider implementation class name! Depending property must be set!");
+		try {
+			Class<?> clazz = Class.forName(className);
+			imageDimensionProvider = (IDimensionProvider) clazz.newInstance();
+			logger.info("DimensionProvider initialized to {}", className);
+		} catch (Throwable e) {
+			String msg = String.format("DimensionProvider implementation [%s] couldn't be instantiated.", className);
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
@@ -223,5 +240,14 @@ public class UserObjectProxy {
 	 */
 	static FilemanagerConfig getFilemanagerConfig() {
 		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
+	}
+
+	/**
+	 * Retrieves the implementation of the {@link IDimensionProvider}.
+	 * 
+	 * @return {@link IDimensionProvider}
+	 */
+	public static IDimensionProvider getImageDimensionProvider() {
+		return imageDimensionProvider;
 	}
 }

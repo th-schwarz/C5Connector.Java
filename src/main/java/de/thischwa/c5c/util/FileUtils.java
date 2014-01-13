@@ -10,6 +10,10 @@
  */
 package de.thischwa.c5c.util;
 
+import java.io.InputStream;
+
+import de.thischwa.jii.IDimensionProvider;
+import de.thischwa.jii.exception.ReadException;
 
 /**
  * General file-based utilities.
@@ -19,16 +23,15 @@ public class FileUtils {
 	/**
 	 * Sanitizes a filename from certain chars.<br />
 	 * 
-	 * This method enforces the <code>forceSingleExtension</code> property and
-	 * then replaces all occurrences of \, /, |, :, ?, *, &quot;, &lt;, &gt;,
-	 * control chars by _ (underscore).
+	 * This method enforces the <code>forceSingleExtension</code> property and then replaces all occurrences of \, /, |, :, ?, *, &quot;,
+	 * &lt;, &gt;, control chars by _ (underscore).
 	 * 
 	 * @param name
 	 *            a potentially 'malicious' filename
 	 * @return sanitized filename
 	 */
 	public static String sanitizeName(final String name) {
-		if (StringUtils.isNullOrEmpty(name))
+		if(StringUtils.isNullOrEmpty(name))
 			return name;
 
 		// Remove \ / | : ? * " < > 'Control Chars' with _
@@ -51,10 +54,29 @@ public class FileUtils {
 	 * 
 	 * @param filename
 	 *            filename to check
-	 * @return <code>true</code> if filename contains severals dots, else
-	 *         <code>false</code>
+	 * @return <code>true</code> if filename contains severals dots, else <code>false</code>
 	 */
 	public static boolean isSingleExtension(final String filename) {
 		return filename.matches("[^\\.]+\\.[^\\.]+");
+	}
+
+	/**
+	 * Checks if a file is an image.
+	 * 
+	 * @param dimensionProvider
+	 *            implementation of the {@link IDimensionProvider} which is used to check the image
+	 * @param in
+	 *            {@link InputStream} of the underlying file
+	 * @return <code>true</code> if the file is really an image, otherwise <code>false</code>
+	 */
+	public static boolean isImage(final IDimensionProvider dimensionProvider, final InputStream in) {
+		try {
+			dimensionProvider.set(in);
+			dimensionProvider.getDimension();
+			return true;
+		} catch (UnsupportedOperationException | ReadException e) {
+			return false;
+		}
+
 	}
 }

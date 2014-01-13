@@ -32,12 +32,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.GenericConnector;
+import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
 import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
-import de.thischwa.jii.core.SimpleImageInfoWrapper;
 import de.thischwa.jii.exception.ReadException;
 
 /**
@@ -176,7 +176,7 @@ public class LocalConnector extends GenericConnector {
 			String ext = FilenameUtils.getExtension(fileName.toString());
 			long size = Files.size(path);
 			if(imageExtensions!=null && !StringUtils.isNullOrEmptyOrBlank(ext) && imageExtensions.contains(ext)) {
-				IDimensionProvider dp = new SimpleImageInfoWrapper();
+				IDimensionProvider dp = UserObjectProxy.getImageDimensionProvider();
 				dp.set(path.toFile());
 				Dimension dim = dp.getDimension();
 				fileProperties = GenericConnector.buildForImage(fileName, dim.width, dim.height, size, lastModified);

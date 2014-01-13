@@ -24,7 +24,7 @@ import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
  * <b>Hint:</b> You are free to implement this interface the way you need it, 
  * in other words your return values can be global, regardless of the request, or on a per-request basis. 
  * For example, it would be possible to build a separate configuration for each user. But the 'icons'-section
- * should *not* be chanded!
+ * should *not* be changed!
  * 
  * @see FilemanagerConfig
  */
