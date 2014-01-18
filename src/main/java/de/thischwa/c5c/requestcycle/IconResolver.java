@@ -27,19 +27,20 @@ public interface IconResolver {
 	public static final String key_default = "unknown";
 
 	/**
-	 * Initialization.
+	 * Initialization of the context.
 	 * 
 	 * @param servletContext
-	 * @param iconPath
-	 *            the full url-path to the icons, e.g. '/filemanager/images/fileicons/
+	 */
+	public void initContext(ServletContext servletContext);
+
+	/**
+	 * Initialization of the request.
+	 * 
 	 * @param defaultIcon
 	 *            filename of the default icon
 	 * @param directoryIcon
 	 *            filename of the icons for directories
+	 * @return an {@link IconRequestResolver} initialized for the current request
 	 */
-	public void init(ServletContext servletContext, String iconPath, String defaultIcon, String directoryIcon);
-
-	public String getIconPath(String extension);
-
-	public String getIconPathForDirectory();
+	public IconRequestResolver initRequest(String iconPath, String defaultIcon, String directoryIcon);
 }

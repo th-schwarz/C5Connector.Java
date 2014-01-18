@@ -17,12 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thischwa.c5c.exception.FilemanagerException;
+import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.FilemanagerCapability;
 import de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
+import de.thischwa.c5c.requestcycle.IconRequestResolver;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.requestcycle.RequestData;
-import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 import de.thischwa.c5c.resource.filemanager.Icons;
@@ -52,8 +53,6 @@ public class UserObjectProxy {
 	private static ServletContext servletContext;
 	
 	private static IconResolver iconResolver;
-	
-	private static boolean iconResolverInitialized = false;
 	
 	private static MessageResolver messageHolder;
 	
@@ -138,6 +137,7 @@ public class UserObjectProxy {
 		try {
 			Class<?> clazz = Class.forName(className);
 			iconResolver = (IconResolver) clazz.newInstance();
+			iconResolver.initContext(servletContext);
 			logger.info("IconResolver initialized to {}", className);
 		} catch (Throwable e) {
 			String msg = String.format("IconResolver implementation [%s] couldn't be instantiated.", className);
@@ -168,22 +168,11 @@ public class UserObjectProxy {
 	 * @see IconResolver
 	 */
 	static String getIconPath(final VirtualFile vf) {
-		initIconResolver();
-		return (vf.getType() == Type.directory) ?
-				iconResolver.getIconPathForDirectory() : iconResolver.getIconPath(vf.getExtension());
-	}
-	
-	// this is needed, because the config of the filemanager is request-based
-	private static void initIconResolver() {
-		if(iconResolverInitialized)
-			return;
-		
 		Icons icons = getFilemanagerConfig().getIcons();
-
 		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
-		fullIconPath.addFolder(icons.getPath());
-		iconResolver.init(servletContext, fullIconPath.toString(), icons.getDefaultIcon(), icons.getDirectory());
-		iconResolverInitialized = true;
+		String iconPath = fullIconPath.addFolder(icons.getPath()).toString();
+		IconRequestResolver iconRequestResolver = iconResolver.initRequest(iconPath, icons.getDefaultIcon(), icons.getDirectory());
+		return (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver.getIconPath(vf.getExtension());
 	}
 	
 	/**

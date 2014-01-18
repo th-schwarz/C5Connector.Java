@@ -177,7 +177,7 @@ public class LocalConnector extends GenericConnector {
 			long size = Files.size(path);
 			if(imageExtensions!=null && !StringUtils.isNullOrEmptyOrBlank(ext) && imageExtensions.contains(ext)) {
 				IDimensionProvider dp = UserObjectProxy.getImageDimensionProvider();
-				dp.set(path.toFile());
+				dp.set(path.toFile().getAbsoluteFile());
 				Dimension dim = dp.getDimension();
 				fileProperties = GenericConnector.buildForImage(fileName, dim.width, dim.height, size, lastModified);
 			} else {

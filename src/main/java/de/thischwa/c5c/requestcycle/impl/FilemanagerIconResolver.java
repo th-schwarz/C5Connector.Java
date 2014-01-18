@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
 
+import de.thischwa.c5c.requestcycle.IconRequestResolver;
 import de.thischwa.c5c.requestcycle.IconResolver;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.util.Path;
@@ -30,9 +31,24 @@ import de.thischwa.c5c.util.StringUtils;
  */
 public class FilemanagerIconResolver implements IconResolver {
 	
-	private Map<String, String> iconsPerType = new HashMap<>();
+	private ServletContext servletContext;
 	
-	public void init(ServletContext servletContext, String iconPath, String defaultIcon, String directoryIcon) throws RuntimeException {
+	// cache of icons <path, <ext, icon>>
+	private Map<String, IconRequestResolver> iconCache = new HashMap<>();
+	
+	@Override
+	public void initContext(ServletContext servletContext) throws RuntimeException {
+		this.servletContext = servletContext;
+	}
+	
+	@Override
+	public IconRequestResolver initRequest(String iconPath, String defaultIcon, String directoryIcon) {
+		if(!iconCache.containsKey(iconPath))
+			buildCache(iconPath, defaultIcon, directoryIcon);
+		return iconCache.get(iconPath);
+	}
+	
+	private void buildCache(String iconPath, String defaultIcon, String directoryIcon) {		
 		Path fileSystemPath = new Path(iconPath);
 
 		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
@@ -48,6 +64,7 @@ public class FilemanagerIconResolver implements IconResolver {
 			urlPath = new Path(fileSystemPath.toString());
 		}
 
+		Map<String, String> iconsPerType = new HashMap<>();
 		for(File icon : iconFolder.listFiles(new IconNameFilter())) {
 			String knownExtension = FilenameUtils.getBaseName(icon.getName());
 			iconsPerType.put(knownExtension, urlPath.addFile(icon.getName()));
@@ -55,18 +72,8 @@ public class FilemanagerIconResolver implements IconResolver {
 		
 		iconsPerType.put(IconResolver.key_directory, urlPath.addFile(directoryIcon));
 		iconsPerType.put(IconResolver.key_default, urlPath.addFile(defaultIcon));
-	}
-	
-	@Override
-	public String getIconPath(final String extension) {
-		if(extension == null || !iconsPerType.containsKey(extension.toLowerCase()))
-			return iconsPerType.get(IconResolver.key_default);
-		return iconsPerType.get(extension.toLowerCase());
-	}
-	
-	@Override
-	public String getIconPathForDirectory() {
-		return iconsPerType.get(IconResolver.key_directory);
+		
+		iconCache.put(iconPath, new IconRequestResolver(iconsPerType));
 	}
 	
 	private class IconNameFilter implements FilenameFilter {
