@@ -47,6 +47,12 @@ public interface Connector {
 	 */
 	public void init() throws RuntimeException;
 	
+	/**
+	 * Setter for the file extensions for images.
+	 * It will be used for additional checks and the handling of file properties. 
+	 * 
+	 * @param imageExtensions
+	 */
 	public void setImageExtensions(Set<String> imageExtensions);
 
 	/**
