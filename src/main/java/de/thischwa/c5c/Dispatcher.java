@@ -213,7 +213,6 @@ final class Dispatcher {
 		boolean overwrite = conf.getUpload().isOverwrite();
 
 		UploadFile resp = null;
-		@SuppressWarnings("resource")
 		InputStream in = null;
 		String currentPath = null;
 		String newName = null;
