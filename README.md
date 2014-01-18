@@ -13,6 +13,7 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
 * 0.3
   * updated jackson to 2.2.2
   * updated slf4j to 1.7.5
+  * issue #15 FilemanagerIconResolver isn't thread-save 
   * issue #14 IconResolver must respect the properties of 'icons'-section 
   * issue #13 Implementation of the upload properties
   * issue #11 Simplify the connector API 
