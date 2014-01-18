@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
@@ -28,6 +29,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
 /**
  * Holds the data for a FileInfo response.
  */
+@JsonPropertyOrder(alphabetic=true)
 public final class FileInfo extends GenericResponse {
 	
 	private static final String type_unknown = "txt";

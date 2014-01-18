@@ -10,20 +10,45 @@
  */
 package de.thischwa.c5c;
 
+import org.eclipse.jetty.testing.HttpTester;
 import org.eclipse.jetty.testing.ServletTester;
 import org.junit.After;
+import org.junit.Before;
 
-public class GenericRequestTest {
+import de.thischwa.c5c.resource.PropertiesLoader;
 
-	protected ServletTester tester;
+public abstract class GenericRequestTest {
 
+	protected ServletTester servletTester = null;
+
+	@Before
+	public void setUp() throws Exception {
+		servletTester = new ServletTester();
+		servletTester.setResourceBase("src/test/resources/requesttest");
+		servletTester.getContext().getServer().getConnectors()[0].setMaxIdleTime(1000*60*10);
+		servletTester.addServlet(ConnectorServlet.class, "/filemanager/connectors/java/*");
+		initTester();
+		servletTester.start();
+	}
+	
+	protected abstract void initTester();
+	
 	@After
 	public void tearDown() throws Exception {
-		tester.stop();
+		servletTester.stop();
+		servletTester = null;
 	}
 
-	String cleanResponse(String response) {
+	protected String cleanResponse(String response) {
 		String actual = response.replaceAll("\\\"Date Modified\\\":\\\"\\d*/\\d*/\\d*\\\",", "");
 		return actual;
+	}
+
+	protected HttpTester buildInitialRequest() {
+		HttpTester tester = new HttpTester(PropertiesLoader.getDefaultEncoding());
+		tester.setMethod("GET");
+	    tester.setVersion("HTTP/1.0");
+	    tester.setHeader("Host","localhost");
+	    return tester;
 	}
 }

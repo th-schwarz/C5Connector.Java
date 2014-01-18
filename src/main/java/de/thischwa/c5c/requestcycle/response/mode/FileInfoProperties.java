@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.util.VirtualFile;
@@ -25,6 +26,7 @@ import de.thischwa.c5c.util.VirtualFile.Type;
  * Holds the properties of a file, which are relevant for building the response for the filemanager.
  * Just for internal use.
  */
+@JsonPropertyOrder(alphabetic=true)
 public class FileInfoProperties {
 	/** The base name WITHOUT the path, - just for internal use. */
 	private String name;

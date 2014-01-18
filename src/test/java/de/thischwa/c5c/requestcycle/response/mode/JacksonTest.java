@@ -28,7 +28,6 @@ public class JacksonTest {
 
 	@Test
 	public void testReadValue() throws JsonParseException, JsonMappingException, IOException {
-		//String str = "{ name: 'basics', items : [ 'Bold','Italic','Strike','-','About' ] }".replace("'", "\"");
 		String str = "{'test name': 'test', 'value': 'val'}".replace("'", "\"");
 		Map<String, Object> objs = new HashMap<>();
 		ObjectMapper mapper = new ObjectMapper();
@@ -41,7 +40,7 @@ public class JacksonTest {
 		FileInfo fileInfo = new FileInfo("/tmp", false);
 		fileInfo.setError("Test Error", 5);
 		fileInfo.setFileProperties(new FileInfoProperties("img.png", 200, 100, 30024, null));
-		String actual = "{\"Error\":\"Test Error\",\"Code\":5,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"\\/tmp\\/img.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img.png\",\"File Type\":\"png\"}";
+		String actual = "{\"Capabilities\":[],\"Code\":5,\"Error\":\"Test Error\",\"File Type\":\"png\",\"Filename\":\"img.png\",\"Path\":\"\\/tmp\\/img.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200}}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }

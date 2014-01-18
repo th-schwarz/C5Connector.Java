@@ -28,7 +28,7 @@ public class FolderInfoTest {
 		fileInfo.setFileProperties(new FileInfoProperties("folder", null));
 		resp.add(fileInfo);
 
-		String expected = "{\"/tmp/img01.png\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Width\":200,\"Size\":30024},\"Path\":\"/tmp/img01.png\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"img01.png\",\"File Type\":\"png\"},\"/tmp/folder/\":{\"Error\":\"\",\"Code\":0,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":null,\"Width\":null,\"Size\":null},\"Path\":\"/tmp/folder/\",\"Capabilities\":[],\"Preview\":null,\"Filename\":\"folder\",\"File Type\":\"dir\"}}";
+		String expected = "{\"\\/tmp\\/img01.png\":{\"Capabilities\":[],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"img01.png\",\"Path\":\"\\/tmp\\/img01.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200}},\"\\/tmp\\/folder\\/\":{\"Capabilities\":[],\"Code\":0,\"Error\":\"\",\"File Type\":\"dir\",\"Filename\":\"folder\",\"Path\":\"\\/tmp\\/folder\\/\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":null,\"Size\":null,\"Width\":null}}}";
 		assertEquals(expected, resp.toString());
 	}
 
