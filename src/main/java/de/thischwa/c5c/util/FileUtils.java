@@ -67,7 +67,7 @@ public class FileUtils {
 	 * @param dimensionProvider
 	 *            implementation of the {@link IDimensionProvider} which is used to check the image
 	 * @param in
-	 *            {@link InputStream} of the underlying file
+	 *            {@link InputStream} of the underlying file, it will be reseted!
 	 * @return <code>true</code> if the file is really an image, otherwise <code>false</code>
 	 */
 	public static boolean isImage(final IDimensionProvider dimensionProvider, final InputStream in) {
@@ -80,6 +80,5 @@ public class FileUtils {
 		} catch (UnsupportedOperationException | ReadException | IOException e) {
 			return false;
 		}
-
 	}
 }
