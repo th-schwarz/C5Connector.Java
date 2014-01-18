@@ -25,7 +25,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -36,7 +35,6 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
-import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.jii.IDimensionProvider;
 import de.thischwa.jii.exception.ReadException;
 
@@ -48,19 +46,19 @@ import de.thischwa.jii.exception.ReadException;
 public class LocalConnector extends GenericConnector {
 	
 	@Override
-	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		Path folder = buildAndCheckFolder(backendPath);
-		return constructFromDirRequest(folder, needSize, showThumbnailsInGrid, imageExtensions);
+		return constructFromDirRequest(folder, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
-	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		Path path = buildRealPath(backendPath);
 		if(!Files.exists(path)) {
 			logger.error("Requested file not exits: {}", path.toAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.Key.FileNotExists, backendPath);
 		}
-		return constructFileInfo(path, needSize, showThumbnailsInGrid, imageExtensions);
+		return constructFileInfo(path, needSize, showThumbnailsInGrid);
 	}
 	
 	@Override
@@ -163,34 +161,34 @@ public class LocalConnector extends GenericConnector {
 	 * @param path the file
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid, can null
-	 * @param imageExtensions allowed extensions for images
 	 * @return the file info
 	 * @throws C5CException the connector exception
 	 */
-	private FileProperties constructFileInfo(Path path, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	private FileProperties constructFileInfo(Path path, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		try {
-			GenericConnector.FileProperties fileProperties;
+			FileProperties fileProperties;
 			Date lastModified = new Date(Files.getLastModifiedTime(path).toMillis());
 			// 'needsize' isn't implemented in the filemanager yet, so the dimension is set if we have an image.
 			String fileName = path.getFileName().toString();
 			String ext = FilenameUtils.getExtension(fileName.toString());
 			long size = Files.size(path);
-			if(imageExtensions!=null && !StringUtils.isNullOrEmptyOrBlank(ext) && imageExtensions.contains(ext)) {
+			if(isImageExtension(ext)) {
 				IDimensionProvider dp = UserObjectProxy.getImageDimensionProvider();
 				dp.set(path.toFile().getAbsoluteFile());
 				Dimension dim = dp.getDimension();
-				fileProperties = GenericConnector.buildForImage(fileName, dim.width, dim.height, size, lastModified);
+				fileProperties = buildForImage(fileName, dim.width, dim.height, size, lastModified);
 			} else {
 				 fileProperties = (Files.isDirectory(path)) ? buildForDirectory(fileName, lastModified)
 						 : buildForFile(fileName, size, lastModified);
 			}
 			return fileProperties;
 		} catch (FileNotFoundException e) {
-			throw new C5CException(String.format("File not found: %s", path.toAbsolutePath().toString()));
+			throw new C5CException(String.format("File not found: %s", path.getFileName().toString()));
 		} catch (SecurityException | IOException e) {
-			throw new C5CException(String.format("Error while analysing %s: %s", path.toAbsolutePath().toString(), e.getMessage()));
+			throw new C5CException(String.format("Error while analysing %s: %s", path.getFileName().toString(), e.getMessage()));
 		} catch (ReadException e) {
-			throw new C5CException(String.format("Error while getting the dimension of the image %s: %s", path.toAbsolutePath().toString(), e.getMessage()));			
+			logger.warn("Error while analyzing an image!", e);
+			throw new C5CException(String.format("Error while getting the dimension of the image %s: %s", path.getFileName().toString(), e.getMessage()));			
 		}
 	}
 
@@ -199,11 +197,10 @@ public class LocalConnector extends GenericConnector {
 	 * @param dir the dir
 	 * @param needSize the need size
 	 * @param showThumbnailsInGrid the show thumbnails in grid
-	 * @param imageExtensions allowed extensions for images
 	 * @return the folder info
 	 * @throws C5CException the connector exception
 	 */
-	private List<FileProperties> constructFromDirRequest(Path dir, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions) throws C5CException {
+	private List<FileProperties> constructFromDirRequest(Path dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
 		List<FileProperties> props = new ArrayList<>();
 		
 		// add dirs
@@ -227,7 +224,7 @@ public class LocalConnector extends GenericConnector {
 				public boolean accept(Path entry) throws IOException {
 					return Files.isRegularFile(entry);
 				}})) {
-				props.add(constructFileInfo(f, needSize, showThumbnailsInGrid, imageExtensions));
+				props.add(constructFileInfo(f, needSize, showThumbnailsInGrid));
 			}
 		} catch (IOException | SecurityException e) {
 			throw new C5CException(String.format("Error while fetching files from [%s]: %s", dir.toAbsolutePath().toString(), e.getMessage()));

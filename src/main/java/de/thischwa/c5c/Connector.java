@@ -46,6 +46,8 @@ public interface Connector {
 	 *             if the initialization fails.
 	 */
 	public void init() throws RuntimeException;
+	
+	public void setImageExtensions(Set<String> imageExtensions);
 
 	/**
 	 * Executes the 'getfolder'-method of the filemanager.
@@ -57,15 +59,13 @@ public interface Connector {
 	 *            {@link GenericConnector.FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
-	 * @param imageExtensions
-	 *            allowed extensions for images
 	 * @return a list of {@link GenericConnector.FileProperties} objects prefilled with data of the files inside the requested folder. To initialize this
 	 *         object use {@link GenericConnector#buildForFile(String, long, java.util.Date)},
 	 *         {@link GenericConnector#buildForDirectory(String, java.util.Date)} or
 	 *         {@link GenericConnector#buildForImage(String, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
-	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
+	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid)
 			throws C5CException;
 
 	/**
@@ -78,12 +78,10 @@ public interface Connector {
 	 *            {@link GenericConnector.FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
-	 * @param imageExtensions
-	 *            allowed extensions for images
 	 * @return a {@link GenericConnector.FileProperties} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
-	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
+	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid)
 			throws C5CException;
 
 	/**

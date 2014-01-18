@@ -25,6 +25,7 @@ import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.impl.LocalConnector;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
+import de.thischwa.c5c.util.StringUtils;
 
 /**
  * The backend base class for the connector servlet of the filemanager of corefive. <br/>
@@ -39,6 +40,13 @@ import de.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 public abstract class GenericConnector implements Connector {
 	
 	protected static Logger logger = LoggerFactory.getLogger(LocalConnector.class);
+	
+	private Set<String> imageExtensions;
+	
+	@Override
+	public void setImageExtensions(Set<String> imageExtensions) {
+		this.imageExtensions = imageExtensions;
+	}
 
 	/**
 	 * Simple container object to hold data which is needed for the download action.
@@ -96,6 +104,7 @@ public abstract class GenericConnector implements Connector {
 	 * @throws Exception
 	 *             if the initialization fails.
 	 */
+	@Override
 	public void init() throws RuntimeException {
 		logger.info("*** {} sucessful initialized.", this.getClass().getName());
 	}
@@ -110,15 +119,14 @@ public abstract class GenericConnector implements Connector {
 	 *            {@link GenericConnector.FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
-	 * @param imageExtensions
-	 *            allowed extensions for images
 	 * @return a list of {@link GenericConnector.FileProperties} objects prefilled with data of the files inside the requested folder. To initialize this
 	 *         object use {@link GenericConnector#buildForFile(String, long, java.util.Date)},
 	 *         {@link GenericConnector#buildForDirectory(String, java.util.Date)} or
 	 *         {@link GenericConnector#buildForImage(String, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
-	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
+	@Override
+	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid)
 			throws C5CException;
 
 	/**
@@ -131,15 +139,11 @@ public abstract class GenericConnector implements Connector {
 	 *            {@link GenericConnector.FileProperties}.
 	 * @param showThumbnailsInGrid
 	 *            indicates if a 'real' preview image is needed
-	 * @param imageExtensions
-	 *            allowed extensions for images
 	 * @return a {@link GenericConnector.FileProperties} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
-	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid, Set<String> imageExtensions)
-			throws C5CException {
-		return null;
-	}
+	@Override
+	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid)	throws C5CException;
 
 	/**
 	 * Executes the 'rename'-method of the filemanager.
@@ -151,6 +155,7 @@ public abstract class GenericConnector implements Connector {
 	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
+	@Override
 	public abstract boolean rename(String oldBackendPath, String sanitizedNewName) throws C5CException;
 
 	/**
@@ -162,6 +167,7 @@ public abstract class GenericConnector implements Connector {
 	 *            the (sanitized) name of the folder hat should be created, e.g. <code>new_folder</code>
 	 * @throws C5CException
 	 */
+	@Override
 	public abstract void createFolder(String backendDirectory, String sanitizedName) throws C5CException;
 
 	/**
@@ -172,6 +178,7 @@ public abstract class GenericConnector implements Connector {
 	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
+	@Override
 	public abstract boolean delete(String backendPath) throws C5CException;
 
 	/**
@@ -185,6 +192,7 @@ public abstract class GenericConnector implements Connector {
 	 *            {@link InputStream} that contains the file data, it will be closed by the caller
 	 * @throws C5CException
 	 */
+	@Override
 	public abstract void upload(String backendDirectory, String sanitizedName, InputStream in) throws C5CException;
 
 	/**
@@ -196,6 +204,7 @@ public abstract class GenericConnector implements Connector {
 	 *         {@link GenericConnector#buildDownloadInfo(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
+	@Override
 	public abstract GenericConnector.DownloadInfo download(String backendPath) throws C5CException;
 
 	/**
@@ -213,7 +222,7 @@ public abstract class GenericConnector implements Connector {
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected static GenericConnector.FileProperties buildForImage(String name, int width, int height, long size, Date modified) {
+	protected GenericConnector.FileProperties buildForImage(String name, int width, int height, long size, Date modified) {
 		return new GenericConnector.FileProperties(name, width, height, size, modified);
 	}
 
@@ -228,7 +237,7 @@ public abstract class GenericConnector implements Connector {
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected static GenericConnector.FileProperties buildForFile(String name, long size, Date modified) {
+	protected GenericConnector.FileProperties buildForFile(String name, long size, Date modified) {
 		return new GenericConnector.FileProperties(name, size, modified);
 	}
 
@@ -241,7 +250,7 @@ public abstract class GenericConnector implements Connector {
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected static GenericConnector.FileProperties buildForDirectory(String name, Date modified) {
+	protected GenericConnector.FileProperties buildForDirectory(String name, Date modified) {
 		return new GenericConnector.FileProperties(name, modified);
 	}
 
@@ -252,7 +261,13 @@ public abstract class GenericConnector implements Connector {
 	 * @param fileSize size of the file to download
 	 * @return The initialized {@link GenericConnector.DownloadInfo}.
 	 */
-	protected static GenericConnector.DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
+	protected GenericConnector.DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
 		return new GenericConnector.DownloadInfo(in, fileSize);
+	}
+	
+	protected boolean isImageExtension(String ext) {
+		if(StringUtils.isNullOrEmpty(ext) || imageExtensions == null)
+			return false;
+		return imageExtensions.contains(ext);
 	}
 }

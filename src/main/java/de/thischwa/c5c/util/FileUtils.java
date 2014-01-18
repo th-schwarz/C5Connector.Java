@@ -10,6 +10,7 @@
  */
 package de.thischwa.c5c.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import de.thischwa.jii.IDimensionProvider;
@@ -71,10 +72,12 @@ public class FileUtils {
 	 */
 	public static boolean isImage(final IDimensionProvider dimensionProvider, final InputStream in) {
 		try {
+			in.mark(0);
 			dimensionProvider.set(in);
 			dimensionProvider.getDimension();
+			in.reset();
 			return true;
-		} catch (UnsupportedOperationException | ReadException e) {
+		} catch (UnsupportedOperationException | ReadException | IOException e) {
 			return false;
 		}
 
