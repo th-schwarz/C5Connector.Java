@@ -251,7 +251,7 @@ final class Dispatcher {
 				in = uploadPart.getInputStream();
 
 				// check if the file is really an image
-				if(isImageExt && !FileUtils.isImage(UserObjectProxy.getImageDimensionProvider(), in))
+				if(isImageExt && !UserObjectProxy.isImage(in))
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
 
 				connector.upload(backendPath, sanitizedName, in);

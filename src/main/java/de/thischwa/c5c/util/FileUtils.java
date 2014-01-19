@@ -10,11 +10,6 @@
  */
 package de.thischwa.c5c.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import de.thischwa.jii.IDimensionProvider;
-import de.thischwa.jii.exception.ReadException;
 
 /**
  * General file-based utilities.
@@ -59,26 +54,5 @@ public class FileUtils {
 	 */
 	public static boolean isSingleExtension(final String filename) {
 		return filename.matches("[^\\.]+\\.[^\\.]+");
-	}
-
-	/**
-	 * Checks if a file is an image.
-	 * 
-	 * @param dimensionProvider
-	 *            implementation of the {@link IDimensionProvider} which is used to check the image
-	 * @param in
-	 *            {@link InputStream} of the underlying file, it will be reseted!
-	 * @return <code>true</code> if the file is really an image, otherwise <code>false</code>
-	 */
-	public static boolean isImage(final IDimensionProvider dimensionProvider, final InputStream in) {
-		try {
-			in.mark(0);
-			dimensionProvider.set(in);
-			dimensionProvider.getDimension();
-			in.reset();
-			return true;
-		} catch (UnsupportedOperationException | ReadException | IOException e) {
-			return false;
-		}
 	}
 }

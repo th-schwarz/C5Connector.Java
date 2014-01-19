@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.GenericConnector;
@@ -35,8 +36,6 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
-import de.thischwa.jii.IDimensionProvider;
-import de.thischwa.jii.exception.ReadException;
 
 /**
  * The default implementation of the connector servlet.
@@ -165,6 +164,7 @@ public class LocalConnector extends GenericConnector {
 	 * @throws C5CException the connector exception
 	 */
 	private FileProperties constructFileInfo(Path path, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+		InputStream imageIn = null;
 		try {
 			FileProperties fileProperties;
 			Date lastModified = new Date(Files.getLastModifiedTime(path).toMillis());
@@ -173,9 +173,8 @@ public class LocalConnector extends GenericConnector {
 			String ext = FilenameUtils.getExtension(fileName.toString());
 			long size = Files.size(path);
 			if(isImageExtension(ext)) {
-				IDimensionProvider dp = UserObjectProxy.getImageDimensionProvider();
-				dp.set(path.toFile().getAbsoluteFile());
-				Dimension dim = dp.getDimension();
+				imageIn = new BufferedInputStream(Files.newInputStream(path));
+				Dimension dim = UserObjectProxy.getDimension(imageIn);
 				fileProperties = buildForImage(fileName, dim.width, dim.height, size, lastModified);
 			} else {
 				 fileProperties = (Files.isDirectory(path)) ? buildForDirectory(fileName, lastModified)
@@ -185,10 +184,10 @@ public class LocalConnector extends GenericConnector {
 		} catch (FileNotFoundException e) {
 			throw new C5CException(String.format("File not found: %s", path.getFileName().toString()));
 		} catch (SecurityException | IOException e) {
-			throw new C5CException(String.format("Error while analysing %s: %s", path.getFileName().toString(), e.getMessage()));
-		} catch (ReadException e) {
 			logger.warn("Error while analyzing an image!", e);
 			throw new C5CException(String.format("Error while getting the dimension of the image %s: %s", path.getFileName().toString(), e.getMessage()));			
+		} finally {
+			IOUtils.closeQuietly(imageIn);
 		}
 	}
 

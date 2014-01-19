@@ -10,6 +10,10 @@
  */
 package de.thischwa.c5c;
 
+import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +36,7 @@ import de.thischwa.c5c.util.StringUtils;
 import de.thischwa.c5c.util.VirtualFile;
 import de.thischwa.c5c.util.VirtualFile.Type;
 import de.thischwa.jii.IDimensionProvider;
+import de.thischwa.jii.exception.ReadException;
 
 /**
  * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -230,13 +235,39 @@ public class UserObjectProxy {
 	static FilemanagerConfig getFilemanagerConfig() {
 		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
 	}
-
+	
 	/**
-	 * Retrieves the implementation of the {@link IDimensionProvider}.
-	 * 
-	 * @return {@link IDimensionProvider}
+	 * Retrieves the {@link Dimension} of the image based on the committed 'imageIn'.
+	 *
+	 * @param imageIn the {@link InputStream} of an image
+	 * @return the {@link Dimension} of an image
+	 * @throws IOException if the image data couldn't be analyzed
 	 */
-	public static IDimensionProvider getImageDimensionProvider() {
-		return imageDimensionProvider;
+	public static synchronized Dimension getDimension(final InputStream imageIn) throws IOException {
+		try {
+			imageIn.mark(0);
+			imageDimensionProvider.set(imageIn);
+			Dimension dim = imageDimensionProvider.getDimension();
+			imageIn.reset();
+			return dim;
+		} catch (UnsupportedOperationException | ReadException e) {
+			throw new IOException(e);
+		}
+	}
+	
+	/**
+	 * Checks if a file is an image.
+	 * 
+	 * @param imageIn
+	 *            {@link InputStream} of the underlying file, it will be reseted!
+	 * @return <code>true</code> if the file is really an image, otherwise <code>false</code>
+	 */
+	public static boolean isImage(final InputStream imageIn) {
+		try {
+			getDimension(imageIn);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 }
