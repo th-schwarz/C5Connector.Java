@@ -15,16 +15,25 @@ import javax.servlet.ServletContext;
 import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.requestcycle.Context;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
+import de.thischwa.c5c.util.StringUtils;
 
 /**
  * An implementation of the {@link BackendPathBuilder} that returns the {@link ServletContext#getRealPath(String)}.
+ * But it will be respected, if the servlet is running in a context other than the root context.
  */
 public class ServerPathBuilder implements BackendPathBuilder {
 
 	@Override
 	public String getBackendPath(String urlPath, Context context, ServletContext servletContext) {
-		String storagePath = servletContext.getRealPath(urlPath);
-		if(urlPath.endsWith(Constants.defaultSeparator) && !storagePath.endsWith(Constants.defaultSeparator))
+		String requestedPath = urlPath;
+		
+		// check if the servlet runs in not in the root-context and adjust the url-path
+		String ctxPath = servletContext.getContextPath();
+		if(!StringUtils.isNullOrEmpty(ctxPath) && requestedPath.startsWith(ctxPath))
+			requestedPath = requestedPath.substring(ctxPath.length(), requestedPath.length());
+		
+		String storagePath = servletContext.getRealPath(requestedPath);
+		if(requestedPath.endsWith(Constants.defaultSeparator) && !storagePath.endsWith(Constants.defaultSeparator))
 			storagePath += Constants.defaultSeparator;
 		return storagePath;
 	}
