@@ -10,8 +10,10 @@
  */
 package de.thischwa.c5c.requestcycle.impl;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,8 @@ import de.thischwa.c5c.util.StringUtils;
 public class FilemanagerIconResolver implements IconResolver {
 	
 	private ServletContext servletContext;
+	protected String defaultIcon;
+	protected String directoryIcon;
 	
 	// cache of icons <path, <ext, icon>>
 	private Map<String, IconRequestResolver> iconCache = new HashMap<>();
@@ -49,38 +53,48 @@ public class FilemanagerIconResolver implements IconResolver {
 	}
 	
 	private void buildCache(String iconPath, String defaultIcon, String directoryIcon) {		
-		Path fileSystemPath = new Path(iconPath);
+		this.defaultIcon = defaultIcon;
+		this.directoryIcon = directoryIcon;
+		Path fileSystemIconPath = new Path(iconPath);
 
-		File iconFolder = new File(servletContext.getRealPath(fileSystemPath.toString()));
-		if(!iconFolder.exists())
-			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemanagerPath(), iconFolder.getAbsolutePath()));
+		java.nio.file.Path iconFolder = Paths.get(servletContext.getRealPath(fileSystemIconPath.toString()));
+		if(!Files.exists(iconFolder))
+			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemanagerPath(), iconFolder.toAbsolutePath().toString()));
 		
 		Path urlPath;
 		if(!StringUtils.isNullOrEmpty(servletContext.getContextPath())) {
 			urlPath = new Path(servletContext.getContextPath());
-			urlPath.addFolder(fileSystemPath.toString());
+			urlPath.addFolder(fileSystemIconPath.toString());
 		}
 		else {
-			urlPath = new Path(fileSystemPath.toString());
+			urlPath = new Path(fileSystemIconPath.toString());
 		}
 
+		collectIcons(iconPath, iconFolder, urlPath);
+	}
+	
+	protected void collectIcons(String iconPath, java.nio.file.Path iconFolder, Path urlPath) {
 		Map<String, String> iconsPerType = new HashMap<>();
-		for(File icon : iconFolder.listFiles(new IconNameFilter())) {
-			String knownExtension = FilenameUtils.getBaseName(icon.getName());
-			iconsPerType.put(knownExtension, urlPath.addFile(icon.getName()));
+		try {
+			for(java.nio.file.Path icon : Files.newDirectoryStream(iconFolder, new DirectoryStream.Filter<java.nio.file.Path>() {
+				@Override
+				public boolean accept(java.nio.file.Path entry) throws IOException {
+					if(Files.isDirectory(entry))  
+						return false;
+					String name = entry.getFileName().toString();
+					return !name.contains("_") && name.endsWith("png");
+				}})) {
+				String name = icon.getFileName().toString();
+				String knownExtension = FilenameUtils.getBaseName(name);
+				iconsPerType.put(knownExtension, urlPath.addFile(name));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Couldn't read the icon files!", e);
 		}
 		
 		iconsPerType.put(IconResolver.key_directory, urlPath.addFile(directoryIcon));
 		iconsPerType.put(IconResolver.key_default, urlPath.addFile(defaultIcon));
 		
 		iconCache.put(iconPath, new IconRequestResolver(iconsPerType));
-	}
-	
-	private class IconNameFilter implements FilenameFilter {
-		
-		@Override
-		public boolean accept(File dir, String name) {
-			return !name.contains("_") && name.endsWith("png");
-		}
 	}
 }

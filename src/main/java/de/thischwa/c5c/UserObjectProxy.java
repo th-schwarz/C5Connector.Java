@@ -232,7 +232,7 @@ public class UserObjectProxy {
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
-	static FilemanagerConfig getFilemanagerConfig() {
+	public static FilemanagerConfig getFilemanagerConfig() {
 		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
 	}
 	
