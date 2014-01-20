@@ -40,7 +40,8 @@ public abstract class GenericRequestTest {
 	}
 
 	protected String cleanResponse(String response) {
-		String actual = response.replaceAll("\\\"Date Modified\\\":\\\"\\d*/\\d*/\\d*\\\",", "");
+		//String actual = response.replaceAll("\\\"Date Modified\\\":\\\"\\d*/\\d*/\\d*\\\",", "");
+		String actual = response.replaceAll("\\\"Date Modified\\\":\\\".*\\\",", "");
 		return actual;
 	}
 

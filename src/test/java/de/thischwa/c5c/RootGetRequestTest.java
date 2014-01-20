@@ -34,7 +34,7 @@ public class RootGetRequestTest extends GenericRequestTest {
 		
 		assertEquals(200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/filemanager\\/images\\/fileicons\\/png.png\",\"Properties\":{\"Date Created\":null,\"Date Modified\":\"11\\/14\\/13\",\"Height\":70,\"Size\":2250,\"Width\":110}}");
+		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/filemanager\\/images\\/fileicons\\/png.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110}}");
 		assertEquals(expected, actual);
 	}
 
