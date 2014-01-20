@@ -20,7 +20,7 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
   * issue #11 Simplify the connector API 
   * issue #10 Revision of the JSON-responses
   * issue #9 A directory couldn't be deleted
-  * issue #5 Configuration of the filemanager in pure Java 
+  * issue #5 Configuration of the filemanager in an Java-style approach
 
 * 0.2
   * restructured FilemanagerIconResolver to get an easier access for embedded applications
