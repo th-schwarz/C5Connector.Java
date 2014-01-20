@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Object to hold the configuration of the filemanager (filemanager.config.js).
+ * Object to hold the configuration of the filemanager (filemanager.config.js). All sections in the configuration file 
+ * have a corresponding type, e.g. 'options', 'images'.
  * 
  * @see <a href="https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file">filemanager-wiki</a>
  */
 public class FilemanagerConfig {
 	public static final Logger logger = LoggerFactory.getLogger(FilemanagerConfig.class);
-	
 
 	@JsonProperty("_comment")
 	private String comment;

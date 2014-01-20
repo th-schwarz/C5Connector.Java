@@ -22,7 +22,7 @@ Connector
   Consult the javadoc and see how it works.
   
   [Hint:] I suggest extending your class from {{{./apidocs/de/thischwa/c5c/GenericConnector.html}<<<de.thischwa.c5c.GenericConnector>>>}}.
-          It provides some helper methods, which builds the required response objects easily. To handle exceptions you have to throw a
+          It provides some helper methods for getting basic properties or for building the required response objects easily. To handle exceptions you have to throw a
           {{{./apidocs/de/thischwa/c5c/exception/FilemanageException.html}<<<de.thischwa.c5c.exception.FilemanagerException>>>}}. It
           has some suitable constructors. For details consult please the javadoc! \
           It is very helpful to hava a look at the code of the {{{./apidocs/de/thischwa/c5c/impl/LocalConnector.html}<<<de.thischwa.c5c.impl.LocalConnector>>>}}!
