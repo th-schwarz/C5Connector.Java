@@ -25,6 +25,13 @@
 		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
 	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>thischwa.repo</id>
+			<url>ftp://ftp.strato.com/</url>
+		</repository>
+	</distributionManagement>
 
 	<properties>
 		<jse.version>1.7</jse.version>
@@ -240,5 +247,13 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<extensions>
+			<!-- Enabling the use of FTP -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 </project>
