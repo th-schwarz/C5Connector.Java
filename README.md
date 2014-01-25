@@ -8,6 +8,12 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
 * Personal and educational use of C5Connector.Java.
 * Integrating C5Connector.Java in commercial software while at the same time satisfying the terms of the Open Source license.
 
+## State
+
+The project is in a beta state. It has to be tested with several servlet-containers. At the moment just jetty 8 and 9 were successful tested by the author.
+
+Don't hesitate to inform the author if you was tested C5Container.Java with other servlet-environments successfully.
+
 ## Changes 
 
 * 0.3
