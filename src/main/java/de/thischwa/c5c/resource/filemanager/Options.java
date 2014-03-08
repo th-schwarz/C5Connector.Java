@@ -15,7 +15,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents the type <code>options</code> of the JSON configuration of the filemanager. 
+ * Represents the type <code>options</code> of the JSON configuration of the filemanager.
  */
 public class Options {
 
@@ -28,6 +28,7 @@ public class Options {
 	private String defaultViewMode;
 	private boolean autoload;
 	private boolean showFullPath;
+	private boolean showTitleAttr;
 	private boolean browseOnly;
 	private boolean showConfirmation;
 	private boolean showThumbs;
@@ -49,7 +50,7 @@ public class Options {
 
 	Options() {
 	}
-	
+
 	public String getCulture() {
 		return culture;
 	}
@@ -88,6 +89,14 @@ public class Options {
 
 	public void setShowFullPath(boolean showFullPath) {
 		this.showFullPath = showFullPath;
+	}
+
+	public boolean isShowTitleAttr() {
+		return showTitleAttr;
+	}
+
+	public void setShowTitleAttr(boolean showTitleAttr) {
+		this.showTitleAttr = showTitleAttr;
 	}
 
 	public boolean isBrowseOnly() {
@@ -192,7 +201,7 @@ public class Options {
 	public Object getRelPath() {
 		return relPath;
 	}
-	
+
 	public void setRelPath(Object relPath) {
 		this.relPath = relPath;
 	}
@@ -204,11 +213,11 @@ public class Options {
 	public void setLogger(boolean logger) {
 		this.logger = logger;
 	}
-	
+
 	public Set<String> getCapabilities() {
 		return capabilities;
 	}
-	
+
 	public void setCapabilities(Set<String> capabilities) {
 		this.capabilities = capabilities;
 	}
