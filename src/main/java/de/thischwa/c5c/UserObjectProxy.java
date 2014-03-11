@@ -13,6 +13,8 @@ package de.thischwa.c5c;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +57,8 @@ import de.thischwa.jii.exception.ReadException;
 public class UserObjectProxy {
 	private static final Logger logger = LoggerFactory.getLogger(UserObjectProxy.class);
 	
+	private static Pattern dimensionPattern = Pattern.compile("(\\d+)x(\\d+)");
+	
 	private static ServletContext servletContext;
 	
 	private static IconResolver iconResolver;
@@ -68,6 +72,8 @@ public class UserObjectProxy {
 	private static FilemanagerConfigBuilder configBuilder;
 	
 	private static IDimensionProvider imageDimensionProvider;
+	
+	private static Dimension thumbnailDimension;
 
 	/**
 	 * Instantiates all user-objects.
@@ -163,16 +169,22 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
+		
+		// 7. try to read the dimension for thumbnails
+		Matcher dimMatcher = dimensionPattern.matcher(PropertiesLoader.getThumbnailDimension());
+		if(dimMatcher.matches()) {
+			thumbnailDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
+		}
 	}
 
 	/**
-	 * Retrieves the url-path of the icon for the desired {@link VirtualFile}.
+	 * Retrieves the url-path of the default-icon for the desired {@link VirtualFile}.
 	 * @param vf the {@link VirtualFile} for which to retrieve the url-path of the icon
 	 * 
 	 * @return the url-path of the desired {@link VirtualFile}
 	 * @see IconResolver
 	 */
-	static String getIconPath(final VirtualFile vf) {
+	static String getDefaultIconPath(final VirtualFile vf) {
 		Icons icons = getFilemanagerConfig().getIcons();
 		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
 		String iconPath = fullIconPath.addFolder(icons.getPath()).toString();
@@ -269,5 +281,9 @@ public class UserObjectProxy {
 		} catch (IOException e) {
 			return false;
 		}
+	}
+	
+	public static Dimension getThumbnailDimension() {
+		return thumbnailDimension;
 	}
 }

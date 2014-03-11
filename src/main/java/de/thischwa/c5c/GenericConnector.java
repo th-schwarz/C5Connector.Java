@@ -117,8 +117,6 @@ public abstract class GenericConnector implements Connector {
 	 * @param needSize
 	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be set in the
 	 *            {@link GenericConnector.FileProperties}.
-	 * @param showThumbnailsInGrid
-	 *            indicates if a 'real' preview image is needed
 	 * @return a list of {@link GenericConnector.FileProperties} objects prefilled with data of the files inside the requested folder. To initialize this
 	 *         object use {@link GenericConnector#buildForFile(String, long, java.util.Date)},
 	 *         {@link GenericConnector#buildForDirectory(String, java.util.Date)} or
@@ -126,7 +124,7 @@ public abstract class GenericConnector implements Connector {
 	 * @throws C5CException
 	 */
 	@Override
-	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid)
+	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize)
 			throws C5CException;
 
 	/**
@@ -137,13 +135,11 @@ public abstract class GenericConnector implements Connector {
 	 * @param needSize
 	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be set in the
 	 *            {@link GenericConnector.FileProperties}.
-	 * @param showThumbnailsInGrid
-	 *            indicates if a 'real' preview image is needed
 	 * @return a {@link GenericConnector.FileProperties} object prefilled with data of the requested file
 	 * @throws C5CException
 	 */
 	@Override
-	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid)	throws C5CException;
+	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize)	throws C5CException;
 
 	/**
 	 * Executes the 'rename'-method of the filemanager.

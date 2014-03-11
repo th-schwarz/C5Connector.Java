@@ -90,12 +90,6 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
-		<!-- just for testing image rendering implementations -->
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-			<version>0.4.2</version>
-		</dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
 			<artifactId>imgscalr-lib</artifactId>

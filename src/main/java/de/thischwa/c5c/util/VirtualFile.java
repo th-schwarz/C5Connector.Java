@@ -55,7 +55,7 @@ public class VirtualFile {
 			if (extPos == -1)
 				extension = null;
 			else
-				extension = fullPath.substring(extPos + 1);
+				extension = fullPath.substring(extPos + 1).toLowerCase();
 		}
 		
 		int pathPos = cleanPath.lastIndexOf(Constants.defaultSeparator);

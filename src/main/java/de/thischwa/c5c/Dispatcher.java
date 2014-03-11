@@ -10,8 +10,10 @@
  */
 package de.thischwa.c5c;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -72,7 +74,7 @@ final class Dispatcher {
 			try {
 				Class<?> clazz = Class.forName(connectorClassName);
 				connector = (Connector) clazz.newInstance();
-				logger.info("Connector instantiated to {}", connectorClassName);
+				logger.info("Connector successful instantiated to {}", connectorClassName);
 			} catch (Throwable e) {
 				String msg = String.format("Connector implementation [%s] couldn't be instatiated.", connectorClassName);
 				logger.error(msg);
@@ -98,70 +100,66 @@ final class Dispatcher {
 		try {
 			GenericResponse resp = null;
 			switch(mode) {
-			case FOLDER: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
-				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs"));
-				logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}, showThumbnails: {}", urlPath, backendPath,
-						needSize, showThumbnailsInGrid);
-				List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize, showThumbnailsInGrid);
-				resp = buildFolder(urlPath, props);
-				break;
-			}
-			case INFO: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
-				boolean showThumbnailsInGrid = Boolean.parseBoolean(req.getParameter("showThumbs"));
-				logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}, showThumbnails: {}", urlPath, backendPath, needSize,
-						showThumbnailsInGrid);
-				GenericConnector.FileProperties fp = connector.getInfo(backendPath, needSize, showThumbnailsInGrid);
-				resp = buildInfo(urlPath, fp);
-				break;
-			}
-			case RENAME: {
-				String oldUrlPath = req.getParameter("old");
-				String oldBackendPath = buildBackendPath(oldUrlPath);
-				String newName = req.getParameter("new");
-				String sanitizedName = FileUtils.sanitizeName(newName);
-				logger.debug("* rename -> oldUrlPath: {}, backendPath: {}, new name: {}, santized new name: {}", oldUrlPath,
-						oldBackendPath, newName, sanitizedName);
-				boolean isDirectory = connector.rename(oldBackendPath, sanitizedName);
-				resp = buildRename(oldUrlPath, sanitizedName, isDirectory);
-				break;
-			}
-			case CREATEFOLDER: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				String folderName = req.getParameter("name");
-				String sanitizedFolderName = FileUtils.sanitizeName(folderName);
-				logger.debug("* createFolder -> urlPath: {}, backendPath: {}, name: {}, sanitized name: {}", urlPath, backendPath,
-						folderName, sanitizedFolderName);
-				connector.createFolder(backendPath, sanitizedFolderName);
-				resp = buildCreateFolder(urlPath, sanitizedFolderName);
-				break;
-			}
-			case DELETE: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				logger.debug("* delete -> urlPath: {}, backendPath: {}", urlPath, backendPath);
-				boolean isDirectory = connector.delete(backendPath);
-				resp = buildDelete(urlPath, isDirectory);
-				break;
-			}
-			case DOWNLOAD: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
-				GenericConnector.DownloadInfo di = connector.download(backendPath);
-				resp = buildDownload(backendPath, di);
-				break;
-			}
-			default: {
-				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
-				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));
-			}
+				case FOLDER: {
+					String urlPath = req.getParameter("path");
+					String backendPath = buildBackendPath(urlPath);
+					boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
+					logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}", urlPath, backendPath, needSize);
+					List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize);
+					resp = buildFolder(urlPath, props);
+					break;
+				}
+				case INFO: {
+					String urlPath = req.getParameter("path");
+					String backendPath = buildBackendPath(urlPath);
+					boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
+					logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}", urlPath, backendPath, needSize);
+					GenericConnector.FileProperties fp = connector.getInfo(backendPath, needSize);
+					resp = buildInfo(urlPath, fp);
+					break;
+				}
+				case RENAME: {
+					String oldUrlPath = req.getParameter("old");
+					String oldBackendPath = buildBackendPath(oldUrlPath);
+					String newName = req.getParameter("new");
+					String sanitizedName = FileUtils.sanitizeName(newName);
+					logger.debug("* rename -> oldUrlPath: {}, backendPath: {}, new name: {}, santized new name: {}", oldUrlPath,
+							oldBackendPath, newName, sanitizedName);
+					boolean isDirectory = connector.rename(oldBackendPath, sanitizedName);
+					resp = buildRename(oldUrlPath, sanitizedName, isDirectory);
+					break;
+				}
+				case CREATEFOLDER: {
+					String urlPath = req.getParameter("path");
+					String backendPath = buildBackendPath(urlPath);
+					String folderName = req.getParameter("name");
+					String sanitizedFolderName = FileUtils.sanitizeName(folderName);
+					logger.debug("* createFolder -> urlPath: {}, backendPath: {}, name: {}, sanitized name: {}", urlPath, backendPath,
+							folderName, sanitizedFolderName);
+					connector.createFolder(backendPath, sanitizedFolderName);
+					resp = buildCreateFolder(urlPath, sanitizedFolderName);
+					break;
+				}
+				case DELETE: {
+					String urlPath = req.getParameter("path");
+					String backendPath = buildBackendPath(urlPath);
+					logger.debug("* delete -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+					boolean isDirectory = connector.delete(backendPath);
+					resp = buildDelete(urlPath, isDirectory);
+					break;
+				}
+				case DOWNLOAD: {
+					String urlPath = req.getParameter("path");
+					String backendPath = buildBackendPath(urlPath);
+					logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
+					GenericConnector.DownloadInfo di = connector.download(backendPath);
+					resp = buildDownload(backendPath, di);
+					break;
+				}
+				default: {
+					logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
+					throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));
+				}
 			}
 			return resp;
 		} catch (C5CException e) {
@@ -182,18 +180,36 @@ final class Dispatcher {
 			FileInfo fileInfo = buildFileInfo(urlPath, fileProperties);
 			setCapabilities(fileInfo, urlPath);
 			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
-			setPreviewPath(fileInfo, UserObjectProxy.getIconPath(vf));
+			setPreviewPath(fileInfo, vf);
 			infos.add(fileInfo);
 			add(folderInfo, fileInfo);
 		}
 		return folderInfo;
 	}
 
+	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
+		FileInfo fi = new FileInfo(urlPath, fp.isDir());
+		fi.setFileProperties(fp);
+		return fi;
+	}
+
 	private FileInfo buildInfo(String urlPath, GenericConnector.FileProperties props) {
 		FileInfo fileInfo = buildFileInfo(urlPath, props);
 		setCapabilities(fileInfo, urlPath);
-		setPreviewPath(fileInfo, UserObjectProxy.getIconPath(fileInfo.getVirtualFile()));
+		setPreviewPath(fileInfo, fileInfo.getVirtualFile());
 		return fileInfo;
+	}
+
+	private void setPreviewPath(FileInfo fileInfo, VirtualFile vf) {
+		boolean isImage = UserObjectProxy.getFilemanagerConfig().getImages().getExtensions().contains(vf.getExtension());
+		boolean showThumbs = UserObjectProxy.getFilemanagerConfig().getOptions().isShowThumbs();
+		String defaultIconPath;
+		if(isImage && showThumbs) {
+			defaultIconPath = String.format("%s%s%s", Constants.defaultSeparator, Constants.INDICATOR_PREVIEW, vf.getFullPath());			
+		} else {
+			defaultIconPath = UserObjectProxy.getDefaultIconPath(vf);
+		}
+		fileInfo.setPreviewPath(defaultIconPath);
 	}
 
 	/**
@@ -285,7 +301,7 @@ final class Dispatcher {
 	}
 
 	private String getUniqueName(String backendPath, String name) throws C5CException {
-		List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false, false);
+		List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false);
 		Set<String> existingNames = new HashSet<>();
 		for(GenericConnector.FileProperties fp : props) {
 			existingNames.add(fp.getName());
@@ -330,17 +346,13 @@ final class Dispatcher {
 		return new Download(fullPath, di.getFileSize(), di.getInputStream());
 	}
 
-	private void setPreviewPath(FileInfo fi, String previewPath) {
-		fi.setPreviewPath(previewPath);
-	}
-
 	private void setCapabilities(FileInfo fi, String urlPath) {
 		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
 	}
 
-	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
-		FileInfo fi = new FileInfo(urlPath, fp.isDir());
-		fi.setFileProperties(fp);
-		return fi;
+	public void getPreview(String pathInfo, OutputStream out) throws C5CException {
+		String backendPath = buildBackendPath(pathInfo);
+		Dimension dim = UserObjectProxy.getThumbnailDimension();
+		connector.buildThumbnail(backendPath, out, dim.width, dim.height);
 	}
 }

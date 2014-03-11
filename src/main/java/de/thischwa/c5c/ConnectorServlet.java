@@ -11,6 +11,9 @@
 package de.thischwa.c5c;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -24,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.requestcycle.RequestData;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.resource.PropertiesLoader;
@@ -61,6 +65,8 @@ import de.thischwa.c5c.util.StringUtils;
 public class ConnectorServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+
+	private static FileNameMap contentTypes = URLConnection.getFileNameMap();
 
 	private static Logger logger = LoggerFactory.getLogger(ConnectorServlet.class);
 
@@ -115,21 +121,36 @@ public class ConnectorServlet extends HttpServlet {
 		if(!StringUtils.isNullOrEmpty(PropertiesLoader.getConnectorDefaultEncoding()))
 			resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
 
-		if(isGetRequest && req.getServletPath().contains("filemanager.config.js")) {
-			// this breaks the request-cycle of this library
-			// but otherwise an extra servlet is needed to serve the config of the filemanager 
-			logger.debug("Filemanager config request.");
-			
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
-			} catch (Exception e) {
-				logger.error("Handling of 'filemanager.config.js' failed.", e);
-				throw new RuntimeException(e);
-			} finally {
-				IOUtils.closeQuietly(resp.getOutputStream());
+		if(isGetRequest) {
+			String sPath = req.getServletPath();
+			if(sPath.endsWith("filemanager.config.js")) {	
+				// this breaks the request-cycle of this library
+				// but otherwise an extra servlet is needed to serve the config of the filemanager 
+				logger.debug("Filemanager config request.");
+				
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
+				} catch (Exception e) {
+					logger.error("Handling of 'filemanager.config.js' failed.", e);
+					throw new RuntimeException(e);
+				} finally {
+					IOUtils.closeQuietly(resp.getOutputStream());
+				}
+				return;
+			} else if(sPath.endsWith(Constants.INDICATOR_PREVIEW)) {
+				String resource = req.getPathInfo();
+				OutputStream out = resp.getOutputStream();
+				String contentType = contentTypes.getContentTypeFor(resource);
+				resp.setContentType(contentType);
+				try {
+					dispatcher.getPreview(resource, out);
+				} catch (C5CException e) {
+					throw new IOException(e);
+				}
+				IOUtils.closeQuietly(out);
+				return;
 			}
-			return;
 		}
 		
 		GenericResponse response;

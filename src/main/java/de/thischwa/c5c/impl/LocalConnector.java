@@ -11,10 +11,13 @@
 package de.thischwa.c5c.impl;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImagingOpException;
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.Files;
@@ -26,9 +29,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.imgscalr.Scalr;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.GenericConnector;
@@ -45,19 +51,19 @@ import de.thischwa.c5c.exception.FilemanagerException.Key;
 public class LocalConnector extends GenericConnector {
 	
 	@Override
-	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException {
 		Path folder = buildAndCheckFolder(backendPath);
-		return constructFromDirRequest(folder, needSize, showThumbnailsInGrid);
+		return constructFromDirRequest(folder, needSize);
 	}
 	
 	@Override
-	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	public GenericConnector.FileProperties getInfo(String backendPath, boolean needSize) throws C5CException {
 		Path path = buildRealPath(backendPath);
 		if(!Files.exists(path)) {
 			logger.error("Requested file not exits: {}", path.toAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.INFO, FilemanagerException.Key.FileNotExists, backendPath);
 		}
-		return constructFileInfo(path, needSize, showThumbnailsInGrid);
+		return constructFileInfo(path, needSize);
 	}
 	
 	@Override
@@ -159,11 +165,10 @@ public class LocalConnector extends GenericConnector {
 	 * 
 	 * @param path the file
 	 * @param needSize the need size
-	 * @param showThumbnailsInGrid the show thumbnails in grid, can null
 	 * @return the file info
 	 * @throws C5CException the connector exception
 	 */
-	private FileProperties constructFileInfo(Path path, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	private FileProperties constructFileInfo(Path path, boolean needSize) throws C5CException {
 		InputStream imageIn = null;
 		try {
 			FileProperties fileProperties;
@@ -195,11 +200,10 @@ public class LocalConnector extends GenericConnector {
 	 * Construct from dir request.
 	 * @param dir the dir
 	 * @param needSize the need size
-	 * @param showThumbnailsInGrid the show thumbnails in grid
 	 * @return the folder info
 	 * @throws C5CException the connector exception
 	 */
-	private List<FileProperties> constructFromDirRequest(Path dir, boolean needSize, boolean showThumbnailsInGrid) throws C5CException {
+	private List<FileProperties> constructFromDirRequest(Path dir, boolean needSize) throws C5CException {
 		List<FileProperties> props = new ArrayList<>();
 		
 		// add dirs
@@ -223,7 +227,7 @@ public class LocalConnector extends GenericConnector {
 				public boolean accept(Path entry) throws IOException {
 					return Files.isRegularFile(entry);
 				}})) {
-				props.add(constructFileInfo(f, needSize, showThumbnailsInGrid));
+				props.add(constructFileInfo(f, needSize));
 			}
 		} catch (IOException | SecurityException e) {
 			throw new C5CException(String.format("Error while fetching files from [%s]: %s", dir.toAbsolutePath().toString(), e.getMessage()));
@@ -259,4 +263,26 @@ public class LocalConnector extends GenericConnector {
 			throw new C5CException(FilemanagerAction.DOWNLOAD, msg);
 		}
 	}	
+	
+	@Override
+	public void buildThumbnail(String urlPath, OutputStream out, int thumbnailWidth, int thumbnailHeight) throws C5CException {
+		Path file = buildRealPath(urlPath);
+		String ext = FilenameUtils.getExtension(urlPath);
+
+		BufferedImage img = null;
+		BufferedImage newImg = null;
+		try {
+			InputStream in = new BufferedInputStream(Files.newInputStream(file, StandardOpenOption.READ));
+			img = ImageIO.read(in);
+			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, thumbnailWidth, thumbnailHeight);
+			ImageIO.write(newImg, ext, out);
+		} catch (IllegalArgumentException | ImagingOpException | IOException e) {
+			throw new C5CException(e.getMessage());
+		} finally {
+			if(img != null)
+				img.flush();
+			if(newImg != null)
+				newImg.flush();
+		}
+	}
 }

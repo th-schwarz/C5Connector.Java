@@ -249,4 +249,13 @@ public class PropertiesLoader {
 	public static String getFilemanagerConfigImpl() {
 		return properties.getProperty("connector.filemanagerConfigImpl");
 	} 
+	
+	/**
+	 * Gets the dimension for thumbnails.
+	 *
+	 * @return <code>connector.thumbnail.dimension</code> property
+	 */
+	public static String getThumbnailDimension() {
+		return properties.getProperty("connector.thumbnail.dimension");
+	} 
 }

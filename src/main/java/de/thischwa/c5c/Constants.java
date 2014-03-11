@@ -21,4 +21,6 @@ public interface Constants {
 	
 	/** The default separator string. */
 	public final String defaultSeparator = String.valueOf(defaultSeparatorChar);
+	
+	public final String INDICATOR_PREVIEW = "preview";
 }
