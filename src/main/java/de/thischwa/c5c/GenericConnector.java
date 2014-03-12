@@ -124,8 +124,7 @@ public abstract class GenericConnector implements Connector {
 	 * @throws C5CException
 	 */
 	@Override
-	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize)
-			throws C5CException;
+	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
 
 	/**
 	 * Executes the 'getinfo'-method of the filemanager.
@@ -139,7 +138,7 @@ public abstract class GenericConnector implements Connector {
 	 * @throws C5CException
 	 */
 	@Override
-	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize)	throws C5CException;
+	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize) throws C5CException;
 
 	/**
 	 * Executes the 'rename'-method of the filemanager.
