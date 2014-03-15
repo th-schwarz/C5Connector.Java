@@ -202,6 +202,7 @@ final class Dispatcher {
 		setCapabilities(fi, urlPath);
 		VirtualFile vf = new VirtualFile(fp.getName(), fp.isDir());
 		if(fConfig.getOptions().isShowThumbs() && vf.getType()==VirtualFile.Type.file && fConfig.getImages().getExtensions().contains(vf.getExtension())) {
+			// attention: urlPath can be with or without a file name!
 			String previewUrlPath = (urlPath.endsWith(vf.getName())) ? urlPath : urlPath.concat(fp.getName());
 			String query =  String.format("?mode=%s&path=%s", FilemanagerAction.THUMBNAIL.getParameterName(), encode(previewUrlPath));
 			String preview = String.format("%s%s", previewUrlPath, query); 
