@@ -204,7 +204,7 @@ final class Dispatcher {
 		if(fConfig.getOptions().isShowThumbs() && vf.getType()==VirtualFile.Type.file && fConfig.getImages().getExtensions().contains(vf.getExtension())) {
 			String previewUrlPath = (urlPath.endsWith(vf.getName())) ? urlPath : urlPath.concat(fp.getName());
 			String query =  String.format("?mode=%s&path=%s", FilemanagerAction.THUMBNAIL.getParameterName(), encode(previewUrlPath));
-			String preview = String.format("%s%s", RequestData.getContext().getServletRequest().getServletPath(), query); 
+			String preview = String.format("%s%s", previewUrlPath, query); 
 			fi.setPreviewPath(preview);
 		} else {
 			fi.setPreviewPath(UserObjectProxy.getDefaultIconPath(vf));

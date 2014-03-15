@@ -1,5 +1,8 @@
 # changelog
 
+* 0.4-SNAPSHOT
+  * issue #17: Implementation of thumbnailing 
+
 * 0.3
   * updated jackson to 2.2.2
   * updated slf4j to 1.7.5
