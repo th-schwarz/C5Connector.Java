@@ -20,10 +20,10 @@
 package de.thischwa.c5c;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
+import de.thischwa.c5c.GenericConnector.StreamContent;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.requestcycle.BackendPathBuilder;
@@ -136,11 +136,11 @@ public interface Connector {
 	 * 
 	 * @param backendPath
 	 *            the requested file to download, e.g. <code>/UserFiles/folder/text.pdf</code>
-	 * @return {@link GenericConnector.DownloadInfo} which holds the required data for the download action. Use
-	 *         {@link GenericConnector#buildDownloadInfo(InputStream, long)} to build it.
+	 * @return {@link GenericConnector.StreamContent} which holds the required data for the download action. Use
+	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public GenericConnector.DownloadInfo download(String backendPath) throws C5CException;
+	public GenericConnector.StreamContent download(String backendPath) throws C5CException;
 
 	/**
 	 * Generates a thumbnail of the requested image ('backendPath') and writes it to 'out'. The caller ensures that 'backendPath' is an
@@ -148,13 +148,13 @@ public interface Connector {
 	 * 
 	 * @param backendPath
 	 *            the requested file to build an {@link InputStream} for the preview, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @param out
-	 *            {@link OutputStream} to write the thumbnail data in
 	 * @param thumbnailWidth
 	 *            width of the thumbnail
 	 * @param thumbnailHeight
 	 *            height of the thumbnail
+	 * @return {@link GenericConnector.StreamContent} which holds the required data of the thumbnail. Use
+	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public void buildThumbnail(String backendPath, OutputStream out, int thumbnailWidth, int thumbnailHeight) throws C5CException;
+	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException;
 }

@@ -29,7 +29,9 @@ public enum FilemanagerAction {
 	
 	UPLOAD(FilemanagerAction.CONTENTTYPE_HTML, "add"),
 
-	DOWNLOAD(FilemanagerAction.CONTENTTYPE_DOWNLOAD, "download");
+	DOWNLOAD(null, "download"),
+	
+	THUMBNAIL(null, "thumbnail");
 	
 	/** The allowed get request modes. */
 	private static FilemanagerAction[] allowedGetRequestModes = new FilemanagerAction[] {INFO,FOLDER,RENAME,DELETE,CREATEFOLDER}; 
@@ -37,8 +39,6 @@ public enum FilemanagerAction {
 	private String contentType;
 	
 	private String parameterName;
-
-	private static final String CONTENTTYPE_DOWNLOAD = "application/x-download";
 
 	private static final String CONTENTTYPE_HTML = "text/html";
 

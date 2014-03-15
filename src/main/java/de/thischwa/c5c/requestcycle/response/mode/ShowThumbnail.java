@@ -12,22 +12,22 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.thischwa.c5c.FilemanagerAction;
 import de.thischwa.c5c.requestcycle.response.GenericResponse;
 
 /**
- * Holds the data for a Download GenericResponse.
+ * Extra mode for show thumbnails. It's NOT defined in the regular request-cycle of the filemanager.
  */
-public final class Download extends GenericResponse {
+public final class ShowThumbnail extends GenericResponse {
 
 	private String fullPath;
 	
@@ -35,26 +35,21 @@ public final class Download extends GenericResponse {
 	
 	private InputStream in;
 
-	public Download(String fullPath, long contentLength, InputStream in) {
-		super(FilemanagerAction.DOWNLOAD);
+	private static FileNameMap contentTypes = URLConnection.getFileNameMap();
+
+	public ShowThumbnail(String fullPath, long contentLength, InputStream in) {
+		super(FilemanagerAction.THUMBNAIL);
 		this.fullPath = fullPath;
 		this.contentLength = contentLength;
 		this.in = in;
 	}
 	
-	@JsonProperty("Path")
-	public String getFullPath() {
-		return fullPath;
-	}
-	
 	@Override
 	@JsonIgnore
 	public void write(HttpServletResponse resp) throws IOException {
-		resp.setHeader("Content-Type", "application/x-download");
-		resp.setHeader("Content-Transfer-Encoding", "Binary");
+		String contentType = contentTypes.getContentTypeFor(fullPath);
+		resp.setHeader("Content-Type", contentType);
 		resp.setHeader("Content-Length", String.valueOf(contentLength));
-		resp.setHeader("Content-Disposition", 
-				String.format("attachment; filename=\"%s\"", FilenameUtils.getName(fullPath)));
 		IOUtils.copy(in, resp.getOutputStream());
 	}
 }

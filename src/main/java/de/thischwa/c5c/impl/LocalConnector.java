@@ -14,10 +14,11 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImagingOpException;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.Files;
@@ -249,11 +250,11 @@ public class LocalConnector extends GenericConnector {
 	}
 
 	@Override
-	public DownloadInfo download(String urlPath) throws C5CException {
+	public StreamContent download(String urlPath) throws C5CException {
 		Path file = buildRealPath(urlPath);
 		try {
 			InputStream in = new BufferedInputStream(Files.newInputStream(file, StandardOpenOption.READ));
-			return buildDownloadInfo(in, Files.size(file));
+			return buildStreamContent(in, Files.size(file));
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.toAbsolutePath());
 			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);
@@ -265,17 +266,20 @@ public class LocalConnector extends GenericConnector {
 	}	
 	
 	@Override
-	public void buildThumbnail(String urlPath, OutputStream out, int thumbnailWidth, int thumbnailHeight) throws C5CException {
+	public StreamContent buildThumbnail(String urlPath, int thumbnailWidth, int thumbnailHeight) throws C5CException {
 		Path file = buildRealPath(urlPath);
 		String ext = FilenameUtils.getExtension(urlPath);
 
 		BufferedImage img = null;
 		BufferedImage newImg = null;
 		try {
-			InputStream in = new BufferedInputStream(Files.newInputStream(file, StandardOpenOption.READ));
+			InputStream in = Files.newInputStream(file, StandardOpenOption.READ);
 			img = ImageIO.read(in);
 			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, thumbnailWidth, thumbnailHeight);
-			ImageIO.write(newImg, ext, out);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(newImg, ext, baos);
+			baos.flush();
+			return buildStreamContent(new ByteArrayInputStream(baos.toByteArray()), baos.size());
 		} catch (IllegalArgumentException | ImagingOpException | IOException e) {
 			throw new C5CException(e.getMessage());
 		} finally {

@@ -49,24 +49,24 @@ public abstract class GenericConnector implements Connector {
 	}
 
 	/**
-	 * Simple container object to hold data which is needed for the download action.
+	 * Simple container object to hold data which is needed to stream content via {@link InputStream} e.g. it's needed for the download action.
 	 */
-	public static class DownloadInfo {
+	public static class StreamContent {
 	
 		private InputStream in;
-		private long fileSize;
+		private long size;
 	
-		DownloadInfo(InputStream in, long fileSize) {
+		StreamContent(InputStream in, long size) {
 			this.in = in;
-			this.fileSize = fileSize;
+			this.size = size;
 		}
 	
 		public InputStream getInputStream() {
 			return in;
 		}
 	
-		public long getFileSize() {
-			return fileSize;
+		public long getSize() {
+			return size;
 		}
 	}
 
@@ -195,12 +195,12 @@ public abstract class GenericConnector implements Connector {
 	 * 
 	 * @param backendPath
 	 *            the requested file to download, e.g. <code>/UserFiles/folder/text.pdf</code>
-	 * @return {@link GenericConnector.DownloadInfo} which holds the required data for the download action. Use
-	 *         {@link GenericConnector#buildDownloadInfo(InputStream, long)} to build it.
+	 * @return {@link GenericConnector.StreamContent} which holds the required data for the download action. Use
+	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
 	@Override
-	public abstract GenericConnector.DownloadInfo download(String backendPath) throws C5CException;
+	public abstract GenericConnector.StreamContent download(String backendPath) throws C5CException;
 
 	/**
 	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a image of the filemanager.
@@ -250,14 +250,14 @@ public abstract class GenericConnector implements Connector {
 	}
 
 	/**
-	 * Builds the {@link GenericConnector.DownloadInfo} which holds the data for the response of the download.
+	 * Builds the {@link GenericConnector.StreamContent} which holds the data for the response of the download.
 	 * 
 	 * @param in {@link InputStream} of the file to download
-	 * @param fileSize size of the file to download
-	 * @return The initialized {@link GenericConnector.DownloadInfo}.
+	 * @param size size of the file to download
+	 * @return The initialized {@link GenericConnector.StreamContent}.
 	 */
-	protected GenericConnector.DownloadInfo buildDownloadInfo(InputStream in, long fileSize) {
-		return new GenericConnector.DownloadInfo(in, fileSize);
+	protected GenericConnector.StreamContent buildStreamContent(InputStream in, long fileSize) {
+		return new GenericConnector.StreamContent(in, fileSize);
 	}
 	
 	protected boolean isImageExtension(String ext) {

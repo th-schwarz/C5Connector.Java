@@ -10,8 +10,11 @@
  */
 package de.thischwa.c5c;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +42,7 @@ import de.thischwa.c5c.requestcycle.response.mode.Download;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.requestcycle.response.mode.ShowThumbnail;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.PropertiesLoader;
 import de.thischwa.c5c.resource.filemanager.FilemanagerConfig;
@@ -113,7 +117,7 @@ final class Dispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}", urlPath, backendPath, needSize);
 				GenericConnector.FileProperties fp = connector.getInfo(backendPath, needSize);
-				resp = buildInfo(urlPath, fp);
+				resp = buildFileInfo(urlPath, fp);
 				break;
 			}
 			case RENAME: {
@@ -149,9 +153,18 @@ final class Dispatcher {
 			case DOWNLOAD: {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
-				logger.debug("* download -> urlPath: {}, backendPath", urlPath, backendPath);
-				GenericConnector.DownloadInfo di = connector.download(backendPath);
-				resp = buildDownload(backendPath, di);
+				logger.debug("* download -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				GenericConnector.StreamContent sc = connector.download(backendPath);
+				resp = buildDownload(backendPath, sc);
+				break;
+			}
+			case THUMBNAIL: {
+				String urlPath = req.getParameter("path");
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				Dimension dim = UserObjectProxy.getThumbnailDimension();
+				GenericConnector.StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
+				resp = buildThumbnailView(backendPath, sc);
 				break;
 			}
 			default: {
@@ -176,20 +189,27 @@ final class Dispatcher {
 		List<FileInfo> infos = new ArrayList<>(props.size());
 		for(GenericConnector.FileProperties fileProperties : props) {
 			FileInfo fileInfo = buildFileInfo(urlPath, fileProperties);
-			setCapabilities(fileInfo, urlPath);
-			VirtualFile vf = new VirtualFile(fileInfo.getPath(), fileInfo.isDir());
-			setPreviewPath(fileInfo, UserObjectProxy.getDefaultIconPath(vf));
 			infos.add(fileInfo);
 			add(folderInfo, fileInfo);
 		}
 		return folderInfo;
 	}
 
-	private FileInfo buildInfo(String urlPath, GenericConnector.FileProperties props) {
-		FileInfo fileInfo = buildFileInfo(urlPath, props);
-		setCapabilities(fileInfo, urlPath);
-		setPreviewPath(fileInfo, UserObjectProxy.getDefaultIconPath(fileInfo.getVirtualFile()));
-		return fileInfo;
+	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
+		FilemanagerConfig fConfig = UserObjectProxy.getFilemanagerConfig();
+		FileInfo fi = new FileInfo(urlPath, fp.isDir());
+		fi.setFileProperties(fp);
+		setCapabilities(fi, urlPath);
+		VirtualFile vf = new VirtualFile(fp.getName(), fp.isDir());
+		if(fConfig.getOptions().isShowThumbs() && vf.getType()==VirtualFile.Type.file && fConfig.getImages().getExtensions().contains(vf.getExtension())) {
+			String previewUrlPath = (urlPath.endsWith(vf.getName())) ? urlPath : urlPath.concat(fp.getName());
+			String query =  String.format("?mode=%s&path=%s", FilemanagerAction.THUMBNAIL.getParameterName(), encode(previewUrlPath));
+			String preview = String.format("%s%s", RequestData.getContext().getServletRequest().getServletPath(), query); 
+			fi.setPreviewPath(preview);
+		} else {
+			fi.setPreviewPath(UserObjectProxy.getDefaultIconPath(vf));
+		}
+		return fi;
 	}
 
 	/**
@@ -322,21 +342,23 @@ final class Dispatcher {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
 
-	private Download buildDownload(String fullPath, GenericConnector.DownloadInfo di) {
-		return new Download(fullPath, di.getFileSize(), di.getInputStream());
+	private Download buildDownload(String fullPath, GenericConnector.StreamContent di) {
+		return new Download(fullPath, di.getSize(), di.getInputStream());
 	}
 
-	private void setPreviewPath(FileInfo fi, String previewPath) {
-		fi.setPreviewPath(previewPath);
+	private ShowThumbnail buildThumbnailView(String fullPath, GenericConnector.StreamContent di) {
+		return new ShowThumbnail(fullPath, di.getSize(), di.getInputStream());
 	}
-
+	
 	private void setCapabilities(FileInfo fi, String urlPath) {
 		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
 	}
-
-	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
-		FileInfo fi = new FileInfo(urlPath, fp.isDir());
-		fi.setFileProperties(fp);
-		return fi;
+	
+	private String encode(String str) {
+		try {
+			return URLEncoder.encode(str, PropertiesLoader.getConnectorDefaultEncoding());
+		} catch (UnsupportedEncodingException e) {
+			return "--unsupportedencoding--";
+		}
 	}
 }

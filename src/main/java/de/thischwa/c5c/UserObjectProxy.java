@@ -189,7 +189,8 @@ public class UserObjectProxy {
 		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
 		String iconPath = fullIconPath.addFolder(icons.getPath()).toString();
 		IconRequestResolver iconRequestResolver = iconResolver.initRequest(iconPath, icons.getDefaultIcon(), icons.getDirectory());
-		return (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver.getIconPath(vf.getExtension());
+		String defaultIconPath = (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver.getIconPath(vf.getExtension());
+		return defaultIconPath;
 	}
 	
 	/**
