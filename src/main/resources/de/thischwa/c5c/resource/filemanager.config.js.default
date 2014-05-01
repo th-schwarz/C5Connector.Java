@@ -58,15 +58,16 @@
     },
     "exclude": {
         "unallowed_files": [
-            ".htaccess"
+            ".htaccess",
+            "web.config"
         ],
         "unallowed_dirs": [
             "_thumbs",
             ".CDN_ACCESS_LOGS",
             "cloudservers"
         ],
-        "unallowed_files_REGEXP": "/^\\./uis",
-        "unallowed_dirs_REGEXP": "/^\\./uis"
+        "unallowed_files_REGEXP": "/^\\.",
+        "unallowed_dirs_REGEXP": "/^\\."
     },
     "images": {
         "imagesExt": [
