@@ -96,7 +96,7 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 			// 3. lib-default
 			if(in == null) {
 				logger.info("Lib-default config file found.");
-				in = FilemanagerConfig.class.getResourceAsStream(BASE_FILE_NAME+".default");
+				in = PropertiesLoader.class.getResourceAsStream(BASE_FILE_NAME+".default");
 			}
 			
 			// load the object
