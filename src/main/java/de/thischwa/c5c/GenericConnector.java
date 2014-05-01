@@ -253,7 +253,7 @@ public abstract class GenericConnector implements Connector {
 	 * Builds the {@link GenericConnector.StreamContent} which holds the data for the response of the download.
 	 * 
 	 * @param in {@link InputStream} of the file to download
-	 * @param size size of the file to download
+	 * @param fileSize size of the file to download
 	 * @return The initialized {@link GenericConnector.StreamContent}.
 	 */
 	protected GenericConnector.StreamContent buildStreamContent(InputStream in, long fileSize) {

@@ -34,6 +34,7 @@ public class FilemanagerConfig {
 	private Images images = new Images();
 	private Videos videos = new Videos();
 	private Audios audios = new Audios();
+	private Edit edit = new Edit();
 	private Extras extras = new Extras();
 	private Icons icons = new Icons();
 
@@ -72,7 +73,11 @@ public class FilemanagerConfig {
 	public Audios getAudios() {
 		return audios;
 	}
-
+	
+	public Edit getEdit() {
+		return edit;
+	}
+	
 	public Extras getExtras() {
 		return extras;
 	}
