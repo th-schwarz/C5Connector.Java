@@ -83,6 +83,8 @@ Configuration properties
 |									 | .ServerPathBuilder				  | {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle | 		|
 |									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thmbnails <<Should be untouched!>> |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
 |									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

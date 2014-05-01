@@ -26,6 +26,10 @@ Shared Configuration
   <servlet-name>ConnectorServlet</servlet-name>
   <url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
 </servlet-mapping>
+<servlet-mapping>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <url-pattern>/filemanager/scripts/filemanager.config.js.default</url-pattern> 	
+</servlet-mapping>
 +---+
 
   Assuming the filemanager is installed in the <<</filemanager>>> folder of your webapp and the {{{./apidocs/de/thischwa/c5c/ConnectorServlet.html}<<<de.thischwa.c5c.ConnectorServlet>>>}}
