@@ -1,6 +1,6 @@
 # changelog
 
-* 0.4-SNAPSHOT
+* 0.4
   * issue #7:  Implementation of the excludes#unallowed properties
   * issue #17: Implementation of thumbnailing 
   * issue #18: implementation of 'savefile'
