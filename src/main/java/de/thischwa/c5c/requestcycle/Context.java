@@ -59,7 +59,7 @@ public class Context {
 		try {
 			mode = FilemanagerAction.valueOfIgnoreCase(paramMode);
 		} catch (IllegalArgumentException e) {
-			logger.error("Unknown 'mode': {}", mode);
+			logger.error("Unknown 'mode': {}", paramMode);
 			throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(FilemanagerException.Key.ModeError));
 		}
 	}
