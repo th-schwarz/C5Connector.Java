@@ -50,11 +50,15 @@ import de.thischwa.c5c.util.StringUtils;
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
  * </servlet-mapping>
+ * <servlet-mapping>
+ * 	<servlet-name>ConnectorServlet</servlet-name>
+ * 	<url-pattern>/filemanager/scripts/filemanager.config.js.default</url-pattern> 	
+ * </servlet-mapping>
  * }
  * </pre>
  * 
  * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.<br/>
- * IMPORTANT: The 2nd servlet-mapping will be necessary only if this servlet should 'serve' the dynamic 
+ * IMPORTANT: The 2nd and 3rd servlet-mapping is necessary only if this servlet should 'serve' the dynamic 
  * configuration of the filemanager.
  */
 @MultipartConfig
