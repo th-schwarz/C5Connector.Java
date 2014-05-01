@@ -157,4 +157,24 @@ public interface Connector {
 	 * @throws C5CException
 	 */
 	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException;
+	
+	/**
+	 * Executes the 'editfile'-method of the filemanager.
+	 * 
+	 * @param backendPath
+	 *            the requested file to get the content from, e.g. <code>/UserFiles/sub/text.txt</code>
+	 * @return the content of the requested file
+	 * @throws C5CException
+	 */
+	public String editFile(String backendPath) throws C5CException;
+	
+	/**
+	 * Executes the 'savefile'-method of the filemanager.
+	 * 
+	 * @param backendPath
+	 *            the requested file to get the content from, e.g. <code>/UserFiles/sub/text.txt</code>
+	 * @param content content of the file to save
+	 * @throws C5CException
+	 */
+	public void saveFile(String backendPath, String content) throws C5CException;
 }

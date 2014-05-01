@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.Files;
@@ -43,6 +44,7 @@ import de.thischwa.c5c.UserObjectProxy;
 import de.thischwa.c5c.exception.C5CException;
 import de.thischwa.c5c.exception.FilemanagerException;
 import de.thischwa.c5c.exception.FilemanagerException.Key;
+import de.thischwa.c5c.resource.PropertiesLoader;
 
 /**
  * The default implementation of the connector servlet.
@@ -272,8 +274,9 @@ public class LocalConnector extends GenericConnector {
 
 		BufferedImage img = null;
 		BufferedImage newImg = null;
+		InputStream in = null;
 		try {
-			InputStream in = Files.newInputStream(file, StandardOpenOption.READ);
+			in = Files.newInputStream(file, StandardOpenOption.READ);
 			img = ImageIO.read(in);
 			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, thumbnailWidth, thumbnailHeight);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -281,12 +284,41 @@ public class LocalConnector extends GenericConnector {
 			baos.flush();
 			return buildStreamContent(new ByteArrayInputStream(baos.toByteArray()), baos.size());
 		} catch (IllegalArgumentException | ImagingOpException | IOException e) {
-			throw new C5CException(e.getMessage());
-		} finally {
+			throw new C5CException(FilemanagerAction.THUMBNAIL, e.getMessage());
+		} finally { 
 			if(img != null)
 				img.flush();
 			if(newImg != null)
 				newImg.flush();
+			IOUtils.closeQuietly(in);
+		}
+	}
+
+	@Override
+	public String editFile(String urlPath) throws C5CException {
+		Path file = buildRealPath(urlPath);
+		InputStream in = null;
+		try {
+			in = Files.newInputStream(file, StandardOpenOption.READ);
+			return IOUtils.toString(in, PropertiesLoader.getDefaultEncoding());
+		} catch (IOException e) {
+			throw new C5CException(FilemanagerAction.EDITFILE, e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	@Override
+	public void saveFile(String urlPath, String content) throws C5CException {
+		Path file = buildRealPath(urlPath);
+		OutputStream out = null;
+		try {
+			out = Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+			IOUtils.write(content, out, PropertiesLoader.getDefaultEncoding());
+		} catch (IOException e) {
+			throw new C5CException(FilemanagerAction.SAVEFILE, e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(out);
 		}
 	}
 }
