@@ -36,11 +36,20 @@ mvn clean package
   <servlet-class>de.thischwa.c5c.ConnectorServlet</servlet-class>
   <load-on-startup>1</load-on-startup>
 </servlet>
-
 <servlet-mapping>
   <servlet-name>ConnectorServlet</servlet-name>
   <url-pattern>/filemanager/connectors/java/*</url-pattern> 	
 </servlet-mapping>
+
+<!- and for using the dynamic config generation you need the following entries, They aren't mandatory -->
+<servlet-mapping>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>ConnectorServlet</servlet-name>
+  <url-pattern>/filemanager/scripts/filemanager.config.js.default</url-pattern> 	
+ </servlet-mapping>
 +---+
   
   Assuming the filemanager has been installed in the <<</filemanager>>> folder in your webapp.\ 
