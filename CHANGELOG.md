@@ -2,6 +2,8 @@
 
 * 0.4-SNAPSHOT
   * issue #17: Implementation of thumbnailing 
+  * issue #18: implementation of 'savefile'
+  * issue #19: implementation of 'editfile'
 
 * 0.3
   * updated jackson to 2.2.2

@@ -45,8 +45,8 @@ public class Context {
 	Context(HttpServletRequest servletRequest) throws C5CException {
 		this.servletRequest = servletRequest;
 		urlPath = servletRequest.getParameter("path");
-		String paramMode;
-		if(servletRequest.getMethod().equals("POST")) {
+		String paramMode = servletRequest.getParameter("mode");
+		if(paramMode == null && servletRequest.getMethod().equals("POST")) {
 			try {
 				paramMode = IOUtils.toString(servletRequest.getPart("mode").getInputStream());
 			} catch (Exception e) {

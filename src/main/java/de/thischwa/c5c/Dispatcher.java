@@ -39,9 +39,11 @@ import de.thischwa.c5c.requestcycle.response.GenericResponse;
 import de.thischwa.c5c.requestcycle.response.mode.CreateFolder;
 import de.thischwa.c5c.requestcycle.response.mode.Delete;
 import de.thischwa.c5c.requestcycle.response.mode.Download;
+import de.thischwa.c5c.requestcycle.response.mode.EditFile;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import de.thischwa.c5c.requestcycle.response.mode.ShowThumbnail;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import de.thischwa.c5c.resource.PropertiesLoader;
@@ -94,12 +96,12 @@ final class Dispatcher {
 	 */
 	GenericResponse doGet() {
 		logger.debug("Entering Dispatcher#doGet");
-		Context ctx = RequestData.getContext();
-		FilemanagerAction mode = ctx.getMode();
-		HttpServletRequest req = RequestData.getContext().getServletRequest();
 		Set<String> imageExtensions = UserObjectProxy.getFilemanagerConfig().getImages().getExtensions();
 		connector.setImageExtensions(imageExtensions);
 		try {
+			Context ctx = RequestData.getContext();
+			FilemanagerAction mode = ctx.getMode();
+			HttpServletRequest req = RequestData.getContext().getServletRequest();
 			GenericResponse resp = null;
 			switch(mode) {
 			case FOLDER: {
@@ -167,6 +169,13 @@ final class Dispatcher {
 				resp = buildThumbnailView(backendPath, sc);
 				break;
 			}
+			case EDITFILE: {
+				String urlPath = req.getParameter("path");
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* editfile -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				resp = new EditFile(backendPath, connector.editFile(backendPath));
+				break;
+			}
 			default: {
 				logger.error("Unknown 'mode' for GET: {}", req.getParameter("mode"));
 				throw new C5CException(UserObjectProxy.getFilemanagerErrorMessage(Key.ModeError));
@@ -221,22 +230,21 @@ final class Dispatcher {
 	 */
 	GenericResponse doPost() {
 		logger.debug("Entering Dispatcher#doPost");
-		Context ctx = RequestData.getContext();
-		FilemanagerAction mode = ctx.getMode();
-		HttpServletRequest req = ctx.getServletRequest();
-		FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
-
-		Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload()
-				.getFileSizeLimit();
-		boolean overwrite = conf.getUpload().isOverwrite();
 
 		UploadFile resp = null;
 		InputStream in = null;
 		String currentPath = null;
 		String newName = null;
 		try {
+			Context ctx = RequestData.getContext();
+			FilemanagerAction mode = ctx.getMode();
+			HttpServletRequest req = ctx.getServletRequest();
+			FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
 			switch(mode) {
 			case UPLOAD: {
+				Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload()
+						.getFileSizeLimit();
+				boolean overwrite = conf.getUpload().isOverwrite();
 				currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
 				String backendPath = buildBackendPath(currentPath);
 				Part uploadPart = req.getPart("newfile");
@@ -277,6 +285,13 @@ final class Dispatcher {
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
 				resp = new UploadFile(currentPath, sanitizedName);
 				return resp;
+			} case SAVEFILE: {
+				String urlPath = req.getParameter("path");
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* savefile -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				String content = req.getParameter("content");
+				connector.saveFile(backendPath, content);
+				return new SaveFile(urlPath);
 			}
 			default: {
 				logger.error("Unknown 'mode' for POST: {}", req.getParameter("mode"));

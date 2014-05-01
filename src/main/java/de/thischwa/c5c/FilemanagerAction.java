@@ -10,7 +10,6 @@
  */
 package de.thischwa.c5c;
 
-import java.util.Arrays;
 
 /**
  * Handles the content-type and parameter names for each action of the filemanager.
@@ -31,10 +30,11 @@ public enum FilemanagerAction {
 
 	DOWNLOAD(null, "download"),
 	
-	THUMBNAIL(null, "thumbnail");
+	THUMBNAIL(null, "thumbnail"),
 	
-	/** The allowed get request modes. */
-	private static FilemanagerAction[] allowedGetRequestModes = new FilemanagerAction[] {INFO,FOLDER,RENAME,DELETE,CREATEFOLDER}; 
+	EDITFILE(FilemanagerAction.CONTENTTYPE_JSON, "editfile"),
+	
+	SAVEFILE(FilemanagerAction.CONTENTTYPE_JSON, "savefile");
 	
 	private String contentType;
 	
@@ -63,15 +63,5 @@ public enum FilemanagerAction {
 				return rm;
 		}
 		throw new IllegalArgumentException(String.format("No mode found for %s", mode));
-	}
-	
-	/**
-	 * Checks if the desired mode is one for a get request.
-	 *
-	 * @param mode the mode
-	 * @return true, if it is a get request
-	 */
-	public static boolean isGetRequest(FilemanagerAction mode) {
-		return Arrays.asList(allowedGetRequestModes).contains(mode);
 	}
 }
