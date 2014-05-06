@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +75,10 @@ public class UserObjectProxy {
 	private static IDimensionProvider imageDimensionProvider;
 	
 	private static Dimension thumbnailDimension;
+
+	private static Pattern excludeFoldersPattern;
+
+	private static Pattern excludeFilesPattern;
 
 	/**
 	 * Instantiates all user-objects.
@@ -174,6 +179,32 @@ public class UserObjectProxy {
 		Matcher dimMatcher = dimensionPattern.matcher(PropertiesLoader.getThumbnailDimension());
 		if(dimMatcher.matches()) {
 			thumbnailDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
+		}
+
+		
+		// 8. build regex pattern
+		String folderExcludePatternStr = PropertiesLoader.getRegexToExcludeFolders();
+		if(StringUtils.isNullOrEmptyOrBlank(folderExcludePatternStr)) {
+			logger.warn("Property 'connector.regex.exclude.folders' isn't set.");
+			excludeFoldersPattern = null;
+		} else {
+			try {
+				excludeFoldersPattern = Pattern.compile(folderExcludePatternStr);
+			} catch (PatternSyntaxException e) {
+				throw new RuntimeException("Exclude pattern for folders couldn't be compiled!");
+			}
+		}
+
+		String fileExcludePatternStr = PropertiesLoader.getRegexToExcludeFiles();
+		if(StringUtils.isNullOrEmptyOrBlank(fileExcludePatternStr)) {
+			logger.warn("Property 'connector.regex.exclude.files' isn't set.");
+			excludeFilesPattern = null;
+		} else {
+			try {
+				excludeFilesPattern = Pattern.compile(fileExcludePatternStr);
+			} catch (PatternSyntaxException e) {
+				throw new RuntimeException("Exclude pattern for files couldn't be compiled!");
+			}
 		}
 	}
 
@@ -284,7 +315,40 @@ public class UserObjectProxy {
 		}
 	}
 	
+	/**
+	 * Getter for the adjusted thumbnail dimension.
+	 * 
+	 * @return the thumbnail dimension
+	 */
 	public static Dimension getThumbnailDimension() {
 		return thumbnailDimension;
+	}
+	
+	/**
+	 * Checks if a folder is allowed to display.
+	 * 
+	 * @param name the name of the folder
+	 * @return <code>false</code> if no pattern was found or 'name' matches the pattern.
+	 */
+	public static boolean isFolderNameAllowed(final String name) {
+		if(excludeFoldersPattern == null)
+			return true;
+		
+		Matcher matcher = excludeFoldersPattern.matcher(name);
+		return !matcher.matches();
+	}
+
+	/**
+	 * Checks if a file is allowed to display.
+	 * 
+	 * @param name the name of the folder
+	 * @return <code>false</code> if no pattern was found or 'name' matches the pattern.
+	 */
+	public static boolean isFileNameAllowed(final String name) {
+		if(excludeFilesPattern == null)
+			return true;
+		
+		Matcher matcher = excludeFilesPattern.matcher(name);
+		return !matcher.matches();
 	}
 }

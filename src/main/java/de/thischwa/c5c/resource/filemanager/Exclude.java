@@ -12,25 +12,24 @@ package de.thischwa.c5c.resource.filemanager;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents the type <code>exclude</code> of the JSON configuration of the filemanager. 
+ * Represents the type <code>exclude</code> of the JSON configuration of the filemanager. </br> 
+ * </br> 
+ * The 2 properties 'unallowed_files_REGEXP' and 'unallowed_dirs_REGEXP' will be ignored 
+ * because they doesn't work for all connector languages.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Exclude {
 
 	@JsonProperty("unallowed_files")
 	private Set<String> disallowedFiles;
-	
+
 	@JsonProperty("unallowed_dirs")
 	private Set<String> disallowedDirs;
-	
-	@JsonProperty("unallowed_files_REGEXP")
-	private String disallowedFilesRegex;
 
-	@JsonProperty("unallowed_dirs_REGEXP")
-	private String disallowedDirsRegex;
-	
 	Exclude() {
 	}
 
@@ -49,21 +48,4 @@ public class Exclude {
 	public void setDisallowedDirs(Set<String> disallowedDirs) {
 		this.disallowedDirs = disallowedDirs;
 	}
-
-	public String getDisallowedFilesRegex() {
-		return disallowedFilesRegex;
-	}
-
-	public void setDisallowedFilesRegex(String disallowedFilesRegex) {
-		this.disallowedFilesRegex = disallowedFilesRegex;
-	}
-
-	public String getDisallowedDirsRegex() {
-		return disallowedDirsRegex;
-	}
-
-	public void setDisallowedDirsRegex(String disallowedDirsRegex) {
-		this.disallowedDirsRegex = disallowedDirsRegex;
-	}
-	
 }

@@ -214,7 +214,7 @@ public class LocalConnector extends GenericConnector {
 			for(Path d : Files.newDirectoryStream(dir, new DirectoryStream.Filter<Path>() {
 				@Override
 				public boolean accept(Path entry) throws IOException {
-					return Files.isDirectory(entry) && checkDirectoryname(entry.getFileName().toString());
+					return Files.isDirectory(entry) && checkFolderName(entry.getFileName().toString());
 				}})) {
 				FileProperties fp = buildForDirectory(d.getFileName().toString(), new Date(Files.getLastModifiedTime(d).toMillis()));
 				props.add(fp);

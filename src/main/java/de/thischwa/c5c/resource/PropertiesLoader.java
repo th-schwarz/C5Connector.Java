@@ -222,9 +222,10 @@ public class PropertiesLoader {
 	/**
 	 * Gets the maximum allowed file size in MB for upload. 
 	 * 
-	 * @return <code>connector.maxUploadSize</code> property, or null if not set or a {@link NumberFormatException} was thrown.
+	 * @return <code>connector.maxUploadSize</code> property, or null if not set
+	 * @throws NumberFormatException if <code>connector.maxUploadSize</code> is not a valid number
 	 */
-	public static Integer getMaxUploadSize() {
+	public static Integer getMaxUploadSize() throws NumberFormatException {
 		try {
 			return Integer.valueOf(properties.getProperty("connector.maxUploadSize"));
 		} catch(Exception e) {
@@ -257,5 +258,23 @@ public class PropertiesLoader {
 	 */
 	public static String getThumbnailDimension() {
 		return properties.getProperty("connector.thumbnail.dimension");
+	} 
+
+	/**
+	 * Gets the regex to exclude folders by name.
+	 *
+	 * @return <code>connector.regex.exclude.folders</code> property
+	 */
+	public static String getRegexToExcludeFolders() {
+		return properties.getProperty("connector.regex.exclude.folders");
+	} 
+	
+	/**
+	 * Gets the regex to exclude files by name.
+	 *
+	 * @return <code>connector.regex.exclude.files</code> property
+	 */
+	public static String getRegexToExcludeFiles() {
+		return properties.getProperty("connector.regex.exclude.files");
 	} 
 }

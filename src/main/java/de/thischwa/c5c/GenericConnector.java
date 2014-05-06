@@ -10,14 +10,10 @@
  */
 package de.thischwa.c5c;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,51 +141,26 @@ public abstract class GenericConnector implements Connector {
 	 * @param name
 	 *            the name of the file to check
 	 * @return <code>true</code> if the name of the file is valid, otherwise <code>false</code>
-	 * 
-	 * @throws IOException
-	 *             if the based regex isn't valid
 	 */
-	protected boolean checkFilename(String name) throws IOException {
+	protected boolean checkFilename(String name) {
 		Exclude exclude = UserObjectProxy.getFilemanagerConfig().getExclude();
 		Set<String> disAllowedFiles = exclude.getDisallowedFiles();
-		String regex = exclude.getDisallowedFilesRegex();
-		return checkFilename(name, disAllowedFiles, regex);
+		return (disAllowedFiles.contains(name)) ? false : UserObjectProxy.isFileNameAllowed(name);
 	}
 
 	/**
-	 * Checks whether the name of the directory is valid in terms of the configuration.
+	 * Checks whether the name of a folder is valid in terms of the configuration.
 	 * 
 	 * @param name
 	 *            the name of the directory to check
 	 * @return <code>true</code> if the name of the directory is valid, otherwise <code>false</code>
-	 * 
-	 * @throws IOException
-	 *             if the based regex isn't valid
 	 */
-	protected boolean checkDirectoryname(String name) throws IOException {
+	protected boolean checkFolderName(String name) {
 		Exclude exclude = UserObjectProxy.getFilemanagerConfig().getExclude();
 		Set<String> disAllowedDirs = exclude.getDisallowedDirs();
-		String regex = exclude.getDisallowedDirsRegex();
-		return checkFilename(name, disAllowedDirs, regex);
+		return (disAllowedDirs.contains(name)) ? false : UserObjectProxy.isFolderNameAllowed(name);
 	}
-
-	private boolean checkFilename(String name, Set<String> disallowedNames, String disallowedRegex) throws IOException {
-		if(disallowedNames != null && disallowedNames.contains(name))
-			return false;
-		if(StringUtils.isNullOrEmptyOrBlank(disallowedRegex))
-			return true;
-
-		if(disallowedRegex.startsWith("/"))
-			disallowedRegex = disallowedRegex.substring(1);
-		try {
-			Pattern pattern = Pattern.compile(disallowedRegex);
-			Matcher matcher = pattern.matcher(name);
-			return !matcher.find();
-		} catch (PatternSyntaxException e) {
-			throw new IOException(String.format("Regex [%s] could not be parsed!", disallowedRegex), e);
-		}
-	}
-
+	
 	/**
 	 * Builds the {@link FileInfoProperties} which holds the basic properties of a representation of a image of the filemanager.
 	 * 
