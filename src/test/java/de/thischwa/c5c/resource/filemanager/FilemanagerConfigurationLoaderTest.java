@@ -53,6 +53,7 @@ public class FilemanagerConfigurationLoaderTest {
 		assertEquals("default.png", conf.getIcons().getDefaultIcon());
 		
 		assertTrue(conf.getOptions().getRelPath() instanceof Boolean);
+		assertFalse(conf.getOptions().isGenerateThumbnails());
 		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
 		
 		assertEquals(5, conf.getOptions().getCapabilities().size());

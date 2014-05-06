@@ -10,7 +10,7 @@
         "browseOnly": false,
         "showConfirmation": true,
         "showThumbs": true,
-        "generateThumbnails": true,
+        "generateThumbnails": false,
         "searchBox": true,
         "listFiles": true,
         "fileSorting": "default",
@@ -66,8 +66,8 @@
             ".CDN_ACCESS_LOGS",
             "cloudservers"
         ],
-        "unallowed_files_REGEXP": "/^\\.",
-        "unallowed_dirs_REGEXP": "/^\\."
+        "unallowed_files_REGEXP": "/^\\./",
+        "unallowed_dirs_REGEXP": "/^\\./"
     },
     "images": {
         "imagesExt": [
