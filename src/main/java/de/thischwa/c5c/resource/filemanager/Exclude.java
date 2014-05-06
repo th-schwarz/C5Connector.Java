@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Represents the type <code>exclude</code> of the JSON configuration of the filemanager. </br> 
  * </br> 
  * The 2 properties 'unallowed_files_REGEXP' and 'unallowed_dirs_REGEXP' will be ignored 
- * because they doesn't work for all connector languages.
+ * because they doesn't work for all connector languages. They are moved to the properties of this library
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Exclude {
