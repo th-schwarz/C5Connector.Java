@@ -85,6 +85,10 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thmbnails <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.regex.exclude.files		 | ^\\..*						      | any Java regex which checks the whole term (name)| Regex to check, if the file is allowed to display or not. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.regex.exclude.folders	 | ^\\..*						      | any Java regex which checks the whole term (name)| Regex to check, if the folder is allowed to display or not. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | jii.impl  		                 | de.thischwa.jii.core   			  | Any fully-qualified class name of a valid	     | The implementation of the {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}}, see {{{http://th-schwarz.github.com/JII/}JII}}.|
 |									 | .ImageInfoWrapper			  	  | {{{http://th-schwarz.github.com/JII/apidocs/de/thischwa/jii/IDimensionProvider.html}IDimensionProvider}} implementation. |  
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

@@ -38,3 +38,5 @@ Shared Configuration
   to get the configuration. This will be transferred to JSON automatically.
   
   To see how to change the configuration by Java, see {{{./extending_filemanagerconfigbuilder.html}Extending the FilemanagerConfigBuilder}}.
+  
+  [Hint:] To avoid interoperability issues with regular expressions (e.g. Excludes#unallowed_folders_REGEXP), all regex' have been moved to the {{{./config_c5connector.html}Configuration of C5Connector.Java}}.

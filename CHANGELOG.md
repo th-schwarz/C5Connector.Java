@@ -1,6 +1,7 @@
 # changelog
 
-* 0.5-SNAPSHOT
+* 0.5
+  * issue #20: All regex from the 'shared' config have to be moved to the properties file
 
 * 0.4
   * issue #7:  Implementation of the excludes#unallowed properties
