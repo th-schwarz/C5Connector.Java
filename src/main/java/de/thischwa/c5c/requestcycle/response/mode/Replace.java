@@ -10,6 +10,9 @@
  */
 package de.thischwa.c5c.requestcycle.response.mode;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
 
 /**
@@ -25,6 +28,15 @@ public final class Replace extends GenericPost {
 		super(FilemanagerAction.REPLACE, path, name);
 	}
 
+	@Override
+	@JsonProperty("Path")
+	public String getPath() {
+		String p = super.getPath();
+		if(p.endsWith(Constants.defaultSeparator))
+			p = p.substring(0, p.length()-1);
+		return p;
+	}
+	
 	@Override
 	public String toString() {
 		String jsonStr = super.toString();

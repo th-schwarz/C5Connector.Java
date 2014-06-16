@@ -291,6 +291,7 @@ final class Dispatcher {
 			} case REPLACE: {
 				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
 				String backendPath = buildBackendPath(newFilePath);
+				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
 
 				// check if file already exits
 				VirtualFile vf = new VirtualFile(backendPath);
@@ -317,7 +318,7 @@ final class Dispatcher {
 				connector.replace(backendPath, in);
 				logger.debug("successful replaced {} bytes", uploadPart.getSize());
 				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
-				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
+ 				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
 			}
 			default: {
 				logger.error("Unknown 'mode' for POST: {}", req.getParameter("mode"));
