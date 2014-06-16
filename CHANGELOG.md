@@ -1,5 +1,8 @@
 # changelog
 
+* 0.6-SNAPSHOT
+  * issue #21: Implementation of 'replace'
+  
 * 0.5
   * issue #20: All regex from the 'shared' config have to be moved to the properties file
 
