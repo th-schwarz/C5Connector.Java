@@ -32,7 +32,7 @@ import de.thischwa.c5c.requestcycle.BackendPathBuilder;
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
  * In general a connector serves and manages files and folders accessed through the filemanager on an arbitrary backend system. The
  * connector will retrieve a valid request. 'Valid' means in terms of correct and reasonable parameters.<br/>
- * Most of the methods get a parameter named 'backendPath' or similar. This is the requested url-path mapped to a o path of the backend by
+ * Most of the methods get a parameter named 'backendPath' or similar. This is the requested url-path mapped to a path of the backend by
  * the {@link BackendPathBuilder}.<br/>
  * <br/>
  * <b>Hint for implementations:</b> For throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful

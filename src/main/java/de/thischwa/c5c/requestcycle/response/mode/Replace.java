@@ -16,7 +16,7 @@ import de.thischwa.c5c.Constants;
 import de.thischwa.c5c.FilemanagerAction;
 
 /**
- * Holds the data of an upload GenericResponse.
+ * Holds the data of an upload response.
  */
 public final class Replace extends GenericPost {
 

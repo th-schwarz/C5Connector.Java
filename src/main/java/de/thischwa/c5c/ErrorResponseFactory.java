@@ -21,7 +21,7 @@ import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
 class ErrorResponseFactory {
 	
 	static GenericResponse buildErrorResponse(String error, int errorCode) {
-		GenericResponse r = new ErrorResponse(null);
+		GenericResponse r = new ErrorResponse();
 		r.setError(error, errorCode);
 		return r;
 	}
@@ -45,9 +45,8 @@ class ErrorResponseFactory {
 	}
 
 	private static class ErrorResponse extends GenericResponse {
-
-		protected ErrorResponse(FilemanagerAction mode) {
-			super(mode);
+		ErrorResponse() {
+			super(null);
 		}
 	}
 }
