@@ -12,18 +12,17 @@ package de.thischwa.c5c.requestcycle.response.mode;
 
 import de.thischwa.c5c.FilemanagerAction;
 
-
 /**
  * Holds the data of an upload GenericResponse.
  */
-public final class UploadFile extends GenericPost {
+public final class Replace extends GenericPost {
 
-	public UploadFile(String errorMessage, int errorCode) {
-		super(FilemanagerAction.UPLOAD, errorMessage, errorCode);
+	public Replace(String errorMessage, int errorCode) {
+		super(FilemanagerAction.REPLACE, errorMessage, errorCode);
 	}
 
-	public UploadFile(String path, String name) {
-		super(FilemanagerAction.UPLOAD, path, name);
+	public Replace(String path, String name) {
+		super(FilemanagerAction.REPLACE, path, name);
 	}
 
 	@Override

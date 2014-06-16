@@ -321,4 +321,14 @@ public class LocalConnector extends GenericConnector {
 			IOUtils.closeQuietly(out);
 		}
 	}
+
+	@Override
+	public void replace(String backendPath, InputStream in) throws C5CException {
+		Path file = buildRealPath(backendPath);
+		try {
+			Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			throw new FilemanagerException(FilemanagerAction.REPLACE, FilemanagerException.Key.InvalidFileUpload, file.getFileName().toString());
+		}
+	}
 }

@@ -28,7 +28,10 @@ public interface FilemanagerCapability {
 		rename,
 
 		/** The download of the file is allowed. */
-		download
+		download,
+
+		/** The replace of the file is allowed. */
+		replace
 	};
 
 	/**

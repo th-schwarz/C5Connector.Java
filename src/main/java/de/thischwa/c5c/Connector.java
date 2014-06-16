@@ -43,7 +43,7 @@ public interface Connector {
 	/**
 	 * Initializes the connector.
 	 * 
-	 * @throws Exception
+	 * @throws RuntimeException
 	 *             if the initialization fails.
 	 */
 	public void init() throws RuntimeException;
@@ -177,4 +177,16 @@ public interface Connector {
 	 * @throws C5CException
 	 */
 	public void saveFile(String backendPath, String content) throws C5CException;
+	
+
+	/**
+	 * Executes the 'savefile'-method of the filemanager.
+	 * 
+	 * @param backendPath
+	 *            the requested file to get the content from, e.g. <code>/UserFiles/sub/text.txt</code>
+	 * @param in
+	 *            {@link InputStream} that contains the file data, it will be closed by the caller
+	 * @throws C5CException
+	 */
+	public void replace(String backendPath, InputStream in) throws C5CException;
 }

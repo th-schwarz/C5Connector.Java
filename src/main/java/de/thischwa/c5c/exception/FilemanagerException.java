@@ -37,6 +37,7 @@ public class FilemanagerException extends C5CException {
 		ErrorRenamingFile("ERROR_RENAMING_FILE"),
 		ErrorOpeningFile("ERROR_OPENING_FILE"),
 		ErrorSavingFile("ERROR_SAVING_FILE"),
+		ErrorReplacingFile("ERROR_REPLACING_FILE"),
 		InvalidDirectoryOrFile("INVALID_DIRECTORY_OR_FILE"),
 		InvalidFileUpload("INVALID_FILE_UPLOAD"),
 		UploadFilesSmallerThan("UPLOAD_FILES_SMALLER_THAN"),

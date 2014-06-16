@@ -28,6 +28,8 @@ public enum FilemanagerAction {
 	
 	UPLOAD(FilemanagerAction.CONTENTTYPE_HTML, "add"),
 
+	REPLACE(FilemanagerAction.CONTENTTYPE_HTML, "replace"),
+
 	DOWNLOAD(null, "download"),
 	
 	THUMBNAIL(null, "thumbnail"),

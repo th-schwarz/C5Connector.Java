@@ -43,6 +43,7 @@ import de.thischwa.c5c.requestcycle.response.mode.EditFile;
 import de.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import de.thischwa.c5c.requestcycle.response.mode.FolderInfo;
 import de.thischwa.c5c.requestcycle.response.mode.Rename;
+import de.thischwa.c5c.requestcycle.response.mode.Replace;
 import de.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import de.thischwa.c5c.requestcycle.response.mode.ShowThumbnail;
 import de.thischwa.c5c.requestcycle.response.mode.UploadFile;
@@ -231,31 +232,25 @@ final class Dispatcher {
 	GenericResponse doPost() {
 		logger.debug("Entering Dispatcher#doPost");
 
-		UploadFile resp = null;
 		InputStream in = null;
-		String currentPath = null;
-		String newName = null;
 		try {
 			Context ctx = RequestData.getContext();
 			FilemanagerAction mode = ctx.getMode();
 			HttpServletRequest req = ctx.getServletRequest();
 			FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
+			Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload()
+					.getFileSizeLimit();
 			switch(mode) {
 			case UPLOAD: {
-				Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload()
-						.getFileSizeLimit();
 				boolean overwrite = conf.getUpload().isOverwrite();
-				currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
+				String currentPath = IOUtils.toString(req.getPart("currentpath").getInputStream());
 				String backendPath = buildBackendPath(currentPath);
 				Part uploadPart = req.getPart("newfile");
-				newName = getFileName(uploadPart);
+				String newName = getFileName(uploadPart);
 
 				// check image only
-				String ext = FilenameUtils.getExtension(newName);
-				boolean isImageExt = conf.getImages().getExtensions().contains(ext);
-				if(conf.getUpload().isImagesOnly() && !isImageExt)
-					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
-
+				boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
+				
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
@@ -269,22 +264,23 @@ final class Dispatcher {
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileAlreadyExists, sanitizedName);
 				}
 				sanitizedName = uniqueName;
-
+				
 				// check the max. upload size
-				if(uploadPart.getSize() > maxFileSize.longValue() * 1024 * 1024)
-					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan,
-							maxFileSize.toString());
+				checkUploadSize(maxFileSize.longValue() * 1024 * 1024, uploadPart.getSize());
+				
 				in = uploadPart.getInputStream();
 
 				// check if the file is really an image
 				if(isImageExt && !UserObjectProxy.isImage(in))
-					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
 
 				connector.upload(backendPath, sanitizedName, in);
 
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
-				resp = new UploadFile(currentPath, sanitizedName);
-				return resp;
+				UploadFile ufResp = new UploadFile(currentPath, sanitizedName);
+				ufResp.setName(newName);
+				ufResp.setPath(currentPath);
+				return ufResp;
 			} case SAVEFILE: {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
@@ -292,6 +288,36 @@ final class Dispatcher {
 				String content = req.getParameter("content");
 				connector.saveFile(backendPath, content);
 				return new SaveFile(urlPath);
+			} case REPLACE: {
+				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
+				String backendPath = buildBackendPath(newFilePath);
+
+				// check if file already exits
+				VirtualFile vf = new VirtualFile(backendPath);
+				String fileName = vf.getName();
+				String uniqueName = getUniqueName(vf.getFolder(), fileName);
+				if(uniqueName.equals(fileName)) {
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
+				}
+				
+				// check image only
+				boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
+				
+				Part uploadPart = req.getPart("fileR");
+				
+				// check the max. upload size
+				checkUploadSize(maxFileSize.longValue() * 1024 * 1024, uploadPart.getSize());
+				
+				in = uploadPart.getInputStream();
+				
+				// check if the file is really an image
+				if(isImageExt && !UserObjectProxy.isImage(in))
+	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+				
+				connector.replace(backendPath, in);
+				logger.debug("successful replaced {} bytes", uploadPart.getSize());
+				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
+				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
 			}
 			default: {
 				logger.error("Unknown 'mode' for POST: {}", req.getParameter("mode"));
@@ -299,24 +325,32 @@ final class Dispatcher {
 			}
 			}
 		} catch (C5CException e) {
-			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage());
+			return ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage());
 		} catch (ServletException e) {
 			logger.error("A ServletException was thrown while uploading: " + e.getMessage(), e);
-			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
+			return ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
 		} catch (IOException e) {
 			logger.error("A IOException was thrown while uploading: " + e.getMessage(), e);
-			resp = ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
+			return ErrorResponseFactory.buildErrorResponseForUpload(e.getMessage(), 200);
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
-
-		if(currentPath != null)
-			resp.setPath(currentPath);
-		if(newName != null)
-			resp.setName(newName);
-		return resp;
 	}
-
+	
+	private boolean checkImageExtension(String path, boolean imageOnly, Set<String> imageExtensions) throws FilemanagerException {
+		String imgExt = FilenameUtils.getExtension(path);
+		boolean isImgExt = imageExtensions.contains(imgExt);
+		if(imageOnly && !isImgExt)
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+		return isImgExt;
+	}
+	
+	private void checkUploadSize(long maxSize, long fileSize) throws FilemanagerException {
+		if(fileSize > maxSize)
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan,
+					String.valueOf(maxSize));
+	}
+	
 	private String getUniqueName(String backendPath, String name) throws C5CException {
 		List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false);
 		Set<String> existingNames = new HashSet<>();
