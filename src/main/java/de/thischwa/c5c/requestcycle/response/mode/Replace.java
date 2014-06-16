@@ -32,6 +32,7 @@ public final class Replace extends GenericPost {
 	@JsonProperty("Path")
 	public String getPath() {
 		String p = super.getPath();
+		// hint: the path isn't the full path here, so we must cut the last separator
 		if(p.endsWith(Constants.defaultSeparator))
 			p = p.substring(0, p.length()-1);
 		return p;
