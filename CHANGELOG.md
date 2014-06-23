@@ -2,6 +2,7 @@
 
 * 0.6-SNAPSHOT
   * issue #21: Implementation of 'replace'
+  * internal: refactored the Dispatcher
   
 * 0.5
   * issue #20: All regex from the 'shared' config have to be moved to the properties file

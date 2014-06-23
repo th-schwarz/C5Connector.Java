@@ -68,20 +68,28 @@ public class ConnectorServlet extends HttpServlet {
 
 	private static Logger logger = LoggerFactory.getLogger(ConnectorServlet.class);
 
-	private Dispatcher dispatcher;
+	private GenericDispatcher dispatcherGET;
+	private GenericDispatcher dispatcherPUT;
 
 	/**
-	 * Initializes this servlet. It initializes the {@link Dispatcher} and {@link UserObjectProxy}.
+	 * Initializes this servlet. It initializes the {@link DispatcherGET} and {@link UserObjectProxy}.
 	 */
 	@Override
 	public void init() throws ServletException {
+		String connectorClassName = PropertiesLoader.getConnectorImpl();
+		if(StringUtils.isNullOrEmpty(connectorClassName))
+			throw new RuntimeException("Empty Connector implementation class name not allowed.");
+		Connector connector;
 		try {
-			dispatcher = new Dispatcher(getServletContext(), PropertiesLoader.getConnectorImpl());
-		} catch (Exception e) {
-			logger.error("Dispatcher could not be instantiated.", e);
-			throw new ServletException(e);
+			Class<?> clazz = Class.forName(connectorClassName);
+			connector = (Connector) clazz.newInstance();
+			logger.info("Connector instantiated to {}", connectorClassName);
+		} catch (Throwable e) {
+			String msg = String.format("Connector implementation [%s] couldn't be instatiated.", connectorClassName);
+			logger.error(msg);
+			throw new RuntimeException(msg, e);
 		}
-
+		
 		try {
 			UserObjectProxy.init(getServletContext());
 		} catch (Exception e) {
@@ -89,37 +97,27 @@ public class ConnectorServlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 
+		connector.init();
+		
+		dispatcherGET = new DispatcherGET(connector);
+		dispatcherPUT = new DispatcherPUT(connector);
+		
 		logger.info(String.format("*** %s sucessful initialized.", this.getClass().getName()));
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doRequest(req, resp, true);
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doRequest(req, resp, false);
-	}
-
-	/**
-	 * Processes the request and dispatch it to the {@link Dispatcher}. It initializes the {@link RequestData} too, which maintenances
-	 * request based objects.
-	 * 
-	 * @param req
-	 * @param resp
-	 * @param isGetRequest
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	private void doRequest(HttpServletRequest req, HttpServletResponse resp, boolean isGetRequest) throws ServletException, IOException {
+	private void initResponseHeader(HttpServletResponse resp) {
 		// set some default headers 
 		resp.setHeader("Cache-Control", "no-cache");
 		resp.setContentType("application/json");
 		if(!StringUtils.isNullOrEmpty(PropertiesLoader.getConnectorDefaultEncoding()))
 			resp.setCharacterEncoding(PropertiesLoader.getConnectorDefaultEncoding());
-
-		if(isGetRequest && req.getServletPath().contains("filemanager.config.js")) {
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		initResponseHeader(resp);
+		
+		if(req.getServletPath().contains("filemanager.config.js")) {
 			// this breaks the request-cycle of this library
 			// but otherwise an extra servlet is needed to serve the config of the filemanager 
 			logger.debug("Filemanager config request.");
@@ -136,14 +134,19 @@ public class ConnectorServlet extends HttpServlet {
 			return;
 		}
 		
-		GenericResponse response;
+		doRequest(req, resp, dispatcherGET);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		initResponseHeader(resp);
+		doRequest(req, resp, dispatcherPUT);
+	}
+	
+	private void doRequest(HttpServletRequest req, HttpServletResponse resp, GenericDispatcher dispatcher) throws ServletException {
 		try {
 			RequestData.beginRequest(req);
-			if (isGetRequest) {
-				response = dispatcher.doGet();
-			} else {
-				response = dispatcher.doPost();
-			}
+			GenericResponse response = dispatcher.doRequest();
 			response.write(resp);
 		} catch (Exception e) {
 			throw new ServletException(e);
