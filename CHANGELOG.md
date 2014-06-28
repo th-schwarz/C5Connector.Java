@@ -3,7 +3,8 @@
 * 0.6-SNAPSHOT
   * issue #21: Implementation of 'replace'
   * internal: refactored the Dispatcher
-  * fixed issue with cached thumbnails (replacing an image hasn't any effect on thumbnails)
+  * issue #22: change name of the package to codes.thischwa
+  * issue #23: replacing an image doesn't have any effect on preview/thumbnails
   
 * 0.5
   * issue #20: All regex from the 'shared' config have to be moved to the properties file

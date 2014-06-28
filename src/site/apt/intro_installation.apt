@@ -33,7 +33,7 @@ mvn clean package
 +---+
 <servlet>
   <servlet-name>ConnectorServlet</servlet-name>
-  <servlet-class>de.thischwa.c5c.ConnectorServlet</servlet-class>
+  <servlet-class>codes.thischwa.c5c.ConnectorServlet</servlet-class>
   <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>

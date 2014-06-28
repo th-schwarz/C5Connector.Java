@@ -8,7 +8,7 @@ Connector
   It works like a proxy or a virtual file system. 
 
   There is a ready-to-go implementation which serves all files from any local path:
-  {{{./apidocs/de/thischwa/c5c/impl/LocalConnector.html}<<<de.thischwa.c5c.impl.LocalConnector>>>}} \
+  {{{./apidocs/codes/thischwa/c5c/impl/LocalConnector.html}<<<codes.thischwa.c5c.impl.LocalConnector>>>}} \
   This is the default setting.
   
 
@@ -18,14 +18,14 @@ Connector
   the context or local file system. Therefore, C5Connector.Java provides a way to create
   your own one. 
   
-  Just implement the interface {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}.
+  Just implement the interface {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}.
   Consult the javadoc and see how it works.
   
-  [Hint:] I suggest extending your class from {{{./apidocs/de/thischwa/c5c/GenericConnector.html}<<<de.thischwa.c5c.GenericConnector>>>}}.
+  [Hint:] I suggest extending your class from {{{./apidocs/codes/thischwa/c5c/GenericConnector.html}<<<codes.thischwa.c5c.GenericConnector>>>}}.
           It provides some helper methods for getting basic properties or for building the required response objects easily. To handle exceptions you have to throw a
-          {{{./apidocs/de/thischwa/c5c/exception/FilemanageException.html}<<<de.thischwa.c5c.exception.FilemanagerException>>>}}. It
+          {{{./apidocs/codes/thischwa/c5c/exception/FilemanageException.html}<<<codes.thischwa.c5c.exception.FilemanagerException>>>}}. It
           has some suitable constructors. For details consult please the javadoc! \
-          It is very helpful to hava a look at the code of the {{{./apidocs/de/thischwa/c5c/impl/LocalConnector.html}<<<de.thischwa.c5c.impl.LocalConnector>>>}}!
+          It is very helpful to hava a look at the code of the {{{./apidocs/codes/thischwa/c5c/impl/LocalConnector.html}<<<codes.thischwa.c5c.impl.LocalConnector>>>}}!
           
           []
           

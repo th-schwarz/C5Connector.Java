@@ -14,7 +14,7 @@ Configuration of C5Connector.Java
 
 +---+
   ...
-  connector.impl = de.thischwa.c5c.impl.LocalConnector
+  connector.impl = codes.thischwa.c5c.impl.LocalConnector
   ...
 +---+
 
@@ -22,9 +22,9 @@ Configuration of C5Connector.Java
 
 +---+
   ...
-  import de.thischwa.c5c.resource.PropertiesLoader;
+  import codes.thischwa.c5c.resource.PropertiesLoader;
   ...
-  PropertiesLoader.setProperty("connector.impl", "de.thischwa.c5c.impl.LocalConnector");
+  PropertiesLoader.setProperty("connector.impl", "codes.thischwa.c5c.impl.LocalConnector");
   ...
 +---+
 
@@ -61,26 +61,26 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.maxUploadSize	         | 10							      | any integer                						 | The maximum size for files that can be uploaded in MB (it's respected, if the filemanager config upload#fileSizeLimit='auto'). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.impl 					 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}}. |
-|									 | .LocalConnector					  | {{{./apidocs/de/thischwa/c5c/Connector.html}<<<de.thischwa.c5c.Connector>>>}} implementation. | 		|
+| connector.impl 					 | codes.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. |
+|									 | .LocalConnector					  | {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}} implementation. | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.filemanagerConfigImpl    | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}. |
-| 									 | .GlobalFilemanagerConfig 		  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<de.thischwa.c5c.requestcycle
+| connector.filemanagerConfigImpl    | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}. |
+| 									 | .GlobalFilemanagerConfig 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle
 |									 |									  | .FilemanagerConfigBuilder>>>}} implementation. 	 | 		|				
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.iconResolverImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle.IconResolver>>>}}. |
-| 									 | .FilemanagerIconResolver 		  | {{{./apidocs/de/thischwa/c5c/requestcycle/IconResolver.html}<<<de.thischwa.c5c.requestcycle
+| connector.iconResolverImpl	     | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/IconResolver.html}<<<codes.thischwa.c5c.requestcycle.IconResolver>>>}}. |
+| 									 | .FilemanagerIconResolver 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/IconResolver.html}<<<codes.thischwa.c5c.requestcycle
 |									 | 									  | .IconResolver>>>}} implementation. 				 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.fileCapabilityImpl	     | de.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle.FilemanagerCapability>>>}}. |
-|									 | .DefaultCapability				  | {{{./apidocs/de/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<de.thischwa.c5c.requestcycle |  |
+| connector.fileCapabilityImpl	     | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerCapability>>>}}. |
+|									 | .DefaultCapability				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle |  |
 |									 | 									  | .FilemanagerCapability>>>}} implementation. 	 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
-|                                    |									  | select,delete,rename,download					 | {{{./apidocs/de/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<de.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
+|                                    |									  | select,delete,rename,download					 | {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.userPathBuilderImpl 	 | de.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
-|									 | .ServerPathBuilder				  | {{{./apidocs/de/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<de.thischwa.c5c.requestcycle | 		|
+| connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
+|									 | .ServerPathBuilder				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requestcycle | 		|
 |									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thmbnails <<Should be untouched!>> |
