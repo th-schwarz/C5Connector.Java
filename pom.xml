@@ -32,6 +32,10 @@
 			<id>thischwa.repo</id>
 			<url>ftp://ftp.strato.com/</url>
 		</repository>
+		<site>
+			<id>thischwa.c5connector</id>
+			<url>${repos.url}</url>
+		</site>
 	</distributionManagement>
 
 	<properties>
@@ -197,30 +201,13 @@
 						</plugin>
 					</reportPlugins>
 				</configuration>
-			</plugin>
-			<plugin>
-				<!-- use mvn site:site for site upload -->
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.9</version>
-				<configuration>
-					<message>Creating site for ${project.version}</message>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>site</phase>
-					</execution>
-				</executions>
 				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.mylyn.github</groupId>
-						<artifactId>org.eclipse.egit.github.core</artifactId>
-						<version>2.1.5</version>
-					</dependency>
-				</dependencies>
+				  <dependency><!-- add support for ssh/scp -->
+				    <groupId>org.apache.maven.wagon</groupId>
+				    <artifactId>wagon-ssh</artifactId>
+				    <version>1.0</version>
+				  </dependency>
+			   </dependencies>
 			</plugin>
 			<plugin>
 				<!-- builds the distribution zip / it's bind to the package phase -->
