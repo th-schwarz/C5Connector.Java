@@ -46,7 +46,7 @@
 		<github.global.server>github</github.global.server>
 		<jii.version>0.5</jii.version>
 		<jackson.version>2.2.2</jackson.version>
-		<slf4j.version>1.7.5</slf4j.version>
+		<slf4j.version>1.7.7</slf4j.version>
 	</properties>
 
 	<repositories>
@@ -238,4 +238,19 @@
 			</extension>
 		</extensions>
 	</build>
+	
+	
+	<developers>
+		<developer>
+			<id>th-schwarz</id>
+			<name>Thilo Schwarz</name>
+			<email>thilo.schwarz AT gmail.com</email>
+			<url>http://www.thischwa.codes</url>
+			<roles>
+				<role>Head Project Manager</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
 </project>

@@ -5,6 +5,7 @@
   * internal: refactored the Dispatcher
   * issue #22: change name of the package to codes.thischwa
   * issue #23: replacing an image doesn't have any effect on preview/thumbnails
+  * updated slf4j to 1.7.7
   
 * 0.5
   * issue #20: All regex from the 'shared' config have to be moved to the properties file
