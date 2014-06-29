@@ -24,8 +24,8 @@
 		<url>https://github.com/th-schwarz/C5Connector.Java</url>
 		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+	    <tag>HEAD</tag>
+    </scm>
 	
 	<distributionManagement>
 		<repository>
