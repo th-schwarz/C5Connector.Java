@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>codes.thischwa.c5c</groupId>
 	<artifactId>c5connector-java</artifactId>
-	<version>0.6-SNAPSHOT</version>
+	<version>0.7-SNAPSHOT</version>
 	<description>The Java backend for the filemanager of corefive.</description>
 	<name>C5Connector.Java</name>
 	<url>http://c5connetor_java.thischwa.codes</url>
