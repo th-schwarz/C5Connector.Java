@@ -33,7 +33,7 @@
 			<url>ftp://ftp.strato.com/</url>
 		</repository>
 		<site>
-			<id>thischwa.c5connector</id>
+			<id>thischwa.site</id>
 			<url>${repos.url}</url>
 		</site>
 	</distributionManagement>

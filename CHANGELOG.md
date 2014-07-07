@@ -1,9 +1,9 @@
 # changelog
 
-* 0.6-SNAPSHOT
+* 0.6
   * issue #21: Implementation of 'replace'
   * internal: refactored the Dispatcher
-  * issue #22: change name of the package to codes.thischwa
+  * issue #22: change name of the base package to codes.thischwa
   * issue #23: replacing an image doesn't have any effect on preview/thumbnails
   * updated slf4j to 1.7.7
   
