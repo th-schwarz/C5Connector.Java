@@ -11,6 +11,7 @@
 package codes.thischwa.c5c;
 
 import java.awt.Dimension;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
@@ -20,6 +21,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +40,8 @@ import codes.thischwa.c5c.util.Path;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
-import de.thischwa.jii.IDimensionProvider;
-import de.thischwa.jii.exception.ReadException;
+import codes.thischwa.jii.IDimensionProvider;
+import codes.thischwa.jii.exception.ReadException;
 
 /**
  * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -287,15 +289,18 @@ public class UserObjectProxy {
 	 * @return the {@link Dimension} of an image
 	 * @throws IOException if the image data couldn't be analyzed
 	 */
-	public static synchronized Dimension getDimension(final InputStream imageIn) throws IOException {
+	public static Dimension getDimension(final InputStream imageIn) throws IOException {
+		InputStream tmpImageIn = null;
 		try {
-			imageIn.mark(0);
-			imageDimensionProvider.set(imageIn);
+			// we have to use a copy of the inputstream, because same dimensionProviders uses #mark 
+			tmpImageIn = new BufferedInputStream(imageIn);
+			imageDimensionProvider.set(tmpImageIn);
 			Dimension dim = imageDimensionProvider.getDimension();
-			imageIn.reset();
 			return dim;
 		} catch (UnsupportedOperationException | ReadException e) {
 			throw new IOException(e);
+		} finally {
+			IOUtils.closeQuietly(tmpImageIn);
 		}
 	}
 	

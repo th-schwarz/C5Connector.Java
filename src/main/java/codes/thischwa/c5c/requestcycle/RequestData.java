@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.StringUtils;
-import de.thischwa.jii.IDimensionProvider;
+import codes.thischwa.jii.IDimensionProvider;
 
 /**
  * This container maintenance objects per request. It relies on {@link ThreadLocal}.<br/>
