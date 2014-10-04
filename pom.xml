@@ -24,20 +24,8 @@
 		<url>https://github.com/th-schwarz/C5Connector.Java</url>
 		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
-	    <tag>HEAD</tag>
     </scm>
-	
-	<distributionManagement>
-		<repository>
-			<id>thischwa.repo</id>
-			<url>ftp://ftp.strato.com/</url>
-		</repository>
-		<site>
-			<id>thischwa.site</id>
-			<url>${repos.url}</url>
-		</site>
-	</distributionManagement>
-
+    
 	<properties>
 		<jse.version>1.7</jse.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,6 +43,17 @@
 			<url>http://maven-repo.thischwa.de/</url>
 		</repository>
 	</repositories>
+	
+	<distributionManagement>
+		<repository>
+			<id>thischwa.repo</id>
+			<url>ftp://ftp.strato.com/</url>
+		</repository>
+		<site>
+			<id>c5connector.site</id>
+			<url>${c5connector-site-url}</url>
+		</site>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -201,13 +200,6 @@
 						</plugin>
 					</reportPlugins>
 				</configuration>
-				<dependencies>
-				  <dependency><!-- add support for ssh/scp -->
-				    <groupId>org.apache.maven.wagon</groupId>
-				    <artifactId>wagon-ssh</artifactId>
-				    <version>1.0</version>
-				  </dependency>
-			   </dependencies>
 			</plugin>
 			<plugin>
 				<!-- builds the distribution zip / it's bind to the package phase -->
@@ -230,15 +222,14 @@
 			</plugin>
 		</plugins>
 		<extensions>
-			<!-- Enabling the use of FTP -->
+			<!-- Enabling the use of ssh/scp -->
 			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-6</version>
+			    <groupId>org.apache.maven.wagon</groupId>
+			    <artifactId>wagon-ssh</artifactId>
+			    <version>2.7</version>
 			</extension>
 		</extensions>
 	</build>
-	
 	
 	<developers>
 		<developer>
