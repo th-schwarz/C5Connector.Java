@@ -12,7 +12,7 @@ C5Connector.Java
   {{{http://velocity.apache.org}Velocity}} or {{{http://freemarker.org}FreeMarker}}.
   
   If the API should be used with the {{{http://ckeditor.com}CKEditor}}, I suggest to use it with 
-  {{{http://th-schwarz.github.io/CKEditor.Java/}CKEditor.Java}}, a simple java backend of the CKEditor.
+  {{{https://github.com/th-schwarz/CKEditor.Java}CKEditor.Java}}, a simple java backend of the CKEditor.
     
   [Hint:] The project is in an early-state and should not to be used in a productive environment! 
           
