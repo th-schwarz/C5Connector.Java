@@ -32,7 +32,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
 		<github.global.server>github</github.global.server>
-		<jii.version>1.1-SNAPSHOT</jii.version>
+		<jii.version>1.0.1</jii.version>
 		<jackson.version>2.2.2</jackson.version>
 		<slf4j.version>1.7.7</slf4j.version>
 	</properties>
@@ -40,14 +40,14 @@
 	<repositories>
 		<repository>
 			<id>thischwa-repro</id>
-			<url>http://maven-repo.thischwa.de/</url>
+			<url>http://maven-repo.thischwa.codes</url>
 		</repository>
 	</repositories>
 	
 	<distributionManagement>
 		<repository>
 			<id>thischwa.repo</id>
-			<url>ftp://ftp.strato.com/</url>
+			<url>${repo-url}</url>
 		</repository>
 		<site>
 			<id>c5connector.site</id>
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>test-jetty-servlet</artifactId>
-			<version>8.1.9.v20130131</version>
+			<version>8.1.16.v20140903</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
