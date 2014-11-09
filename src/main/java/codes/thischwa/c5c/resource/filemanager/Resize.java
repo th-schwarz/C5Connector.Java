@@ -10,38 +10,44 @@
  */
 package codes.thischwa.c5c.resource.filemanager;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents the type <code>images</code> of the JSON configuration of the filemanager. 
+ * Represents the type <code>resize</code> of the JSON configuration of the filemanager.
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Images {
+public class Resize {
 
-	@JsonProperty("imagesExt")
-	private Set<String> extensions;
-	
-	private Resize resize = new Resize();
+	private boolean enabled;
 
-	Images() {
+	private int maxHeight;
+
+	private int maxWidth;
+
+	Resize() {
 	}
 
-	public Set<String> getExtensions() {
-		return extensions;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setExtensions(Set<String> extensions) {
-		this.extensions = extensions;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
-	public Resize getResize() {
-		return resize;
+	public int getMaxHeight() {
+		return maxHeight;
 	}
-	
-	public void setResize(Resize resize) {
-		this.resize = resize;
+
+	public void setMaxHeight(int maxHeight) {
+		this.maxHeight = maxHeight;
+	}
+
+	public int getMaxWidth() {
+		return maxWidth;
+	}
+
+	public void setMaxWidth(int maxWidth) {
+		this.maxWidth = maxWidth;
 	}
 }
