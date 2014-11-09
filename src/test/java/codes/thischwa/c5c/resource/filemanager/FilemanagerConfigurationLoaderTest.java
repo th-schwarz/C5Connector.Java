@@ -29,9 +29,9 @@ public class FilemanagerConfigurationLoaderTest {
 		conf.getOptions().setLang("java");
 		conf.getOptions().setRelPath(Boolean.FALSE);
 
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper(); 
 		String actual = mapper.writeValueAsString(conf);
-		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"showTitleAttr\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"capabilities\":null,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":-1},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null},\"images\":{\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"edit\":{\"enabled\":false,\"lineNumbers\":false,\"lineWrapping\":false,\"codeHighlight\":false,\"theme\":null,\"editExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"_comment\":\"test\"}";
+		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"showTitleAttr\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"capabilities\":null,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":-1},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null},\"images\":{\"resize\":{\"enabled\":false,\"maxHeight\":0,\"maxWidth\":0},\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"edit\":{\"enabled\":false,\"lineNumbers\":false,\"lineWrapping\":false,\"codeHighlight\":false,\"theme\":null,\"editExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"_comment\":\"test\"}";
 		assertEquals(expected, actual);
 	}
 
@@ -61,6 +61,10 @@ public class FilemanagerConfigurationLoaderTest {
 		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
 		
 		assertEquals(5, conf.getOptions().getCapabilities().size());
+		
+		Resize resize = conf.getImages().getResize();
+		assertEquals(1280, resize.getMaxWidth());
+		assertEquals(1024, resize.getMaxHeight());
 	}
 
 	@Test
@@ -68,5 +72,6 @@ public class FilemanagerConfigurationLoaderTest {
 		ObjectMapper mapper = new ObjectMapper();
 		FilemanagerConfig conf = mapper.readValue(this.getClass().getResourceAsStream("filemanager.config.js.default"), FilemanagerConfig.class);
 		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
+		assertTrue(conf.getOptions().isServerRoot());
 	}
 }
