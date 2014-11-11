@@ -75,8 +75,6 @@ final class DispatcherPUT extends GenericDispatcher {
 			FilemanagerAction mode = ctx.getMode();
 			HttpServletRequest req = ctx.getServletRequest();
 			FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
-			Integer maxFileSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload()
-					.getFileSizeLimit();
 			switch(mode) {
 			case UPLOAD: {
 				boolean overwrite = conf.getUpload().isOverwrite();
@@ -85,9 +83,6 @@ final class DispatcherPUT extends GenericDispatcher {
 				Part uploadPart = req.getPart("newfile");
 				String newName = getFileName(uploadPart);
 
-				// check image only
-				boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
-				
 				// Some browsers transfer the entire source path not just the filename
 				String fileName = FilenameUtils.getName(newName); // TODO check forceSingleExtension
 				String sanitizedName = FileUtils.sanitizeName(fileName);
@@ -102,28 +97,11 @@ final class DispatcherPUT extends GenericDispatcher {
 				}
 				sanitizedName = uniqueName;
 				
-				// check the max. upload size
-				checkUploadSize(maxFileSize.longValue() * 1024 * 1024, uploadPart.getSize());
-				
 				in = uploadPart.getInputStream();
 				
-				// save the file temporary
-				Path tempPath = saveTemp(in, sanitizedName);
+				// process the upload
+				Path tempPath = processUpload(backendPath, in, sanitizedName, uploadPart.getSize(), conf);
 				
-				// check if the file is really an image
-				Dimension dim = getDimension(new BufferedInputStream(Files.newInputStream(tempPath)));
-				if(isImageExt && dim == null)
-	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
-				
-				// check if resize is enabled and fix it, if necessary 
-				Resize resize = conf.getImages().getResize();
-				if(resize.isEnabled() && (dim.getHeight() > resize.getMaxHeight() || dim.getWidth() > resize.getMaxWidth())) {
-					logger.debug("process resize");
-					String ext = FilenameUtils.getExtension(sanitizedName);
-					StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, resize.getMaxWidth(), resize.getMaxHeight());
-					Files.copy(sc.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
-				}
-
 				connector.upload(backendPath, sanitizedName, new BufferedInputStream(Files.newInputStream(tempPath)));
 
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
@@ -145,22 +123,13 @@ final class DispatcherPUT extends GenericDispatcher {
 					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
 				}
 				
-				// check image only
-				boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
-				
 				Part uploadPart = req.getPart("fileR");
-				
-				// check the max. upload size
-				checkUploadSize(maxFileSize.longValue() * 1024 * 1024, uploadPart.getSize());
-				
 				in = uploadPart.getInputStream();
+
+				// process the upload
+				Path tempPath = processUpload(backendPath, in, fileName, uploadPart.getSize(), conf);
 				
-				// check if the file is really an image
-				Dimension dim = getDimension(in);
-				if(isImageExt && dim == null)
-	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
-				
-				connector.replace(backendPath, in);
+				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
 				logger.debug("successful replaced {} bytes", uploadPart.getSize());
 				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
  				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
@@ -189,6 +158,35 @@ final class DispatcherPUT extends GenericDispatcher {
 			IOUtils.closeQuietly(in);
 		}
 	};
+	
+	private Path processUpload(String backendPath, InputStream reqIn, String sanitizedName, long fileSize, FilemanagerConfig conf) throws C5CException, IOException {
+		Integer maxSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload().getFileSizeLimit();
+		if(fileSize > maxSize.longValue() * 1024 * 1024)
+			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan,
+					String.valueOf(maxSize));
+
+		// check image only
+		boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
+		
+		// save the file temporary
+		Path tempPath = saveTemp(reqIn, sanitizedName);
+		
+		// check if the file is really an image
+		Dimension dim = getDimension(new BufferedInputStream(Files.newInputStream(tempPath)));
+		if(isImageExt && dim == null)
+				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+		
+		// check if resize is enabled and fix it, if necessary 
+		Resize resize = conf.getImages().getResize();
+		if(resize.isEnabled() && (dim.getHeight() > resize.getMaxHeight() || dim.getWidth() > resize.getMaxWidth())) {
+			logger.debug("process resize");
+			String ext = FilenameUtils.getExtension(sanitizedName);
+			StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, resize.getMaxWidth(), resize.getMaxHeight());
+			Files.copy(sc.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
+		}
+
+		return tempPath;
+	}
 	
 	private Path saveTemp(InputStream in, String name) throws IOException {
 		String baseName = FilenameUtils.getBaseName(name);
@@ -220,12 +218,6 @@ final class DispatcherPUT extends GenericDispatcher {
 		if(imageOnly && !isImgExt)
 			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
 		return isImgExt;
-	}
-	
-	private void checkUploadSize(long maxSize, long fileSize) throws FilemanagerException {
-		if(fileSize > maxSize)
-			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan,
-					String.valueOf(maxSize));
 	}
 	
 	private String getUniqueName(String backendPath, String name) throws C5CException {
