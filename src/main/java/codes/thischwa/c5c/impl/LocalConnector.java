@@ -252,14 +252,14 @@ public class LocalConnector extends GenericConnector {
 	}
 
 	@Override
-	public StreamContent download(String urlPath) throws C5CException {
-		Path file = buildRealPath(urlPath);
+	public StreamContent download(String backendPath) throws C5CException {
+		Path file = buildRealPath(backendPath);
 		try {
 			InputStream in = new BufferedInputStream(Files.newInputStream(file, StandardOpenOption.READ));
 			return buildStreamContent(in, Files.size(file));
 		} catch (FileNotFoundException e) {
 			logger.error("Requested file not exits: {}", file.toAbsolutePath());
-			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, urlPath);
+			throw new FilemanagerException(FilemanagerAction.DOWNLOAD, FilemanagerException.Key.FileNotExists, backendPath);
 		} catch (IOException | SecurityException e) {
 			String msg = String.format("Error while downloading {}: {}", file.getFileName().toFile(), e.getMessage());
 			logger.error(msg, e);
@@ -268,9 +268,9 @@ public class LocalConnector extends GenericConnector {
 	}	
 	
 	@Override
-	public StreamContent buildThumbnail(String urlPath, int thumbnailWidth, int thumbnailHeight) throws C5CException {
-		Path file = buildRealPath(urlPath);
-		String ext = FilenameUtils.getExtension(urlPath);
+	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException {
+		Path file = buildRealPath(backendPath);
+		String ext = FilenameUtils.getExtension(backendPath);
 
 		InputStream in = null;
 		try {
@@ -280,6 +280,16 @@ public class LocalConnector extends GenericConnector {
 			throw new C5CException(FilemanagerAction.THUMBNAIL, e.getMessage());
 		} finally { 
 			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	@Override
+	public StreamContent preview(String backendPath) throws C5CException {
+		Path file = buildRealPath(backendPath);
+		try {
+			return buildStreamContent(Files.newInputStream(file), Files.size(file));
+		} catch (IOException e) {
+			throw new C5CException(FilemanagerAction.PREVIEW, e.getMessage());
 		}
 	}
 
@@ -305,8 +315,8 @@ public class LocalConnector extends GenericConnector {
 	}
 
 	@Override
-	public String editFile(String urlPath) throws C5CException {
-		Path file = buildRealPath(urlPath);
+	public String editFile(String backendPath) throws C5CException {
+		Path file = buildRealPath(backendPath);
 		InputStream in = null;
 		try {
 			in = Files.newInputStream(file, StandardOpenOption.READ);
@@ -319,8 +329,8 @@ public class LocalConnector extends GenericConnector {
 	}
 	
 	@Override
-	public void saveFile(String urlPath, String content) throws C5CException {
-		Path file = buildRealPath(urlPath);
+	public void saveFile(String backendPath, String content) throws C5CException {
+		Path file = buildRealPath(backendPath);
 		OutputStream out = null;
 		try {
 			out = Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE);

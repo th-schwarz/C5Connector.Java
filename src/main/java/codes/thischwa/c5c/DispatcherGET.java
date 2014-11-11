@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.GenericConnector.StreamContent;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException.Key;
 import codes.thischwa.c5c.requestcycle.Context;
@@ -34,6 +35,7 @@ import codes.thischwa.c5c.requestcycle.response.mode.Download;
 import codes.thischwa.c5c.requestcycle.response.mode.EditFile;
 import codes.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import codes.thischwa.c5c.requestcycle.response.mode.FolderInfo;
+import codes.thischwa.c5c.requestcycle.response.mode.Prieview;
 import codes.thischwa.c5c.requestcycle.response.mode.Rename;
 import codes.thischwa.c5c.requestcycle.response.mode.ShowThumbnail;
 import codes.thischwa.c5c.resource.PropertiesLoader;
@@ -126,7 +128,7 @@ final class DispatcherGET extends GenericDispatcher {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* download -> urlPath: {}, backendPath: {}", urlPath, backendPath);
-				GenericConnector.StreamContent sc = connector.download(backendPath);
+				StreamContent sc = connector.download(backendPath);
 				resp = buildDownload(backendPath, sc);
 				break;
 			}
@@ -135,8 +137,23 @@ final class DispatcherGET extends GenericDispatcher {
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}", urlPath, backendPath);
 				Dimension dim = UserObjectProxy.getThumbnailDimension();
-				GenericConnector.StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
+				StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
 				resp = buildThumbnailView(backendPath, sc);
+				break;
+			}
+			case PREVIEW: {
+				String urlPath = req.getParameter("path");
+				String backendPath = buildBackendPath(urlPath);
+				boolean thumbnail = Boolean.valueOf(req.getParameter("thumbnail"));
+				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}, thumbnail: {}", urlPath, backendPath, thumbnail);
+				if(thumbnail) {
+					Dimension dim = UserObjectProxy.getThumbnailDimension();
+					StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
+					resp = buildThumbnailView(backendPath, sc);					
+				} else {
+					StreamContent sc = connector.preview(backendPath);
+					resp = buildPrieview(backendPath, sc);
+				}
 				break;
 			}
 			case EDITFILE: {
@@ -180,7 +197,7 @@ final class DispatcherGET extends GenericDispatcher {
 			// attention: urlPath can be with or without a file name!
 			HttpServletRequest req = RequestData.getContext().getServletRequest();
 			String previewUrlPath = (urlPath.endsWith(vf.getName())) ? urlPath : urlPath.concat(fp.getName());
-			String query =  String.format("?mode=%s&path=%s&t=%s", FilemanagerAction.THUMBNAIL.getParameterName(), encode(previewUrlPath), Calendar.getInstance().getTimeInMillis());
+			String query =  String.format("?mode=%s&path=%s&t=%s", FilemanagerAction.PREVIEW.getParameterName(), encode(previewUrlPath), Calendar.getInstance().getTimeInMillis());
 			String preview = String.format("%s%s%s",req.getContextPath(), req.getServletPath(), query); 
 			fi.setPreviewPath(preview);
 		} else {
@@ -212,12 +229,16 @@ final class DispatcherGET extends GenericDispatcher {
 		return new CreateFolder(parentUrlPath, folderName);
 	}
 
-	private Download buildDownload(String fullPath, GenericConnector.StreamContent di) {
-		return new Download(fullPath, di.getSize(), di.getInputStream());
+	private Download buildDownload(String fullPath, StreamContent sc) {
+		return new Download(fullPath, sc.getSize(), sc.getInputStream());
 	}
 
-	private ShowThumbnail buildThumbnailView(String fullPath, GenericConnector.StreamContent di) {
-		return new ShowThumbnail(fullPath, di.getSize(), di.getInputStream());
+	private ShowThumbnail buildThumbnailView(String fullPath, StreamContent sc) {
+		return new ShowThumbnail(fullPath, sc.getSize(), sc.getInputStream());
+	}
+	
+	private Prieview buildPrieview(String fullPath, StreamContent sc) {
+		return new Prieview(fullPath, sc.getSize(), sc.getInputStream());
 	}
 	
 	private void setCapabilities(FileInfo fi, String urlPath) {

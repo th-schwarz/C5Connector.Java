@@ -175,6 +175,17 @@ public interface Connector {
 	 * @throws IOException
 	 */
 	public StreamContent resize(InputStream imageIn, String imageExt, int width, int height) throws IOException;
+	
+	/**
+	 * Generates a preview of the requested image ('backendPath') and writes it to the returned {@link StreamContent}.
+	 * 
+	 * @param backendPath
+	 *            the requested file to build an {@link InputStream} for the preview, e.g. <code>/UserFiles/Image/logo.png</code>
+	 * @return {@link GenericConnector.StreamContent} which holds the required data of the image. Use
+	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
+	 * @throws C5CException
+	 */
+	public StreamContent preview(String backendPath) throws C5CException;
 
 	/**
 	 * Executes the 'editfile'-method of the filemanager.
