@@ -1,5 +1,8 @@
 # changelog
 
+* 0.7-SNAPSHOT
+  * renamed Connector#buildThumbnail to Connector#resize
+
 * 0.6
   * issue #21: Implementation of 'replace'
   * internal: refactored the Dispatcher

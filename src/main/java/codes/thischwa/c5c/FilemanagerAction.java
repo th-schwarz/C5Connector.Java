@@ -34,6 +34,8 @@ public enum FilemanagerAction {
 	
 	THUMBNAIL(null, "thumbnail"),
 	
+	PREVIEW(null, "preview"),
+	
 	EDITFILE(FilemanagerAction.CONTENTTYPE_JSON, "editfile"),
 	
 	SAVEFILE(FilemanagerAction.CONTENTTYPE_JSON, "savefile");

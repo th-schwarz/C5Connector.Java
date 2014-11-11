@@ -44,11 +44,6 @@ public abstract class GenericConnector implements Connector {
 
 	private Set<String> imageExtensions;
 
-	@Override
-	public void setImageExtensions(Set<String> imageExtensions) {
-		this.imageExtensions = imageExtensions;
-	}
-
 	/**
 	 * Simple container object to hold data which is needed to stream content via {@link InputStream} e.g. it's needed for the download
 	 * action.
@@ -109,6 +104,11 @@ public abstract class GenericConnector implements Connector {
 	@Override
 	public void init() throws RuntimeException {
 		logger.info("*** {} sucessful initialized.", this.getClass().getName());
+	}
+	
+	@Override
+	public void setImageExtensions(Set<String> imageExtensions) {
+		this.imageExtensions = imageExtensions;
 	}
 
 	@Override

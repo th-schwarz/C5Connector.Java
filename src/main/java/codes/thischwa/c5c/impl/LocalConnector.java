@@ -272,25 +272,35 @@ public class LocalConnector extends GenericConnector {
 		Path file = buildRealPath(urlPath);
 		String ext = FilenameUtils.getExtension(urlPath);
 
-		BufferedImage img = null;
-		BufferedImage newImg = null;
 		InputStream in = null;
 		try {
 			in = Files.newInputStream(file, StandardOpenOption.READ);
-			img = ImageIO.read(in);
-			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, thumbnailWidth, thumbnailHeight);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(newImg, ext, baos);
-			baos.flush();
-			return buildStreamContent(new ByteArrayInputStream(baos.toByteArray()), baos.size());
+			return resize(in, ext, thumbnailWidth, thumbnailHeight);
 		} catch (IllegalArgumentException | ImagingOpException | IOException e) {
 			throw new C5CException(FilemanagerAction.THUMBNAIL, e.getMessage());
+		} finally { 
+			IOUtils.closeQuietly(in);
+		}
+	}
+
+	@Override
+	public StreamContent resize(InputStream imageIn, String imageExt, int width, int height) throws IOException {
+		BufferedImage img = null;
+		BufferedImage newImg = null;
+		try {
+			img = ImageIO.read(imageIn);
+			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(newImg, imageExt, baos);
+			baos.flush();
+			return buildStreamContent(new ByteArrayInputStream(baos.toByteArray()), baos.size());
+		} catch (IllegalArgumentException | ImagingOpException e) {
+			throw new IOException(e);
 		} finally { 
 			if(img != null)
 				img.flush();
 			if(newImg != null)
 				newImg.flush();
-			IOUtils.closeQuietly(in);
 		}
 	}
 

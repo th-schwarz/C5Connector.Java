@@ -10,8 +10,14 @@
  */
 package codes.thischwa.c5c;
 
+import java.awt.Dimension;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.GenericConnector.StreamContent;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException;
 import codes.thischwa.c5c.exception.FilemanagerException.Key;
@@ -36,6 +43,7 @@ import codes.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import codes.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.resource.filemanager.Resize;
 import codes.thischwa.c5c.util.FileUtils;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
@@ -98,25 +106,32 @@ final class DispatcherPUT extends GenericDispatcher {
 				checkUploadSize(maxFileSize.longValue() * 1024 * 1024, uploadPart.getSize());
 				
 				in = uploadPart.getInputStream();
-
+				
+				// save the file temporary
+				Path tempPath = saveTemp(in, sanitizedName);
+				
 				// check if the file is really an image
-				if(isImageExt && !UserObjectProxy.isImage(in))
+				Dimension dim = getDimension(new BufferedInputStream(Files.newInputStream(tempPath)));
+				if(isImageExt && dim == null)
 	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+				
+				// check if resize is enabled and fix it, if necessary 
+				Resize resize = conf.getImages().getResize();
+				if(resize.isEnabled() && (dim.getHeight() > resize.getMaxHeight() || dim.getWidth() > resize.getMaxWidth())) {
+					logger.debug("process resize");
+					String ext = FilenameUtils.getExtension(sanitizedName);
+					StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, resize.getMaxWidth(), resize.getMaxHeight());
+					Files.copy(sc.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
+				}
 
-				connector.upload(backendPath, sanitizedName, in);
+				connector.upload(backendPath, sanitizedName, new BufferedInputStream(Files.newInputStream(tempPath)));
 
 				logger.debug("successful uploaded {} bytes", uploadPart.getSize());
+				Files.delete(tempPath);
 				UploadFile ufResp = new UploadFile(currentPath, sanitizedName);
 				ufResp.setName(newName);
 				ufResp.setPath(currentPath);
 				return ufResp;
-			} case SAVEFILE: {
-				String urlPath = req.getParameter("path");
-				String backendPath = buildBackendPath(urlPath);
-				logger.debug("* savefile -> urlPath: {}, backendPath: {}", urlPath, backendPath);
-				String content = req.getParameter("content");
-				connector.saveFile(backendPath, content);
-				return new SaveFile(urlPath);
 			} case REPLACE: {
 				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
 				String backendPath = buildBackendPath(newFilePath);
@@ -141,13 +156,21 @@ final class DispatcherPUT extends GenericDispatcher {
 				in = uploadPart.getInputStream();
 				
 				// check if the file is really an image
-				if(isImageExt && !UserObjectProxy.isImage(in))
+				Dimension dim = getDimension(in);
+				if(isImageExt && dim == null)
 	 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
 				
 				connector.replace(backendPath, in);
 				logger.debug("successful replaced {} bytes", uploadPart.getSize());
 				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
  				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
+			} case SAVEFILE: {
+				String urlPath = req.getParameter("path");
+				String backendPath = buildBackendPath(urlPath);
+				logger.debug("* savefile -> urlPath: {}, backendPath: {}", urlPath, backendPath);
+				String content = req.getParameter("content");
+				connector.saveFile(backendPath, content);
+				return new SaveFile(urlPath);
 			}
 			default: {
 				logger.error("Unknown 'mode' for POST: {}", req.getParameter("mode"));
@@ -166,6 +189,30 @@ final class DispatcherPUT extends GenericDispatcher {
 			IOUtils.closeQuietly(in);
 		}
 	};
+	
+	private Path saveTemp(InputStream in, String name) throws IOException {
+		String baseName = FilenameUtils.getBaseName(name);
+		String ext = FilenameUtils.getExtension(name);
+		OutputStream out = null;
+		try {
+			Path tempPath = Files.createTempFile(UserObjectProxy.getTempDirectory(), baseName, ext);
+			Files.copy(in, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			return tempPath;
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+		
+	}
+	
+	private Dimension getDimension(InputStream imageIn) {
+		try {
+			return UserObjectProxy.getDimension(imageIn);
+		} catch (IOException e) {
+			return null;
+		}
+	}
 	
 	private boolean checkImageExtension(String path, boolean imageOnly, Set<String> imageExtensions) throws FilemanagerException {
 		String imgExt = FilenameUtils.getExtension(path);

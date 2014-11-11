@@ -12,6 +12,7 @@ package codes.thischwa.c5c;
 
 import java.awt.Dimension;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
@@ -21,7 +22,6 @@ import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +63,8 @@ public class UserObjectProxy {
 	private static Pattern dimensionPattern = Pattern.compile("(\\d+)x(\\d+)");
 	
 	private static ServletContext servletContext;
+	
+	private static java.nio.file.Path tempDirectory;
 	
 	private static IconResolver iconResolver;
 	
@@ -183,8 +185,16 @@ public class UserObjectProxy {
 			thumbnailDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
 		}
 
+		// 8. fetch the temporary directory
+		File tempDir = (File) UserObjectProxy.servletContext.getAttribute(ServletContext.TEMPDIR);
+		if(tempDir == null) {
+			String msg = "No temporary directory according to the Servlet spec SRV.3.7.1 found!";
+			logger.error(msg);
+			throw new RuntimeException(msg);
+		}
+		tempDirectory = tempDir.toPath();
 		
-		// 8. build regex pattern
+		// 9. build regex pattern
 		String folderExcludePatternStr = PropertiesLoader.getRegexToExcludeFolders();
 		if(StringUtils.isNullOrEmptyOrBlank(folderExcludePatternStr)) {
 			logger.warn("Property 'connector.regex.exclude.folders' isn't set.");
@@ -299,24 +309,6 @@ public class UserObjectProxy {
 			return dim;
 		} catch (UnsupportedOperationException | ReadException e) {
 			throw new IOException(e);
-		} finally {
-			IOUtils.closeQuietly(tmpImageIn);
-		}
-	}
-	
-	/**
-	 * Checks if a file is an image.
-	 * 
-	 * @param imageIn
-	 *            {@link InputStream} of the underlying file, it will be reseted!
-	 * @return <code>true</code> if the file is really an image, otherwise <code>false</code>
-	 */
-	public static boolean isImage(final InputStream imageIn) {
-		try {
-			getDimension(imageIn);
-			return true;
-		} catch (IOException e) {
-			return false;
 		}
 	}
 	
@@ -355,5 +347,14 @@ public class UserObjectProxy {
 		
 		Matcher matcher = excludeFilesPattern.matcher(name);
 		return !matcher.matches();
+	}
+	
+	/**
+	 * Getter for the temporary directory of the servlet context.
+	 * 
+	 * @return the temporary directory
+	 */
+	public static java.nio.file.Path getTempDirectory() {
+		return tempDirectory;
 	}
 }

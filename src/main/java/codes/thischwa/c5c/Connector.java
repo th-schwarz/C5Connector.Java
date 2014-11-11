@@ -19,6 +19,7 @@
  */
 package codes.thischwa.c5c;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +33,8 @@ import codes.thischwa.c5c.requestcycle.BackendPathBuilder;
  * The backend interface for the connector servlet of the filemanager of corefive. <br/>
  * In general a connector serves and manages files and folders accessed through the filemanager on an arbitrary backend system. The
  * connector will retrieve a valid request. 'Valid' means in terms of correct and reasonable parameters.<br/>
- * Most of the methods get a parameter named 'backendPath' or similar. This is the requested url-path mapped to a path of the backend by
- * the {@link BackendPathBuilder}.<br/>
+ * Most of the methods get a parameter named 'backendPath' or similar. This is the requested url-path mapped to a path of the backend by the
+ * {@link BackendPathBuilder}.<br/>
  * <br/>
  * <b>Hint for implementations:</b> For throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful
  * constructors are provided.
@@ -47,10 +48,9 @@ public interface Connector {
 	 *             if the initialization fails.
 	 */
 	public void init() throws RuntimeException;
-	
+
 	/**
-	 * Setter for the file extensions for images.
-	 * It will be used for additional checks and the handling of file properties. 
+	 * Setter for the file extensions for images. It will be used for additional checks and the handling of file properties.
 	 * 
 	 * @param imageExtensions
 	 */
@@ -143,8 +143,9 @@ public interface Connector {
 	public GenericConnector.StreamContent download(String backendPath) throws C5CException;
 
 	/**
-	 * Generates a thumbnail of the requested image ('backendPath') and writes it to 'out'. The caller ensures that 'backendPath' is an
-	 * image.
+	 * Generates a thumbnail of the requested image ('backendPath') and writes it to the returned {@link StreamContent}. The caller has to
+	 * ensure that 'backendPath' is an image. <br/>
+	 * Hint: The implementation should use {@link #resize(InputStream, String, int, int)} internally.
 	 * 
 	 * @param backendPath
 	 *            the requested file to build an {@link InputStream} for the preview, e.g. <code>/UserFiles/Image/logo.png</code>
@@ -157,7 +158,24 @@ public interface Connector {
 	 * @throws C5CException
 	 */
 	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException;
-	
+
+	/**
+	 * Resizes an image and writes it to the returned {@link StreamContent}.
+	 * 
+	 * @param imageIn
+	 *            {@link InputStream} of the image
+	 * @param imageExt
+	 *            file extension of the image
+	 * @param width
+	 *            width of the image
+	 * @param height
+	 *            height of the image
+	 * @return {@link GenericConnector.StreamContent} which holds the required data of the image. Use
+	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
+	 * @throws IOException
+	 */
+	public StreamContent resize(InputStream imageIn, String imageExt, int width, int height) throws IOException;
+
 	/**
 	 * Executes the 'editfile'-method of the filemanager.
 	 * 
@@ -167,17 +185,17 @@ public interface Connector {
 	 * @throws C5CException
 	 */
 	public String editFile(String backendPath) throws C5CException;
-	
+
 	/**
 	 * Executes the 'savefile'-method of the filemanager.
 	 * 
 	 * @param backendPath
 	 *            the requested file to get the content from, e.g. <code>/UserFiles/sub/text.txt</code>
-	 * @param content content of the file to save
+	 * @param content
+	 *            content of the file to save
 	 * @throws C5CException
 	 */
 	public void saveFile(String backendPath, String content) throws C5CException;
-	
 
 	/**
 	 * Executes the 'savefile'-method of the filemanager.
