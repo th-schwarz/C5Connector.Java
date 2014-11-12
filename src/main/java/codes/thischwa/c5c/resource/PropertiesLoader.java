@@ -146,15 +146,6 @@ public class PropertiesLoader {
 	public static String getFilemanagerPath() {
 		return properties.getProperty("connector.filemanagerPath");
 	}
-
-	/**
-	 * Returns <code>connector.secureImageUploads</code> property
-	 *
-	 * @return true, if is secure image uploads
-	 */
-	public static boolean isSecureImageUploads() {
-		return Boolean.valueOf(properties.getProperty("connector.secureImageUploads"));
-	}
 	
 	/**
 	 * Returns <code>connector.iconResolverImpl</code> property

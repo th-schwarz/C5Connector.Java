@@ -53,8 +53,6 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.defaultEncoding 		 | ISO-8859-1              			  | any valid standard charset, or empty     		 | The character encoding of the HttpResponse. If it is empty, no charset will be explicitly set. <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.secureImageUploads  	 | true	                			  | true, false (boolean)	   						 | Checks validity of uploaded images. |
-*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.forceSingleExtension  	 | true		               			  | true, false (boolean)	    					 | Indicates whether filenames with multiple extensions are sanitized. <<Not yet implemented!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerPath          | /filemanager					      | any path                   						 | The path of the editor installation resides within your webapp. |
@@ -79,7 +77,7 @@ Configuration properties
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
 |                                    |									  | select,delete,rename,download					 | {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
+| connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
 |									 | .ServerPathBuilder				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requestcycle | 		|
 |									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
