@@ -1,7 +1,9 @@
 # changelog
 
 * 0.7-SNAPSHOT
-  * renamed Connector#buildThumbnail to Connector#resize
+  * internal: refactored the upload code
+  * issue #25: Implementation of the mode 'preview'
+  * issue #26: introduce a property to hold the max. preview dimension
 
 * 0.6
   * issue #21: Implementation of 'replace'
