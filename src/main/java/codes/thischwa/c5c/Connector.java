@@ -19,6 +19,7 @@
  */
 package codes.thischwa.c5c;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -145,19 +146,17 @@ public interface Connector {
 	/**
 	 * Generates a thumbnail of the requested image ('backendPath') and writes it to the returned {@link StreamContent}. The caller has to
 	 * ensure that 'backendPath' is an image. <br/>
-	 * Hint: The implementation should use {@link #resize(InputStream, String, int, int)} internally.
+	 * Hint: The implementation should use {@link #resize(InputStream, String, Dimension)} internally.
 	 * 
 	 * @param backendPath
 	 *            the requested file to build an {@link InputStream} for the preview, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @param thumbnailWidth
-	 *            width of the thumbnail
-	 * @param thumbnailHeight
-	 *            height of the thumbnail
+	 * @param dim
+	 *            the dimension of the thumbnail, shouldn't be null
 	 * @return {@link GenericConnector.StreamContent} which holds the required data of the thumbnail. Use
 	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException;
+	public StreamContent buildThumbnail(String backendPath, Dimension dim) throws C5CException;
 
 	/**
 	 * Resizes an image and writes it to the returned {@link StreamContent}.
@@ -166,26 +165,27 @@ public interface Connector {
 	 *            {@link InputStream} of the image
 	 * @param imageExt
 	 *            file extension of the image
-	 * @param width
-	 *            width of the image
-	 * @param height
-	 *            height of the image
+	 * @param dim
+	 *            the dimension of an image
 	 * @return {@link GenericConnector.StreamContent} which holds the required data of the image. Use
 	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws IOException
 	 */
-	public StreamContent resize(InputStream imageIn, String imageExt, int width, int height) throws IOException;
-	
+	public StreamContent resize(InputStream imageIn, String imageExt, Dimension dim) throws IOException;
+
 	/**
 	 * Generates a preview of the requested image ('backendPath') and writes it to the returned {@link StreamContent}.
 	 * 
 	 * @param backendPath
 	 *            the requested file to build an {@link InputStream} for the preview, e.g. <code>/UserFiles/Image/logo.png</code>
+	 * @param maxDim
+	 *            the max. dimension of an image, if it is <code>null</code> or greater than the original size it should be shown in its original
+	 *            size
 	 * @return {@link GenericConnector.StreamContent} which holds the required data of the image. Use
 	 *         {@link GenericConnector#buildStreamContent(InputStream, long)} to build it.
 	 * @throws C5CException
 	 */
-	public StreamContent preview(String backendPath) throws C5CException;
+	public StreamContent preview(String backendPath, Dimension maxDim) throws C5CException;
 
 	/**
 	 * Executes the 'editfile'-method of the filemanager.

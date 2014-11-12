@@ -137,7 +137,7 @@ final class DispatcherGET extends GenericDispatcher {
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}", urlPath, backendPath);
 				Dimension dim = UserObjectProxy.getThumbnailDimension();
-				StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
+				StreamContent sc = connector.buildThumbnail(backendPath, dim);
 				resp = buildThumbnailView(backendPath, sc);
 				break;
 			}
@@ -148,10 +148,10 @@ final class DispatcherGET extends GenericDispatcher {
 				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}, thumbnail: {}", urlPath, backendPath, thumbnail);
 				if(thumbnail) {
 					Dimension dim = UserObjectProxy.getThumbnailDimension();
-					StreamContent sc = connector.buildThumbnail(backendPath, dim.width, dim.height);
+					StreamContent sc = connector.buildThumbnail(backendPath, dim);
 					resp = buildThumbnailView(backendPath, sc);					
 				} else {
-					StreamContent sc = connector.preview(backendPath);
+					StreamContent sc = connector.preview(backendPath, UserObjectProxy.getPreviewDimension());
 					resp = buildPrieview(backendPath, sc);
 				}
 				break;

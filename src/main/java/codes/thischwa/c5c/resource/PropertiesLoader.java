@@ -252,6 +252,15 @@ public class PropertiesLoader {
 	} 
 
 	/**
+	 * Gets the dimension for preview.
+	 *
+	 * @return <code>connector.preview.dimension</code> property
+	 */
+	public static String getPreviewDimension() {
+		return properties.getProperty("connector.preview.dimension");
+	} 
+
+	/**
 	 * Gets the regex to exclude folders by name.
 	 *
 	 * @return <code>connector.regex.exclude.folders</code> property

@@ -79,6 +79,8 @@ public class UserObjectProxy {
 	private static IDimensionProvider imageDimensionProvider;
 	
 	private static Dimension thumbnailDimension;
+	
+	private static Dimension previewDimension;
 
 	private static Pattern excludeFoldersPattern;
 
@@ -185,6 +187,12 @@ public class UserObjectProxy {
 			thumbnailDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
 		}
 
+		// 8. try to read the dimension for preview
+		dimMatcher = dimensionPattern.matcher(PropertiesLoader.getPreviewDimension());
+		if(dimMatcher.matches()) {
+			previewDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
+		}
+
 		// 8. fetch the temporary directory
 		File tempDir = (File) UserObjectProxy.servletContext.getAttribute(ServletContext.TEMPDIR);
 		if(tempDir == null) {
@@ -194,7 +202,7 @@ public class UserObjectProxy {
 		}
 		tempDirectory = tempDir.toPath();
 		
-		// 9. build regex pattern
+		// 10. build regex pattern
 		String folderExcludePatternStr = PropertiesLoader.getRegexToExcludeFolders();
 		if(StringUtils.isNullOrEmptyOrBlank(folderExcludePatternStr)) {
 			logger.warn("Property 'connector.regex.exclude.folders' isn't set.");
@@ -319,6 +327,15 @@ public class UserObjectProxy {
 	 */
 	public static Dimension getThumbnailDimension() {
 		return thumbnailDimension;
+	}
+
+	/**
+	 * Getter for the adjusted preview dimension.
+	 * 
+	 * @return the preview dimension
+	 */
+	public static Dimension getPreviewDimension() {
+		return previewDimension;
 	}
 	
 	/**

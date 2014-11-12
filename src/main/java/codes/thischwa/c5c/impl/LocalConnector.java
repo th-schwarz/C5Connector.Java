@@ -49,7 +49,10 @@ import codes.thischwa.c5c.resource.PropertiesLoader;
 /**
  * The default implementation of the connector servlet.
  * It's a real local filesystem backend connector. The file access is translated as-is
- * to the local filesystem. A servlet context is respected, if it exists.
+ * to the local filesystem. A servlet context is respected, if it exists. <br/>
+ * <br/>
+ * For resizing images the 
+ * <a href="http://www.thebuzzmedia.com/software/imgscalr-java-image-scaling-library/">imgscalr – Java Image Scaling Library</a> is used.
  */
 public class LocalConnector extends GenericConnector {
 	
@@ -268,14 +271,14 @@ public class LocalConnector extends GenericConnector {
 	}	
 	
 	@Override
-	public StreamContent buildThumbnail(String backendPath, int thumbnailWidth, int thumbnailHeight) throws C5CException {
+	public StreamContent buildThumbnail(String backendPath, Dimension dim) throws C5CException {
 		Path file = buildRealPath(backendPath);
 		String ext = FilenameUtils.getExtension(backendPath);
 
 		InputStream in = null;
 		try {
-			in = Files.newInputStream(file, StandardOpenOption.READ);
-			return resize(in, ext, thumbnailWidth, thumbnailHeight);
+			in = Files.newInputStream(file);
+			return resize(in, ext, dim);
 		} catch (IllegalArgumentException | ImagingOpException | IOException e) {
 			throw new C5CException(FilemanagerAction.THUMBNAIL, e.getMessage());
 		} finally { 
@@ -284,9 +287,13 @@ public class LocalConnector extends GenericConnector {
 	}
 	
 	@Override
-	public StreamContent preview(String backendPath) throws C5CException {
+	public StreamContent preview(String backendPath, Dimension maxPreviewDim) throws C5CException {
 		Path file = buildRealPath(backendPath);
 		try {
+			Dimension currentDim = UserObjectProxy.getDimension(Files.newInputStream(file));
+			if(maxPreviewDim != null && (currentDim.width > maxPreviewDim.width || currentDim.height > maxPreviewDim.height)) {
+				return resize(new BufferedInputStream(Files.newInputStream(file)), FilenameUtils.getExtension(backendPath), maxPreviewDim);
+			}
 			return buildStreamContent(Files.newInputStream(file), Files.size(file));
 		} catch (IOException e) {
 			throw new C5CException(FilemanagerAction.PREVIEW, e.getMessage());
@@ -294,12 +301,12 @@ public class LocalConnector extends GenericConnector {
 	}
 
 	@Override
-	public StreamContent resize(InputStream imageIn, String imageExt, int width, int height) throws IOException {
+	public StreamContent resize(InputStream imageIn, String imageExt, Dimension dim) throws IOException {
 		BufferedImage img = null;
 		BufferedImage newImg = null;
 		try {
 			img = ImageIO.read(imageIn);
-			newImg = Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height);
+			newImg = Scalr.resize(img, Scalr.Method.BALANCED, Scalr.Mode.AUTOMATIC, dim.width, dim.height);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(newImg, imageExt, baos);
 			baos.flush();

@@ -181,7 +181,7 @@ final class DispatcherPUT extends GenericDispatcher {
 		if(resize.isEnabled() && (dim.getHeight() > resize.getMaxHeight() || dim.getWidth() > resize.getMaxWidth())) {
 			logger.debug("process resize");
 			String ext = FilenameUtils.getExtension(sanitizedName);
-			StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, resize.getMaxWidth(), resize.getMaxHeight());
+			StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, new Dimension(resize.getMaxWidth(), resize.getMaxHeight()));
 			Files.copy(sc.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
 		}
 
