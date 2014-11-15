@@ -62,6 +62,9 @@ Configuration properties
 | connector.impl 					 | codes.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. |
 |									 | .LocalConnector					  | {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}} implementation. | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
+|                                    |									  | select,delete,rename,download					 | {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerConfigImpl    | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}. |
 | 									 | .GlobalFilemanagerConfig 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle
 |									 |									  | .FilemanagerConfigBuilder>>>}} implementation. 	 | 		|				
@@ -74,14 +77,15 @@ Configuration properties
 |									 | .DefaultCapability				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle |  |
 |									 | 									  | .FilemanagerCapability>>>}} implementation. 	 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
-|                                    |									  | select,delete,rename,download					 | {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
-*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
 |									 | .ServerPathBuilder				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requestcycle | 		|
 |									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thmbnails <<Should be untouched!>> |
+| connector.exifRemoverImpl		 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c.ExifRemover>>>}}. |
+|									 | .ExifRemoverImpl					  | {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c | 		|
+|									 |									  | .ExifRemover>>>}} implementation. 			 |		|
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thumbnails <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.preview.dimension		 | 750x1200						      | any string of the pattern [number]x[number] 	 | The max. dimension of the image prieview. If it isn't set or greater than the original size the image will be be shown in its original size. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

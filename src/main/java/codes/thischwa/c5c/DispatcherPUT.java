@@ -14,10 +14,10 @@ import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +38,6 @@ import codes.thischwa.c5c.exception.FilemanagerException.Key;
 import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
-import codes.thischwa.c5c.requestcycle.response.mode.Replace;
 import codes.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import codes.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import codes.thischwa.c5c.resource.PropertiesLoader;
@@ -46,7 +45,6 @@ import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
 import codes.thischwa.c5c.resource.filemanager.Resize;
 import codes.thischwa.c5c.util.FileUtils;
 import codes.thischwa.c5c.util.StringUtils;
-import codes.thischwa.c5c.util.VirtualFile;
 
 /**
  * Dispatches the PUT-request from the 'main' servlet {@link ConnectorServlet} to the implementation of the object which extends the
@@ -99,8 +97,12 @@ final class DispatcherPUT extends GenericDispatcher {
 				
 				in = uploadPart.getInputStream();
 				
-				// process the upload
-				Path tempPath = processUpload(backendPath, in, sanitizedName, uploadPart.getSize(), conf);
+				// save the file temporary
+				Path tempPath = saveTemp(in, sanitizedName);
+				logger.debug(tempPath.toAbsolutePath().toString());
+				
+				// pre-process the upload
+				imageProcessingAndSizeCheck(tempPath, sanitizedName, uploadPart.getSize(), conf);
 				
 				connector.upload(backendPath, sanitizedName, new BufferedInputStream(Files.newInputStream(tempPath)));
 
@@ -111,28 +113,28 @@ final class DispatcherPUT extends GenericDispatcher {
 				ufResp.setPath(currentPath);
 				return ufResp;
 			} case REPLACE: {
-				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
-				String backendPath = buildBackendPath(newFilePath);
-				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
-
-				// check if file already exits
-				VirtualFile vf = new VirtualFile(backendPath);
-				String fileName = vf.getName();
-				String uniqueName = getUniqueName(vf.getFolder(), fileName);
-				if(uniqueName.equals(fileName)) {
-					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
-				}
-				
-				Part uploadPart = req.getPart("fileR");
-				in = uploadPart.getInputStream();
-
-				// process the upload
-				Path tempPath = processUpload(backendPath, in, fileName, uploadPart.getSize(), conf);
-				
-				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
-				logger.debug("successful replaced {} bytes", uploadPart.getSize());
-				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
- 				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
+//				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
+//				String backendPath = buildBackendPath(newFilePath);
+//				Part uploadPart = req.getPart("fileR");
+//				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
+//
+//				// check if file already exits
+//				VirtualFile vf = new VirtualFile(backendPath);
+//				String fileName = vf.getName();
+//				String uniqueName = getUniqueName(vf.getFolder(), fileName);
+//				if(uniqueName.equals(fileName)) {
+//					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
+//				}
+//				
+//				in = uploadPart.getInputStream();
+//
+//				// pre-process the upload
+//				Path tempPath = preProcessUpload(backendPath, in, fileName, uploadPart.getSize(), conf);
+//				
+//				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
+//				logger.debug("successful replaced {} bytes", uploadPart.getSize());
+//				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
+// 				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
 			} case SAVEFILE: {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
@@ -159,47 +161,52 @@ final class DispatcherPUT extends GenericDispatcher {
 		}
 	};
 	
-	private Path processUpload(String backendPath, InputStream reqIn, String sanitizedName, long fileSize, FilemanagerConfig conf) throws C5CException, IOException {
+	private void imageProcessingAndSizeCheck(Path tempPath, String sanitizedName, long fileSize, FilemanagerConfig conf) throws C5CException, IOException {
 		Integer maxSize = (conf.getUpload().isFileSizeLimitAuto()) ? PropertiesLoader.getMaxUploadSize() : conf.getUpload().getFileSizeLimit();
 		if(fileSize > maxSize.longValue() * 1024 * 1024)
 			throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadFilesSmallerThan,
 					String.valueOf(maxSize));
+		String extension = FilenameUtils.getExtension(sanitizedName);
 
 		// check image only
-		boolean isImageExt = checkImageExtension(backendPath, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
+		boolean isImageExt = checkImageExtension(sanitizedName, conf.getUpload().isImagesOnly(), conf.getImages().getExtensions());
+		if(!isImageExt)
+			return;
 		
-		// save the file temporary
-		Path tempPath = saveTemp(reqIn, sanitizedName);
+		// remove exif data
+		Path woExifPath = UserObjectProxy.removeExif(tempPath);
+		if(!tempPath.equals(woExifPath)) {
+			Files.move(woExifPath, tempPath, StandardCopyOption.REPLACE_EXISTING);
+		}
 		
 		// check if the file is really an image
-		Dimension dim = getDimension(new BufferedInputStream(Files.newInputStream(tempPath)));
+		InputStream in = new BufferedInputStream(Files.newInputStream(tempPath, StandardOpenOption.READ));
+		Dimension dim = getDimension(in);
 		if(isImageExt && dim == null)
 				throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.UploadImagesOnly);
+		IOUtils.closeQuietly(in);
 		
 		// check if resize is enabled and fix it, if necessary 
 		Resize resize = conf.getImages().getResize();
 		if(resize.isEnabled() && (dim.getHeight() > resize.getMaxHeight() || dim.getWidth() > resize.getMaxWidth())) {
 			logger.debug("process resize");
-			String ext = FilenameUtils.getExtension(sanitizedName);
-			StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), ext, new Dimension(resize.getMaxWidth(), resize.getMaxHeight()));
+			StreamContent sc = connector.resize(new BufferedInputStream(Files.newInputStream(tempPath)), extension, new Dimension(resize.getMaxWidth(), resize.getMaxHeight()));
 			Files.copy(sc.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
+			IOUtils.closeQuietly(sc.getInputStream());
 		}
-
-		return tempPath;
 	}
 	
 	private Path saveTemp(InputStream in, String name) throws IOException {
 		String baseName = FilenameUtils.getBaseName(name);
 		String ext = FilenameUtils.getExtension(name);
-		OutputStream out = null;
 		try {
-			Path tempPath = Files.createTempFile(UserObjectProxy.getTempDirectory(), baseName, ext);
+			Path tempPath = Files.createTempFile(UserObjectProxy.getTempDirectory(), baseName, "."+ext);
 			Files.copy(in, tempPath, StandardCopyOption.REPLACE_EXISTING);
 			return tempPath;
 		} catch (IOException e) {
 			throw e;
 		} finally {
-			IOUtils.closeQuietly(out);
+			IOUtils.closeQuietly(in);
 		}
 		
 	}

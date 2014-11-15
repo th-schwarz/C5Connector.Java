@@ -243,6 +243,15 @@ public class PropertiesLoader {
 	} 
 	
 	/**
+	 * Gets the EXIF data remover impl.
+	 *
+	 * @return <code>connector.exifRemoverImpl</code> property
+	 */
+	public static String getExifRemoverImpl() {
+		return properties.getProperty("connector.exifRemoverImpl");
+	} 
+	
+	/**
 	 * Gets the dimension for thumbnails.
 	 *
 	 * @return <code>connector.thumbnail.dimension</code> property

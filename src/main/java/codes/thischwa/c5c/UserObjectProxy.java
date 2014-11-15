@@ -15,6 +15,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -22,6 +25,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,53 +53,57 @@ import codes.thischwa.jii.exception.ReadException;
  * <li>{@link IconResolver}</li>
  * <li>{@link MessageResolver}</li>
  * <li>{@link FilemanagerCapability}</li>
- * <li>{@link BackendPathBuilder}</li> 
- * <li>{@link FilemanagerConfigBuilder}</li> 
+ * <li>{@link BackendPathBuilder}</li>
+ * <li>{@link FilemanagerConfigBuilder}</li>
+ * <li>{@link IDimensionProvider}</li>
+ * <li>{@link ExifRemover}</li>
  * </ul>
- * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the
- * user-objects itself.
- * <br/>
- * A {@link RuntimeException} will be thrown if one of these implementation couldn't be instantiated. 
+ * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the user-objects itself. <br/>
+ * A {@link RuntimeException} will be thrown if one of these implementation couldn't be instantiated.
  */
 public class UserObjectProxy {
 	private static final Logger logger = LoggerFactory.getLogger(UserObjectProxy.class);
-	
+
 	private static Pattern dimensionPattern = Pattern.compile("(\\d+)x(\\d+)");
-	
+
 	private static ServletContext servletContext;
-	
+
 	private static java.nio.file.Path tempDirectory;
-	
+
 	private static IconResolver iconResolver;
-	
+
 	private static MessageResolver messageHolder;
-	
+
 	private static FilemanagerCapability fileCapability;
-	
+
 	private static BackendPathBuilder userPathBuilder;
-	
+
 	private static FilemanagerConfigBuilder configBuilder;
-	
+
 	private static IDimensionProvider imageDimensionProvider;
-	
+
 	private static Dimension thumbnailDimension;
-	
+
 	private static Dimension previewDimension;
 
 	private static Pattern excludeFoldersPattern;
 
 	private static Pattern excludeFilesPattern;
 
+	private static ExifRemover exifRemover;
+
 	/**
 	 * Instantiates all user-objects.
 	 *
-	 * @param servletContext the servlet context
-	 * @throws RuntimeException is thrown, if one of the required user-objects couldn't be instantiated
+	 * @param servletContext
+	 *            the servlet context
+	 * @throws RuntimeException
+	 *             is thrown, if one of the required user-objects couldn't be instantiated
 	 */
 	static void init(ServletContext servletContext) throws RuntimeException {
 		UserObjectProxy.servletContext = servletContext;
 
-		// 1. try to instantiate to FileCapacity
+		// try to instantiate to FileCapacity
 		String className = PropertiesLoader.getFileCapabilityImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerCapability implementation class name! Depending property must be set!");
@@ -108,8 +116,8 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
-		
-		// 2. try to initialize the MessageResolver
+
+		// try to initialize the MessageResolver
 		className = PropertiesLoader.getMessageResolverImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty MessageResolver implementation class name! Depending property must be set!");
@@ -123,8 +131,8 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
-		
-		// 3. try to initialize the BackendPathBuilder
+
+		// try to initialize the BackendPathBuilder
 		className = PropertiesLoader.getUserPathBuilderImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty BackendPathBuilder implementation class name! Depending property must be set!");
@@ -138,7 +146,7 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 
-		// 4. try to initialize the FilemanagerConfigBuilder
+		// try to initialize the FilemanagerConfigBuilder
 		className = PropertiesLoader.getFilemanagerConfigImpl();
 		if(StringUtils.isNullOrEmpty(className))
 			throw new RuntimeException("Empty FilemanagerConfigBuilder implementation class name! Depending property must be set!");
@@ -152,9 +160,9 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg, e);
 		}
 
-		// 5. try to instantiate the IconResolver object
+		// try to instantiate the IconResolver object
 		className = PropertiesLoader.getIconResolverImpl();
-		if (StringUtils.isNullOrEmptyOrBlank(className))
+		if(StringUtils.isNullOrEmptyOrBlank(className))
 			throw new RuntimeException("Empty IconResolver implementation class name! Depending property must be set!");
 		try {
 			Class<?> clazz = Class.forName(className);
@@ -166,10 +174,10 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
-		
-		// 6. try to instantiate the DimensionProvider object 
+
+		// try to instantiate the DimensionProvider object
 		className = PropertiesLoader.getDimensionProviderImpl();
-		if (StringUtils.isNullOrEmptyOrBlank(className))
+		if(StringUtils.isNullOrEmptyOrBlank(className))
 			throw new RuntimeException("Empty DimensionProvider implementation class name! Depending property must be set!");
 		try {
 			Class<?> clazz = Class.forName(className);
@@ -180,20 +188,37 @@ public class UserObjectProxy {
 			logger.error(msg);
 			throw new RuntimeException(msg, e);
 		}
-		
-		// 7. try to read the dimension for thumbnails
+
+		// try to instantiate the ExifRemover object
+		className = PropertiesLoader.getExifRemoverImpl();
+		if(StringUtils.isNullOrEmptyOrBlank(className)) {
+			logger.warn("Empty ExifRemover implementation class name! EXIF data won't be removed.");
+			exifRemover = null;
+		} else {
+			try {
+				Class<?> clazz = Class.forName(className);
+				exifRemover = (ExifRemover) clazz.newInstance();
+				logger.info("ExifRemover initialized to {}", className);
+			} catch (Throwable e) {
+				String msg = String.format("ExifRemover implementation [%s] couldn't be instantiated.", className);
+				logger.error(msg);
+				throw new RuntimeException(msg, e);
+			}
+		}
+
+		// try to read the dimension for thumbnails
 		Matcher dimMatcher = dimensionPattern.matcher(PropertiesLoader.getThumbnailDimension());
 		if(dimMatcher.matches()) {
 			thumbnailDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
 		}
 
-		// 8. try to read the dimension for preview
+		// try to read the dimension for preview
 		dimMatcher = dimensionPattern.matcher(PropertiesLoader.getPreviewDimension());
 		if(dimMatcher.matches()) {
 			previewDimension = new Dimension(Integer.valueOf(dimMatcher.group(1)), Integer.valueOf(dimMatcher.group(2)));
 		}
 
-		// 8. fetch the temporary directory
+		// fetch the temporary directory
 		File tempDir = (File) UserObjectProxy.servletContext.getAttribute(ServletContext.TEMPDIR);
 		if(tempDir == null) {
 			String msg = "No temporary directory according to the Servlet spec SRV.3.7.1 found!";
@@ -201,8 +226,8 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg);
 		}
 		tempDirectory = tempDir.toPath();
-		
-		// 10. build regex pattern
+
+		// build regex pattern
 		String folderExcludePatternStr = PropertiesLoader.getRegexToExcludeFolders();
 		if(StringUtils.isNullOrEmptyOrBlank(folderExcludePatternStr)) {
 			logger.warn("Property 'connector.regex.exclude.folders' isn't set.");
@@ -230,7 +255,9 @@ public class UserObjectProxy {
 
 	/**
 	 * Retrieves the url-path of the default-icon for the desired {@link VirtualFile}.
-	 * @param vf the {@link VirtualFile} for which to retrieve the url-path of the icon
+	 * 
+	 * @param vf
+	 *            the {@link VirtualFile} for which to retrieve the url-path of the icon
 	 * 
 	 * @return the url-path of the desired {@link VirtualFile}
 	 * @see IconResolver
@@ -240,13 +267,16 @@ public class UserObjectProxy {
 		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
 		String iconPath = fullIconPath.addFolder(icons.getPath()).toString();
 		IconRequestResolver iconRequestResolver = iconResolver.initRequest(iconPath, icons.getDefaultIcon(), icons.getDirectory());
-		String defaultIconPath = (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver.getIconPath(vf.getExtension());
+		String defaultIconPath = (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver
+				.getIconPath(vf.getExtension());
 		return defaultIconPath;
 	}
-	
+
 	/**
-	 * Retrieves the localized and known message provided by the filemanager. 
-	 * @param key the key of the desired message
+	 * Retrieves the localized and known message provided by the filemanager.
+	 * 
+	 * @param key
+	 *            the key of the desired message
 	 * 
 	 * @return the localized and known error message of the filemanager
 	 * @see FilemanagerMessageResolver#getMessage(java.util.Locale, codes.thischwa.c5c.exception.FilemanagerException.Key)
@@ -257,7 +287,9 @@ public class UserObjectProxy {
 
 	/**
 	 * Retrieves the file capabilities for the desired file.
-	 * @param filePath the path of the file for which the capabilities have to retrieve
+	 * 
+	 * @param filePath
+	 *            the path of the file for which the capabilities have to retrieve
 	 * 
 	 * @return the capabilities for the desired file
 	 * @see FilemanagerCapability#getCapabilities(Context)
@@ -268,7 +300,9 @@ public class UserObjectProxy {
 
 	/**
 	 * Retrieves the server-side path to the desired url-path.
-	 * @param urlPath the url-path for which to retrieve the server-side path
+	 * 
+	 * @param urlPath
+	 *            the url-path for which to retrieve the server-side path
 	 * 
 	 * @return the server-side path to the desired url-path
 	 * @see BackendPathBuilder#getBackendPath(String, Context, ServletContext)
@@ -276,10 +310,12 @@ public class UserObjectProxy {
 	static String getBackendPath(final String urlPath) {
 		return userPathBuilder.getBackendPath(urlPath, RequestData.getContext(), servletContext);
 	}
-	
+
 	/**
 	 * Retrieves the {@link FilemanagerConfig}.
-	 * @param req the {@link HttpServletRequest}
+	 * 
+	 * @param req
+	 *            the {@link HttpServletRequest}
 	 * 
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
@@ -288,29 +324,31 @@ public class UserObjectProxy {
 		// we need the HttpServletRequest here because this breaks the request-cycle, see ConnctorServlet#doGet
 		return configBuilder.getConfig(req, servletContext);
 	}
-	
+
 	/**
-	 * Retrieves the {@link FilemanagerConfig} based on the current {@link HttpServletRequest}.
-	 * It's just a wrapper method to {@link #getFilemanagerConfig(HttpServletRequest)}.
-	 *  
+	 * Retrieves the {@link FilemanagerConfig} based on the current {@link HttpServletRequest}. It's just a wrapper method to
+	 * {@link #getFilemanagerConfig(HttpServletRequest)}.
+	 * 
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
 	public static FilemanagerConfig getFilemanagerConfig() {
 		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
 	}
-	
+
 	/**
 	 * Retrieves the {@link Dimension} of the image based on the committed 'imageIn'.
 	 *
-	 * @param imageIn the {@link InputStream} of an image
+	 * @param imageIn
+	 *            the {@link InputStream} of an image
 	 * @return the {@link Dimension} of an image
-	 * @throws IOException if the image data couldn't be analyzed
+	 * @throws IOException
+	 *             if the image data couldn't be analyzed
 	 */
-	public static Dimension getDimension(final InputStream imageIn) throws IOException {
+	public static synchronized Dimension getDimension(final InputStream imageIn) throws IOException {
 		InputStream tmpImageIn = null;
 		try {
-			// we have to use a copy of the inputstream, because same dimensionProviders uses #mark 
+			// we have to use a copy of the inputstream, because same dimensionProviders uses #mark
 			tmpImageIn = new BufferedInputStream(imageIn);
 			imageDimensionProvider.set(tmpImageIn);
 			Dimension dim = imageDimensionProvider.getDimension();
@@ -319,7 +357,7 @@ public class UserObjectProxy {
 			throw new IOException(e);
 		}
 	}
-	
+
 	/**
 	 * Getter for the adjusted thumbnail dimension.
 	 * 
@@ -337,17 +375,18 @@ public class UserObjectProxy {
 	public static Dimension getPreviewDimension() {
 		return previewDimension;
 	}
-	
+
 	/**
 	 * Checks if a folder is allowed to display.
 	 * 
-	 * @param name the name of the folder
+	 * @param name
+	 *            the name of the folder
 	 * @return <code>false</code> if no pattern was found or 'name' matches the pattern.
 	 */
 	public static boolean isFolderNameAllowed(final String name) {
 		if(excludeFoldersPattern == null)
 			return true;
-		
+
 		Matcher matcher = excludeFoldersPattern.matcher(name);
 		return !matcher.matches();
 	}
@@ -355,17 +394,18 @@ public class UserObjectProxy {
 	/**
 	 * Checks if a file is allowed to display.
 	 * 
-	 * @param name the name of the folder
+	 * @param name
+	 *            the name of the folder
 	 * @return <code>false</code> if no pattern was found or 'name' matches the pattern.
 	 */
 	public static boolean isFileNameAllowed(final String name) {
 		if(excludeFilesPattern == null)
 			return true;
-		
+
 		Matcher matcher = excludeFilesPattern.matcher(name);
 		return !matcher.matches();
 	}
-	
+
 	/**
 	 * Getter for the temporary directory of the servlet context.
 	 * 
@@ -373,5 +413,21 @@ public class UserObjectProxy {
 	 */
 	public static java.nio.file.Path getTempDirectory() {
 		return tempDirectory;
+	}
+
+	public static java.nio.file.Path removeExif(java.nio.file.Path tempPath) {
+		if(exifRemover == null)
+			return tempPath;
+		try {
+			String fileName = tempPath.toString();
+			String ext = FilenameUtils.getExtension(fileName);
+
+			java.nio.file.Path woExifPath = Paths.get(tempPath.toString()+"_woExif");
+			exifRemover.removeExif(Files.newInputStream(tempPath), Files.newOutputStream(woExifPath, StandardOpenOption.CREATE_NEW), ext);
+			return woExifPath;
+		} catch (IOException e) {
+			logger.warn("Error while removing EXIF data.", e);
+			return tempPath;
+		}
 	}
 }
