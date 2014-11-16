@@ -23,7 +23,7 @@
 			<item name="Connector" href="extending_connector.html"/>
 			<item name="FilemanagerConfigBuilder" href="extending_filemanagerconfigbuilder.html"/>
 			<item name="FilemanagerCapability" href="extending_filemanagercapability.html"/>
-			<item name="UserPathBuilder" href="extending_userpathbuilder.html"/>
+			<item name="BackendPathBuilder" href="extending_backendpathbuilder.html"/>
 		</menu>
 		<menu ref="reports"/>
 		<links>

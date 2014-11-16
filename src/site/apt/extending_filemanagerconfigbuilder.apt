@@ -5,12 +5,12 @@
 FilemanagerConfigBuilder
 
   The implementation of {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
-  is used to fill and hold the shared configuration object {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}.
+  is used to fill and hold the shared configuration object {{{./apidocs/codes/thischwa/c5c/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}.
   If the request-based configuration is enabled (see {{{./config_shared.html}Shared Config}}), the default implementation
   ({{{./apidocs/codes/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<codes.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}})
   can be used to change the configuration by Java <globally>. 
   Just inherit this object and override the method <<<postLoadConfigFileHook()>>>. This hook is called after the successful loading of a
-  configuration file, - the configuration object {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  configuration file, - the configuration object {{{./apidocs/codes/thischwa/c5c/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}
   is filled.\
   Example:
   

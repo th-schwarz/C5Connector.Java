@@ -8,26 +8,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package codes.thischwa.c5c.resource.filemanager;
+package codes.thischwa.c5c;
 
 import static org.junit.Assert.*;
 
+import java.util.Locale;
+
 import org.junit.Test;
 
-import codes.thischwa.c5c.resource.filemanager.Upload;
+import codes.thischwa.c5c.PropertiesLoader;
 
-public class UploadTest {
+public class PropertiesLoaderTest {
 
 	@Test
-	public void testIsFileSizeLimitAuto() {
-		Upload u = new Upload();
-		u.setFileSizeLimit(20);
-		assertFalse(u.isFileSizeLimitAuto());
-		assertEquals(20, u.getFileSizeLimit());
-		
-		u.setFileSizeLimit();
-		assertTrue(u.isFileSizeLimitAuto());
-		assertEquals(-1, u.getFileSizeLimit());
+	public void testGetDefaultLocale() {
+		Locale expected = Locale.ENGLISH;
+		assertEquals(expected, PropertiesLoader.getDefaultLocale());
 	}
 
 }

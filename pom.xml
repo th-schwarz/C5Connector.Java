@@ -5,7 +5,7 @@
 	<version>0.7-SNAPSHOT</version>
 	<description>The Java backend for the filemanager of corefive.</description>
 	<name>C5Connector.Java</name>
-	<url>http://c5connetor_java.thischwa.codes</url>
+	<url>http://c5connetor.thischwa.codes</url>
 	<inceptionYear>2012</inceptionYear>
 	<licenses>
 		<license>
@@ -16,7 +16,7 @@
 	</licenses>
 
 	<issueManagement>
-		<url>https://github.com/th-schwarz/C5Connector.Java/issues</url>
+		<url>https://github.com/th-schwarz/JII/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 

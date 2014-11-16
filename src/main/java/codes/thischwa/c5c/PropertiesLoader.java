@@ -8,7 +8,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package codes.thischwa.c5c.resource;
+package codes.thischwa.c5c;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -35,9 +35,9 @@ public class PropertiesLoader {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
 	
-	private static final String DEFAULT_FILENAME = "default.properties";
+	private static final String default_filename = "default.properties";
 	
-	private static final String LOCAL_PROPERTIES = "/c5connector.properties";
+	private static final String local_properties = "/c5connector.properties";
 	
 	private static Properties properties = new Properties();
 	
@@ -45,19 +45,19 @@ public class PropertiesLoader {
 
 	static {
 		// 1. load library defaults
-		InputStream inDefault = PropertiesLoader.class.getResourceAsStream(DEFAULT_FILENAME);
+		InputStream inDefault = PropertiesLoader.class.getResourceAsStream(default_filename);
 
 		if (inDefault == null) {
-			logger.error("{} not found", DEFAULT_FILENAME);
-			throw new RuntimeException(DEFAULT_FILENAME + " not found");
+			logger.error("{} not found", default_filename);
+			throw new RuntimeException(default_filename + " not found");
 		} else {
 			if (!(inDefault instanceof BufferedInputStream))
 				inDefault = new BufferedInputStream(inDefault);
 			try {
 				properties.load(inDefault);
-				logger.info("{} successful loaded", DEFAULT_FILENAME);
+				logger.info("{} successful loaded", default_filename);
 			} catch (Exception e) {
-				String msg = "Error while processing " + DEFAULT_FILENAME;
+				String msg = "Error while processing " + default_filename;
 				logger.error(msg);
 				throw new RuntimeException(msg, e);
 			} finally {
@@ -66,18 +66,18 @@ public class PropertiesLoader {
 		}
 
 		// 2. load user defaults if present
-		InputStream inUser = PropertiesLoader.class.getResourceAsStream(LOCAL_PROPERTIES);
+		InputStream inUser = PropertiesLoader.class.getResourceAsStream(local_properties);
 		if (inUser == null) {
-			logger.info("{} not found", LOCAL_PROPERTIES);
+			logger.info("{} not found", local_properties);
 		} else {
 			if (!(inUser instanceof BufferedInputStream))
 				inUser = new BufferedInputStream(inUser);
 			try {
 				properties.load(inUser);
 				inUser.close();
-				logger.info("{} successful loaded", LOCAL_PROPERTIES);
+				logger.info("{} successful loaded", local_properties);
 			} catch (Exception e) {
-				String msg = "Error while processing " + LOCAL_PROPERTIES;
+				String msg = "Error while processing " + local_properties;
 				logger.error(msg);
 				throw new RuntimeException(msg, e);
 			} finally {
@@ -137,51 +137,6 @@ public class PropertiesLoader {
 	public static Locale getDefaultLocale() {
 		return defaultLocale;
 	}
-	
-	/**
-	 * Returns <code>connector.filemanagerPath</code> property
-	 *
-	 * @return the filemanager path
-	 */
-	public static String getFilemanagerPath() {
-		return properties.getProperty("connector.filemanagerPath");
-	}
-	
-	/**
-	 * Returns <code>connector.iconResolverImpl</code> property
-	 *
-	 * @return the icon resolver impl
-	 */
-	public static String getIconResolverImpl() {
-		return properties.getProperty("connector.iconResolverImpl");
-	}
-
-	/**
-	 * Returns <code>jii.impl</code> property
-	 *
-	 * @return the dimension provider impl
-	 */
-	public static String getDimensionProviderImpl() {
-		return properties.getProperty("jii.impl");
-	}
-
-	/**
-	 * Returns <code>connector.userPathBuilderImpl</code> property
-	 *
-	 * @return the user action impl
-	 */
-	public static String getUserPathBuilderImpl() {
-		return properties.getProperty("connector.userPathBuilderImpl");
-	}
-
-	/**
-	 * Returns <code>connector.messageResolverImpl</code> property
-	 *
-	 * @return the message resolver impl
-	 */
-	public static String getMessageResolverImpl() {
-		return properties.getProperty("connector.messageResolverImpl");
-	}
 
 	/**
 	 * Returns <code>connector.forceSingleExtension</code> property
@@ -191,16 +146,16 @@ public class PropertiesLoader {
 	public static boolean isForceSingleExtension() {
 		return Boolean.valueOf(properties.getProperty("connector.forceSingleExtension"));
 	}
-
-	/**
-	 * Gets the connector impl.
-	 *
-	 * @return <code>connector.impl</code> property
-	 */
-	public static String getConnectorImpl() {
-		return properties.getProperty("connector.impl");
-	}
 	
+	/**
+	 * Returns <code>connector.filemanagerPath</code> property
+	 *
+	 * @return the filemanager path
+	 */
+	public static String getFilemanagerPath() {
+		return properties.getProperty("connector.filemanagerPath");
+	}
+
 	/**
 	 * Gets the default capacity.
 	 *
@@ -216,47 +171,20 @@ public class PropertiesLoader {
 	 * @return <code>connector.maxUploadSize</code> property, or null if not set
 	 * @throws NumberFormatException if <code>connector.maxUploadSize</code> is not a valid number
 	 */
-	public static Integer getMaxUploadSize() throws NumberFormatException {
+	static Integer getMaxUploadSize() throws NumberFormatException {
 		try {
 			return Integer.valueOf(properties.getProperty("connector.maxUploadSize"));
 		} catch(Exception e) {
 			return null;
 		}
 	}
-	
-	/**
-	 * Gets the file capability impl.
-	 *
-	 * @return <code>connector.fileCapabilityImpl</code> property
-	 */
-	public static String getFileCapabilityImpl() {
-		return properties.getProperty("connector.fileCapabilityImpl");
-	} 
 
-	/**
-	 * Gets the file config impl.
-	 *
-	 * @return <code>connector.filemanagerConfigImpl</code> property
-	 */
-	public static String getFilemanagerConfigImpl() {
-		return properties.getProperty("connector.filemanagerConfigImpl");
-	} 
-	
-	/**
-	 * Gets the EXIF data remover impl.
-	 *
-	 * @return <code>connector.exifRemoverImpl</code> property
-	 */
-	public static String getExifRemoverImpl() {
-		return properties.getProperty("connector.exifRemoverImpl");
-	} 
-	
 	/**
 	 * Gets the dimension for thumbnails.
 	 *
 	 * @return <code>connector.thumbnail.dimension</code> property
 	 */
-	public static String getThumbnailDimension() {
+	static String getThumbnailDimension() {
 		return properties.getProperty("connector.thumbnail.dimension");
 	} 
 
@@ -265,7 +193,7 @@ public class PropertiesLoader {
 	 *
 	 * @return <code>connector.preview.dimension</code> property
 	 */
-	public static String getPreviewDimension() {
+	static String getPreviewDimension() {
 		return properties.getProperty("connector.preview.dimension");
 	} 
 
@@ -274,7 +202,7 @@ public class PropertiesLoader {
 	 *
 	 * @return <code>connector.regex.exclude.folders</code> property
 	 */
-	public static String getRegexToExcludeFolders() {
+	static String getRegexToExcludeFolders() {
 		return properties.getProperty("connector.regex.exclude.folders");
 	} 
 	
@@ -283,7 +211,79 @@ public class PropertiesLoader {
 	 *
 	 * @return <code>connector.regex.exclude.files</code> property
 	 */
-	public static String getRegexToExcludeFiles() {
+	static String getRegexToExcludeFiles() {
 		return properties.getProperty("connector.regex.exclude.files");
+	} 
+	
+	/**
+	 * Returns <code>connector.iconResolverImpl</code> property
+	 *
+	 * @return the icon resolver impl
+	 */
+	static String getIconResolverImpl() {
+		return properties.getProperty("connector.iconResolverImpl");
+	}
+
+	/**
+	 * Returns <code>jii.impl</code> property
+	 *
+	 * @return the dimension provider impl
+	 */
+	static String getDimensionProviderImpl() {
+		return properties.getProperty("jii.impl");
+	}
+
+	/**
+	 * Returns <code>connector.userPathBuilderImpl</code> property
+	 *
+	 * @return the user action impl
+	 */
+	static String getUserPathBuilderImpl() {
+		return properties.getProperty("connector.userPathBuilderImpl");
+	}
+
+	/**
+	 * Returns <code>connector.messageResolverImpl</code> property
+	 *
+	 * @return the message resolver impl
+	 */
+	static String getMessageResolverImpl() {
+		return properties.getProperty("connector.messageResolverImpl");
+	}
+
+	/**
+	 * Gets the connector impl.
+	 *
+	 * @return <code>connector.impl</code> property
+	 */
+	static String getConnectorImpl() {
+		return properties.getProperty("connector.impl");
+	}
+		
+	/**
+	 * Gets the file capability impl.
+	 *
+	 * @return <code>connector.fileCapabilityImpl</code> property
+	 */
+	static String getFileCapabilityImpl() {
+		return properties.getProperty("connector.fileCapabilityImpl");
+	} 
+
+	/**
+	 * Gets the file config impl.
+	 *
+	 * @return <code>connector.filemanagerConfigImpl</code> property
+	 */
+	static String getFilemanagerConfigImpl() {
+		return properties.getProperty("connector.filemanagerConfigImpl");
+	} 
+	
+	/**
+	 * Gets the EXIF data remover impl.
+	 *
+	 * @return <code>connector.exifRemoverImpl</code> property
+	 */
+	static String getExifRemoverImpl() {
+		return properties.getProperty("connector.exifRemoverImpl");
 	} 
 }

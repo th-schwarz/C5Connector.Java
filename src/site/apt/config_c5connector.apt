@@ -22,7 +22,7 @@ Configuration of C5Connector.Java
 
 +---+
   ...
-  import codes.thischwa.c5c.resource.PropertiesLoader;
+  import codes.thischwa.c5c.PropertiesLoader;
   ...
   PropertiesLoader.setProperty("connector.impl", "codes.thischwa.c5c.impl.LocalConnector");
   ...
@@ -77,9 +77,9 @@ Configuration properties
 |									 | .DefaultCapability				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle |  |
 |									 | 									  | .FilemanagerCapability>>>}} implementation. 	 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.UserPathBuilder>>>}}. |
-|									 | .ServerPathBuilder				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requestcycle | 		|
-|									 |									  | .UserPathBuilder>>>}} implementation. 			 |		|
+| connector.userPathBuilderImpl 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/BackendPathBuilder.html}<<<codes.thischwa.c5c.requsetcycle.BackendPathBuilder>>>}}. |
+|									 | .ServerPathBuilder				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/BackendPathBuilder.html}<<<codes.thischwa.c5c.requestcycle | 		|
+|									 |									  | .BackendPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.exifRemoverImpl		 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c.ExifRemover>>>}}. |
 |									 | .ExifRemoverImpl					  | {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c | 		|

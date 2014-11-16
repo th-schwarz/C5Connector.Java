@@ -35,14 +35,13 @@ import codes.thischwa.c5c.GenericConnector.StreamContent;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException;
 import codes.thischwa.c5c.exception.FilemanagerException.Key;
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.filemanager.Resize;
 import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
 import codes.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import codes.thischwa.c5c.requestcycle.response.mode.UploadFile;
-import codes.thischwa.c5c.resource.PropertiesLoader;
-import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
-import codes.thischwa.c5c.resource.filemanager.Resize;
 import codes.thischwa.c5c.util.FileUtils;
 import codes.thischwa.c5c.util.StringUtils;
 

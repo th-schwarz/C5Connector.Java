@@ -1,8 +1,8 @@
    ----------------------------
-   UserPathBuilder
+   BackendPathBuilder
    ----------------------------
 
-UserPathBuilder
+BackendPathBuilder
 
   For each request of the filemanager the parameter <<<path>>> must be mapped to a real path in the storage backend.
     
@@ -12,6 +12,6 @@ UserPathBuilder
   
 * Custom implementation
 
-  With an implementation of the interface {{{./apidocs/codes/thischwa/c5c/requestcycle/UserPathBuilder.html}<<<codes.thischwa.c5c.requestcycle.BackendPathBuilder>>>}}
+  With an implementation of the interface {{{./apidocs/codes/thischwa/c5c/requestcycle/BackendPathBuilder.html}<<<codes.thischwa.c5c.requestcycle.BackendPathBuilder>>>}}
   you are able to map the parameter <<<path>>> to whatever locations you desired. For example if you want to have one
   directory for each user in the storage backend.

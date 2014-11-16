@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,6 +64,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ConnectorServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final String propertyKey_connectorImpl = "connector.impl";
 
 	private static Logger logger = LoggerFactory.getLogger(ConnectorServlet.class);
 
@@ -76,7 +77,7 @@ public class ConnectorServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() throws ServletException {
-		String connectorClassName = PropertiesLoader.getConnectorImpl();
+		String connectorClassName = PropertiesLoader.getProperty(propertyKey_connectorImpl);
 		if(StringUtils.isNullOrEmpty(connectorClassName))
 			throw new RuntimeException("Empty Connector implementation class name not allowed.");
 		Connector connector;

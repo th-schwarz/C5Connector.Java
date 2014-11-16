@@ -8,7 +8,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package codes.thischwa.c5c;
+package codes.thischwa.c5c.impl;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -22,8 +22,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.MessageResolver;
+import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.exception.FilemanagerException;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.Path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -30,6 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import codes.thischwa.c5c.exception.FilemanagerException;
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.filemanager.Icons;
+import codes.thischwa.c5c.impl.FilemanagerMessageResolver;
 import codes.thischwa.c5c.requestcycle.BackendPathBuilder;
 import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.FilemanagerCapability;
@@ -37,9 +40,6 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import codes.thischwa.c5c.requestcycle.IconRequestResolver;
 import codes.thischwa.c5c.requestcycle.IconResolver;
 import codes.thischwa.c5c.requestcycle.RequestData;
-import codes.thischwa.c5c.resource.PropertiesLoader;
-import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
-import codes.thischwa.c5c.resource.filemanager.Icons;
 import codes.thischwa.c5c.util.Path;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
@@ -48,7 +48,7 @@ import codes.thischwa.jii.IDimensionProvider;
 import codes.thischwa.jii.exception.ReadException;
 
 /**
- * This class serves as proxy for configurable implementations of the following interfaces (user-objects):
+ * This object serves as proxy for configurable implementations of the following interfaces (user-objects):
  * <ul>
  * <li>{@link IconResolver}</li>
  * <li>{@link MessageResolver}</li>

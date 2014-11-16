@@ -8,15 +8,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package codes.thischwa.c5c.resource.filemanager;
+package codes.thischwa.c5c.filemanager;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
-import codes.thischwa.c5c.resource.filemanager.Options;
-import codes.thischwa.c5c.resource.filemanager.Security;
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.filemanager.Options;
+import codes.thischwa.c5c.filemanager.Resize;
+import codes.thischwa.c5c.filemanager.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

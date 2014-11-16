@@ -16,9 +16,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.FilemanagerCapability;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.StringUtils;
 
 /**

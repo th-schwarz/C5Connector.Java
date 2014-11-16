@@ -20,10 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException;
+import codes.thischwa.c5c.filemanager.Exclude;
 import codes.thischwa.c5c.impl.LocalConnector;
 import codes.thischwa.c5c.requestcycle.BackendPathBuilder;
 import codes.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
-import codes.thischwa.c5c.resource.filemanager.Exclude;
 import codes.thischwa.c5c.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

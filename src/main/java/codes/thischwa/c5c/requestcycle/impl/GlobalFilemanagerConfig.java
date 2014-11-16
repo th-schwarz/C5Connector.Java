@@ -22,10 +22,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.PropertiesLoader;
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.filemanager.Options;
 import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
-import codes.thischwa.c5c.resource.PropertiesLoader;
-import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
-import codes.thischwa.c5c.resource.filemanager.Options;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

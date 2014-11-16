@@ -21,9 +21,9 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
 
+import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.requestcycle.IconRequestResolver;
 import codes.thischwa.c5c.requestcycle.IconResolver;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.Path;
 import codes.thischwa.c5c.util.StringUtils;
 

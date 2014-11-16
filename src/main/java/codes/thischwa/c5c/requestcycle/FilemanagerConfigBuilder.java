@@ -14,7 +14,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import codes.thischwa.c5c.Connector;
-import codes.thischwa.c5c.resource.filemanager.FilemanagerConfig;
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
 
 /**
  * An interface to specify the configuration of the filemanager.<br/>

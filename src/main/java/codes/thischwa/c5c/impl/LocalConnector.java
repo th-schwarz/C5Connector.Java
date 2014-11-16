@@ -40,11 +40,11 @@ import org.imgscalr.Scalr;
 
 import codes.thischwa.c5c.FilemanagerAction;
 import codes.thischwa.c5c.GenericConnector;
+import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.UserObjectProxy;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException;
 import codes.thischwa.c5c.exception.FilemanagerException.Key;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 
 /**
  * The default implementation of the connector servlet.

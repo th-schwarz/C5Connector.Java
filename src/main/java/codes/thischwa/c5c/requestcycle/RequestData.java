@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.exception.C5CException;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.jii.IDimensionProvider;
 
@@ -37,9 +37,7 @@ public class RequestData {
 	private static Logger logger = LoggerFactory.getLogger(RequestData.class);
 	
 	private static ThreadLocal<Context> context = new ThreadLocal<>();
-	
-	private static ThreadLocal<IDimensionProvider> dimensionProvider = new ThreadLocal<>();
-	
+
 	private static ThreadLocal<Locale> locale = new ThreadLocal<>();
 
 	/**
@@ -57,17 +55,7 @@ public class RequestData {
 			RequestData.context.set(new Context(req));
 		} catch (C5CException e) {
 			throw new RuntimeException("Couldn't initialize the context.", e);
-		}
-		
-		// init the dimension provider
-		try {
-			String className = PropertiesLoader.getDimensionProviderImpl();
-			Class<?> cls = Class.forName(className);
-			dimensionProvider.set((IDimensionProvider)cls.newInstance());
-		} catch (Throwable e) {
-			throw new RuntimeException("Couldn't initialize the dimension provider.", e);
-		}
-		
+		}		
 
 		String referer = req.getHeader("referer");
 		if(StringUtils.isNullOrEmptyOrBlank(referer))
@@ -96,16 +84,7 @@ public class RequestData {
 	public static Context getContext() {
 		return context.get();
 	}
-	
-	/**
-	 * Gets the dimension provider.
-	 *
-	 * @return the dimension provider
-	 */
-	public static IDimensionProvider getDimensionProvider() {
-		return dimensionProvider.get();
-	}
-	
+		
 	/**
 	 * Gets the locale.
 	 *
@@ -121,7 +100,6 @@ public class RequestData {
 	 */
 	public static void endRequest() {
 		context.remove();
-		dimensionProvider.remove();
 		locale.remove();
 	}
 }

@@ -16,7 +16,6 @@ import org.junit.After;
 import org.junit.Before;
 
 import codes.thischwa.c5c.ConnectorServlet;
-import codes.thischwa.c5c.resource.PropertiesLoader;
 
 public abstract class GenericRequestTest {
 

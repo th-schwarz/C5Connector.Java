@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 
-import codes.thischwa.c5c.resource.PropertiesLoader;
+import codes.thischwa.c5c.PropertiesLoader;
 
 /**
  * Some static string helper methods.

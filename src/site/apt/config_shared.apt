@@ -8,7 +8,7 @@ Shared Configuration
   the configuration between the frontend (javascript filemanager) and the backend (C5Connector.Java). 
   It's important to understand the settings of the configuration file. Details about that can be found
   at the wiki page {{{https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file}<<<Filemanager configuration file>>>}}.
-  The {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}
+  The {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}
   object is the corresponding object-oriented map of this configuration file and is used to provide properties for
   the implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. This configuration
   file is commonly built by the default implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}} 
@@ -18,7 +18,7 @@ Shared Configuration
   must be edited to change the configuration globally and for all users of your webapp!
   
   An outstanding feature of C5Connector.Java is the possibility of a request-based (user-based) configuration.
-  For this purpose the <<<ConnectorServlet>>> will be used to build and deliver the configuration based on {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.resource.filemanager.FilemanagerConfig>>>}}.\
+  For this purpose the <<<ConnectorServlet>>> will be used to build and deliver the configuration based on {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}.\
   Add the following lines to the <<<web.xml>>> to enable this: 
   
 +---+
