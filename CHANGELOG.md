@@ -1,9 +1,10 @@
 # changelog
 
 * 0.7-SNAPSHOT
-  * internal: refactored the upload code
+  * internal: global refactoring, refactored the upload code 
   * issue #25: Implementation of the mode 'preview'
   * issue #26: introduce a property to hold the max. preview dimension
+  * issue #28: introduce a remover for EXIF data
 
 * 0.6
   * issue #21: Implementation of 'replace'
