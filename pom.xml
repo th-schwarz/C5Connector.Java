@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>codes.thischwa.c5c</groupId>
 	<artifactId>c5connector-java</artifactId>
@@ -24,8 +25,9 @@
 		<url>https://github.com/th-schwarz/C5Connector.Java</url>
 		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
-    </scm>
-    
+		<tag>HEAD</tag>
+	</scm>
+
 	<properties>
 		<jse.version>1.7</jse.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,11 +41,11 @@
 
 	<repositories>
 		<repository>
-			<id>thischwa-repro</id>
+			<id>thischwa-repo</id>
 			<url>http://maven-repo.thischwa.codes</url>
 		</repository>
 	</repositories>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>thischwa.repo</id>
@@ -229,13 +231,13 @@
 		<extensions>
 			<!-- Enabling the use of ssh/scp -->
 			<extension>
-			    <groupId>org.apache.maven.wagon</groupId>
-			    <artifactId>wagon-ssh</artifactId>
-			    <version>2.7</version>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.7</version>
 			</extension>
 		</extensions>
 	</build>
-	
+
 	<developers>
 		<developer>
 			<id>th-schwarz</id>
