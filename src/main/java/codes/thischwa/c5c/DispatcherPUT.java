@@ -40,13 +40,15 @@ import codes.thischwa.c5c.filemanager.Resize;
 import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
+import codes.thischwa.c5c.requestcycle.response.mode.Replace;
 import codes.thischwa.c5c.requestcycle.response.mode.SaveFile;
 import codes.thischwa.c5c.requestcycle.response.mode.UploadFile;
 import codes.thischwa.c5c.util.FileUtils;
 import codes.thischwa.c5c.util.StringUtils;
+import codes.thischwa.c5c.util.VirtualFile;
 
 /**
- * Dispatches the PUT-request from the 'main' servlet {@link ConnectorServlet} to the implementation of the object which extends the
+ * Dispatches the PUT-request from the 'main' servlet {@link ConnectorServlet} to the implementation of the 
  * {@link Connector}. The parameters of the request will be prepared before dispatching them to connector.
  */
 final class DispatcherPUT extends GenericDispatcher {
@@ -98,7 +100,6 @@ final class DispatcherPUT extends GenericDispatcher {
 				
 				// save the file temporary
 				Path tempPath = saveTemp(in, sanitizedName);
-				logger.debug(tempPath.toAbsolutePath().toString());
 				
 				// pre-process the upload
 				imageProcessingAndSizeCheck(tempPath, sanitizedName, uploadPart.getSize(), conf);
@@ -112,28 +113,31 @@ final class DispatcherPUT extends GenericDispatcher {
 				ufResp.setPath(currentPath);
 				return ufResp;
 			} case REPLACE: {
-//				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
-//				String backendPath = buildBackendPath(newFilePath);
-//				Part uploadPart = req.getPart("fileR");
-//				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
-//
-//				// check if file already exits
-//				VirtualFile vf = new VirtualFile(backendPath);
-//				String fileName = vf.getName();
-//				String uniqueName = getUniqueName(vf.getFolder(), fileName);
-//				if(uniqueName.equals(fileName)) {
-//					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
-//				}
-//				
-//				in = uploadPart.getInputStream();
-//
-//				// pre-process the upload
-//				Path tempPath = preProcessUpload(backendPath, in, fileName, uploadPart.getSize(), conf);
-//				
-//				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
-//				logger.debug("successful replaced {} bytes", uploadPart.getSize());
-//				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
-// 				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
+				String newFilePath = IOUtils.toString(req.getPart("newfilepath").getInputStream());
+				String backendPath = buildBackendPath(newFilePath);
+				Part uploadPart = req.getPart("fileR");
+				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
+
+				// check if file already exits
+				VirtualFile vf = new VirtualFile(backendPath);
+				String fileName = vf.getName();
+				String uniqueName = getUniqueName(vf.getFolder(), fileName);
+				if(uniqueName.equals(fileName)) {
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.FileNotExists, backendPath);
+				}
+				
+				in = uploadPart.getInputStream();
+
+				// save the file temporary
+				Path tempPath = saveTemp(in, fileName);
+				
+				// pre-process the upload
+				imageProcessingAndSizeCheck(tempPath, fileName, uploadPart.getSize(), conf);
+				
+				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
+				logger.debug("successful replaced {} bytes", uploadPart.getSize());
+				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
+ 				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
 			} case SAVEFILE: {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
