@@ -35,7 +35,7 @@ public class ContextGetRequestsTest extends GenericRequestTest {
 		
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String expected = cleanResponse("{\"\\/filemanager\\/userfiles\\/folder\\/\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"dir\",\"Filename\":\"folder\",\"Path\":\"\\/filemanager\\/userfiles\\/folder\\/\",\"Preview\":\"\\/context\\/filemanager\\/images\\/fileicons\\/_Open.png\",\"Properties\":{\"Date Created\":null,\"Height\":null,\"Size\":null,\"Width\":null}},\"\\/filemanager\\/userfiles\\/pic01.png\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=thumbnail&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110}}}");
+		String expected = cleanResponse("{\"\\/filemanager\\/userfiles\\/folder\\/\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"dir\",\"Filename\":\"folder\",\"Path\":\"\\/filemanager\\/userfiles\\/folder\\/\",\"Preview\":\"\\/context\\/filemanager\\/images\\/fileicons\\/_Open.png\",\"Properties\":{\"Date Created\":null,\"Height\":null,\"Size\":null,\"Width\":null}},\"\\/filemanager\\/userfiles\\/pic01.png\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=preview&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110}}}");
 		assertEquals(expected, actual);
 	}
 
@@ -51,7 +51,7 @@ public class ContextGetRequestsTest extends GenericRequestTest {
 		
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=thumbnail&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110}}");
+		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=preview&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110}}");
 		assertEquals(expected, actual);
 	}
 }

@@ -10,12 +10,14 @@
  */
 package codes.thischwa.c5c;
 
+import java.io.File;
+
+import javax.servlet.ServletContext;
+
 import org.eclipse.jetty.testing.HttpTester;
 import org.eclipse.jetty.testing.ServletTester;
 import org.junit.After;
 import org.junit.Before;
-
-import codes.thischwa.c5c.ConnectorServlet;
 
 public abstract class GenericRequestTest {
 
@@ -26,6 +28,7 @@ public abstract class GenericRequestTest {
 		servletTester = new ServletTester();
 		servletTester.setResourceBase("src/test/resources/requesttest");
 		servletTester.getContext().getServer().getConnectors()[0].setMaxIdleTime(1000*60*10);
+		servletTester.getContext().setAttribute(ServletContext.TEMPDIR, new File(System.getProperty("java.io.tmpdir")));
 		servletTester.addServlet(ConnectorServlet.class, "/filemanager/connectors/java/*");
 		initTester();
 		servletTester.start();
