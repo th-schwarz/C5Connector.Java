@@ -24,6 +24,30 @@ Installation Guide
 mvn clean package
 +---+
 
+  Alternativly, you can use the public maven-repository which is provided by the author. In order to use it, 
+  you have to add the following snippets to your pom:
+  
+
++------------------------------------------------------------------------------+
+	<repositories>
+		<repository>
+			<id>thischwa-repo</id>
+			<url>http://maven-repo.thischwa.codes/</url>
+		</repository>
+	</repositories>
++------------------------------------------------------------------------------+
+
+   To the dependencies add the following:
+
++------------------------------------------------------------------------------+
+	<dependency>
+		<groupId>codes.thischwa.c5c</groupId>
+		<artifactId>c5connector-java</artifactId>
+		<version>${c5connector.version}</version>
+	</dependency>
++------------------------------------------------------------------------------+  
+
+
 * Activation of the Connector Servlet
    
   It takes two steps to enable it.
