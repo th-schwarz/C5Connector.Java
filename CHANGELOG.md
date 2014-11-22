@@ -1,6 +1,7 @@
 # changelog
 
 * 0.7
+  * issue #29: extend the shared-config with option#theme 
   * internal: global refactoring, refactored the upload code 
   * issue #25: Implementation of the mode 'preview'
   * issue #26: introduce a property to hold the max. preview dimension
