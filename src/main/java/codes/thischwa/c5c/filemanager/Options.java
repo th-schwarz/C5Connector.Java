@@ -12,11 +12,13 @@ package codes.thischwa.c5c.filemanager;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents the type <code>options</code> of the JSON configuration of the filemanager.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Options {
 
 	public enum FILE_SORTING {
@@ -25,6 +27,7 @@ public class Options {
 
 	private String culture;
 	private String lang;
+	private String theme;
 	private String defaultViewMode;
 	private boolean autoload;
 	private boolean showFullPath;
@@ -65,6 +68,14 @@ public class Options {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+	
+	public String getTheme() {
+		return theme;
+	}
+	
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
 
 	public String getDefaultViewMode() {
