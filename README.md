@@ -13,3 +13,5 @@ C5Connector.Java is distributed under the [MPL](http://www.mozilla.org/MPL/2.0/)
 The project is in a beta state. It has to be tested with several servlet-containers. At the moment just jetty 8 and 9 were successful tested by the author.
 
 Don't hesitate to inform the author if you was tested C5Container.Java with other servlet-environments successfully.
+
+The chaangelog can be found [here](https://github.com/th-schwarz/C5Connector.Java/blob/master/CHANGELOG.md).
