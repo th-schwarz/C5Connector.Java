@@ -35,7 +35,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * The order of searching canfig files is the following:
  * <ol>
  * <li>[filemanager-dir]/scripts/filemanager.config.js</li>
- * <li>[filemanager-dir]/scripts/filemanager.config.js.default</li>
  * <li>internal config file</li>
  * </ol>
  * The configuration is loaded globally.<br/>
@@ -50,24 +49,24 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 
 	private static Logger logger = LoggerFactory.getLogger(GlobalFilemanagerConfig.class);
 	
-	protected FilemanagerConfig config = null;
+	protected FilemanagerConfig userConfig = null;
 
 	@Override
 	public FilemanagerConfig getConfig(HttpServletRequest req, ServletContext servletContext) {
-		if(config == null) {
+		if(userConfig == null) {
 			loadConfigFile(servletContext);
 			
 			// set some defaults
-			config.setComment("Built by the C5Connector.Java");
-			Options options = config.getOptions();
+			userConfig.setComment("Built by the C5Connector.Java");
+			Options options = userConfig.getOptions();
 			options.setLang("java");
 			postLoadConfigFileHook();
 		}
-		return config;
+		return userConfig;
 	}
 	
 	/**
-	 * This method hook will be called after the successful loading of a config file. 
+	 * This method hook will be called after the successful loading of a userConfig file. 
 	 * That's an easy point for inherited objects to change properties globally.
 	 */
 	protected void postLoadConfigFileHook() {
@@ -79,29 +78,22 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 		try {
 			File fmScriptDir = new File(context.getRealPath(PropertiesLoader.getFilemanagerPath()), "scripts");
 			
-			// 1. defined: filemanager/scripts/filemanager.js
+			// 1. defined: filemanager/scripts/filemanager.config.js
 			File configFile = new File(fmScriptDir, BASE_FILE_NAME);
 			if(configFile.exists()) {
-				logger.info("Defined config file found.");
+				logger.info("Defined userConfig file found.");
 				in = new BufferedInputStream(new FileInputStream(configFile));
 			}
 			
-			// 2. default: filemanager/scripts/filemanager.js.default
-			configFile = new File(fmScriptDir, BASE_FILE_NAME+".default");
-			if(in == null && configFile.exists()) {
-				logger.info("Default config file found.");
-				in = new BufferedInputStream(new FileInputStream(configFile));
-			}
-			
-			// 3. lib-default
+			// 2. lib-default
 			if(in == null) {
-				logger.info("Lib-default config file found.");
+				logger.info("Lib-default userConfig file found.");
 				in = PropertiesLoader.class.getResourceAsStream(BASE_FILE_NAME+".default");
 			}
 			
 			// load the object
 			ObjectMapper mapper = new ObjectMapper();
-			config = mapper.readValue(in, FilemanagerConfig.class);
+			userConfig = mapper.readValue(in, FilemanagerConfig.class);
 		} catch (Exception e) {
 			logger.error("Error while loading the config file!", e);
 			throw new RuntimeException(e);

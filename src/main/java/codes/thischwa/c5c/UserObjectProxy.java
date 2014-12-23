@@ -13,6 +13,7 @@ package codes.thischwa.c5c;
 import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -26,6 +27,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,8 @@ import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
 import codes.thischwa.jii.IDimensionProvider;
 import codes.thischwa.jii.exception.ReadException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * This object serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -91,6 +95,8 @@ public class UserObjectProxy {
 	private static Pattern excludeFilesPattern;
 
 	private static ExifRemover exifRemover;
+	
+	private static FilemanagerConfig filemanagerDefaultConfig;
 
 	/**
 	 * Instantiates all user-objects.
@@ -226,7 +232,27 @@ public class UserObjectProxy {
 			throw new RuntimeException(msg);
 		}
 		tempDirectory = tempDir.toPath();
-
+		
+		// try to load the default configuration of the filemanager
+		File fmScriptDir = new File(UserObjectProxy.servletContext.getRealPath(PropertiesLoader.getFilemanagerPath()), "scripts");
+		String fmDefaultConfig = FilemanagerConfigBuilder.BASE_FILE_NAME.concat(".default");
+		File defaultConfig = new File(fmScriptDir, fmDefaultConfig);
+		if(!defaultConfig.exists())
+			throw new RuntimeException(String.format("Default config file doesn't exists: %s", defaultConfig.getAbsolutePath()));
+		InputStream configIn = null;
+		try {
+			// load the object
+			configIn = new BufferedInputStream(new FileInputStream(defaultConfig));
+			ObjectMapper mapper = new ObjectMapper();
+			filemanagerDefaultConfig = mapper.readValue(configIn, FilemanagerConfig.class);
+			logger.info("Default configuration of the filemanager loaded successful.");
+		} catch (Exception e) {
+			logger.error("Error while loading the defaultConfig file!", e);
+			throw new RuntimeException(e);
+		} finally {
+			IOUtils.closeQuietly(configIn);
+		}
+		
 		// build regex pattern
 		String folderExcludePatternStr = PropertiesLoader.getRegexToExcludeFolders();
 		if(StringUtils.isNullOrEmptyOrBlank(folderExcludePatternStr)) {
@@ -312,7 +338,7 @@ public class UserObjectProxy {
 	}
 
 	/**
-	 * Retrieves the {@link FilemanagerConfig}.
+	 * Retrieves the (user) {@link FilemanagerConfig}.
 	 * 
 	 * @param req
 	 *            the {@link HttpServletRequest}
@@ -320,20 +346,24 @@ public class UserObjectProxy {
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
-	static FilemanagerConfig getFilemanagerConfig(HttpServletRequest req) {
+	static FilemanagerConfig getFilemanagerUserConfig(HttpServletRequest req) {
 		// we need the HttpServletRequest here because this breaks the request-cycle, see ConnctorServlet#doGet
 		return configBuilder.getConfig(req, servletContext);
 	}
 
 	/**
 	 * Retrieves the {@link FilemanagerConfig} based on the current {@link HttpServletRequest}. It's just a wrapper method to
-	 * {@link #getFilemanagerConfig(HttpServletRequest)}.
+	 * {@link #getFilemanagerUserConfig(HttpServletRequest)}.
 	 * 
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
 	public static FilemanagerConfig getFilemanagerConfig() {
-		return getFilemanagerConfig(RequestData.getContext().getServletRequest());
+		return getFilemanagerUserConfig(RequestData.getContext().getServletRequest());
+	}
+
+	public static FilemanagerConfig getFilemanagerDefaultConfig() {
+		return filemanagerDefaultConfig;
 	}
 
 	/**

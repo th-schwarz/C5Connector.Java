@@ -135,9 +135,7 @@ final class DispatcherGET extends GenericDispatcher {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
 				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}", urlPath, backendPath);
-				Dimension dim = UserObjectProxy.getThumbnailDimension();
-				StreamContent sc = connector.buildThumbnail(backendPath, dim);
-				resp = buildThumbnailView(backendPath, sc);
+				resp = buildThumbnailView(backendPath);
 				break;
 			}
 			case PREVIEW: {
@@ -146,9 +144,7 @@ final class DispatcherGET extends GenericDispatcher {
 				boolean thumbnail = Boolean.valueOf(req.getParameter("thumbnail"));
 				logger.debug("* thumbnail -> urlPath: {}, backendPath: {}, thumbnail: {}", urlPath, backendPath, thumbnail);
 				if(thumbnail) {
-					Dimension dim = UserObjectProxy.getThumbnailDimension();
-					StreamContent sc = connector.buildThumbnail(backendPath, dim);
-					resp = buildThumbnailView(backendPath, sc);					
+					resp = buildThumbnailView(backendPath);					
 				} else {
 					StreamContent sc = connector.preview(backendPath, UserObjectProxy.getPreviewDimension());
 					resp = buildPrieview(backendPath, sc);
@@ -232,7 +228,10 @@ final class DispatcherGET extends GenericDispatcher {
 		return new Download(fullPath, sc.getSize(), sc.getInputStream());
 	}
 
-	private ShowThumbnail buildThumbnailView(String fullPath, StreamContent sc) {
+	private ShowThumbnail buildThumbnailView(String fullPath) throws C5CException {
+		Dimension dim = UserObjectProxy.getThumbnailDimension();
+		// TODO calling the cache, see issue#27
+		StreamContent sc = connector.buildThumbnail(fullPath, dim);
 		return new ShowThumbnail(fullPath, sc.getSize(), sc.getInputStream());
 	}
 	

@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import codes.thischwa.c5c.filemanager.FilemanagerConfig;
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
 import codes.thischwa.c5c.util.StringUtils;
@@ -117,17 +118,19 @@ public class ConnectorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		initResponseHeader(resp);
-		
-		if(req.getServletPath().contains("filemanager.config.js")) {
+		String path = req.getServletPath(); 
+		if(path.contains("filemanager.config.js")) {
 			// this breaks the request-cycle of this library
 			// but otherwise an extra servlet is needed to serve the config of the filemanager 
-			logger.debug("Filemanager config request.");
+			logger.debug("Filemanager config request: {}", path);
+			FilemanagerConfig config = (path.endsWith(".default")) ? UserObjectProxy.getFilemanagerDefaultConfig()
+					: UserObjectProxy.getFilemanagerUserConfig(req);
 			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				mapper.writeValue(resp.getOutputStream(), UserObjectProxy.getFilemanagerConfig(req)); 
+				mapper.writeValue(resp.getOutputStream(), config); 
 			} catch (Exception e) {
-				logger.error("Handling of 'filemanager.config.js' failed.", e);
+				logger.error(String.format("Handling of '%s' failed.", path), e);
 				throw new RuntimeException(e);
 			} finally {
 				IOUtils.closeQuietly(resp.getOutputStream());

@@ -73,7 +73,7 @@ final class DispatcherPUT extends GenericDispatcher {
 			Context ctx = RequestData.getContext();
 			FilemanagerAction mode = ctx.getMode();
 			HttpServletRequest req = ctx.getServletRequest();
-			FilemanagerConfig conf = UserObjectProxy.getFilemanagerConfig(req);
+			FilemanagerConfig conf = UserObjectProxy.getFilemanagerUserConfig(req);
 			switch(mode) {
 			case UPLOAD: {
 				boolean overwrite = conf.getUpload().isOverwrite();
