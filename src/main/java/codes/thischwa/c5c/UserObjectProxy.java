@@ -362,6 +362,11 @@ public class UserObjectProxy {
 		return getFilemanagerUserConfig(RequestData.getContext().getServletRequest());
 	}
 
+	/**
+	 * Getter for the default configuration of the filemanager.
+	 * 
+	 * @return the default configuration of the filemanager
+	 */
 	public static FilemanagerConfig getFilemanagerDefaultConfig() {
 		return filemanagerDefaultConfig;
 	}

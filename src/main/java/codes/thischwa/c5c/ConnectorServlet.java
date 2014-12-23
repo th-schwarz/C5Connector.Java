@@ -18,16 +18,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import codes.thischwa.c5c.filemanager.FilemanagerConfig;
 import codes.thischwa.c5c.requestcycle.RequestData;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
 import codes.thischwa.c5c.util.StringUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * <b>The</b> connector servlet of the filemanager. <br/>
@@ -44,15 +40,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <servlet-mapping>
  * 	<servlet-name>ConnectorServlet</servlet-name>
  * 	<url-pattern>/filemanager/connectors/java/*</url-pattern> 	
- * </servlet-mapping>
- * 
- * <servlet-mapping>
- * 	<servlet-name>ConnectorServlet</servlet-name>
- * 	<url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
- * </servlet-mapping>
- * <servlet-mapping>
- * 	<servlet-name>ConnectorServlet</servlet-name>
- * 	<url-pattern>/filemanager/scripts/filemanager.config.js.default</url-pattern> 	
  * </servlet-mapping>
  * }
  * </pre>
@@ -107,7 +94,7 @@ public class ConnectorServlet extends HttpServlet {
 		logger.info(String.format("*** %s sucessful initialized.", this.getClass().getName()));
 	}
 
-	private void initResponseHeader(HttpServletResponse resp) {
+	static void initResponseHeader(HttpServletResponse resp) {
 		// set some default headers 
 		resp.setHeader("Cache-Control", "no-cache");
 		resp.setContentType("application/json");
@@ -118,26 +105,6 @@ public class ConnectorServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		initResponseHeader(resp);
-		String path = req.getServletPath(); 
-		if(path.contains("filemanager.config.js")) {
-			// this breaks the request-cycle of this library
-			// but otherwise an extra servlet is needed to serve the config of the filemanager 
-			logger.debug("Filemanager config request: {}", path);
-			FilemanagerConfig config = (path.endsWith(".default")) ? UserObjectProxy.getFilemanagerDefaultConfig()
-					: UserObjectProxy.getFilemanagerUserConfig(req);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				mapper.writeValue(resp.getOutputStream(), config); 
-			} catch (Exception e) {
-				logger.error(String.format("Handling of '%s' failed.", path), e);
-				throw new RuntimeException(e);
-			} finally {
-				IOUtils.closeQuietly(resp.getOutputStream());
-			}
-			return;
-		}
-		
 		doRequest(req, resp, dispatcherGET);
 	}
 
