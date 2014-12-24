@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * {@link FilemanagerConfigBuilder} will be used to build the configuration.<br/>
  * <br/>
  * <strong>Important:</strong> It must be ensured, that this filter will be initialized
- * *after* the {@link Connector} (see the 'load-on-startup' tag). <br/>
+ * *after* the {@link ConnectorServlet} (see the 'load-on-startup' tag). <br/>
  * <br/>
  * To register it in the web.xml the following entries should be used:
  * 

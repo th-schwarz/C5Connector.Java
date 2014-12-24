@@ -4,39 +4,50 @@
    
 Shared Configuration
 
-  There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>>) for sharing
+  There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>> copied from <<<[filemanager-dir]/scripts/filemanager.config.js.default>>>) for sharing
   the configuration between the frontend (javascript filemanager) and the backend (C5Connector.Java). 
   It's important to understand the settings of the configuration file. Details about that can be found
   at the wiki page {{{https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file}<<<Filemanager configuration file>>>}}.
-  The {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}
-  object is the corresponding object-oriented map of this configuration file and is used to provide properties for
-  the implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. This configuration
-  file is commonly built by the default implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}} 
-  ({{{./apidocs/codes/thischwa/c5c/requestcycle/impl/GlobalFilemanagerConfig.html}<<<codes.thischwa.c5c.requestcycle.impl.GlobalFilemanagerConfig>>>}}).
   
-  Usually the configuration file (<<<[filemanager-dir]/scripts/filemanager.config.js>>>)
-  must be edited to change the configuration globally and for all users of your webapp!
+  The most important setting for C5Connector.Java is <options#lang>, it must be set to 'java'!
   
+  [Hint:] To avoid interoperability issues with regular expressions (e.g. <excludes#unallowed_folders_REGEXP>), all regex' have been moved to the {{{./config_c5connector.html}Configuration of C5Connector.Java}}. 
+    
+  []
+    
+  Changes on the configuration file (<<<[filemanager-dir]/scripts/filemanager.config.js>>>)
+  are globally and for all users of your webapp!
+  
+* Request-Based Configuration
+
   An outstanding feature of C5Connector.Java is the possibility of a request-based (user-based) configuration.
-  For this purpose the <<<ConnectorServlet>>> will be used to build and deliver the configuration based on {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}.\
-  Add the following lines to the <<<web.xml>>> to enable this: 
+  For this purpose the filter <<<FilemanagerConfigFilter>>> is provided. It will be used to build and deliver the configuration 
+  based on {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}. 
+  It is the corresponding object-oriented map of the shared configuration file. 
+  
+  Add the following lines to the <<<web.xml>>> to enable the filter: 
   
 +---+
-<servlet-mapping>
-  <servlet-name>ConnectorServlet</servlet-name>
-  <url-pattern>/filemanager/scripts/filemanager.config.js</url-pattern> 	
-</servlet-mapping>
-<servlet-mapping>
-  <servlet-name>ConnectorServlet</servlet-name>
-  <url-pattern>/filemanager/scripts/filemanager.config.js.default</url-pattern> 	
-</servlet-mapping>
+<filter>
+	<filter-name>ConfigFilter</filter-name>
+	<filter-class>codes.thischwa.c5c.FilemanagerConfigFilter</filter-class>
+	<load-on-startup>2</load-on-startup>
+</filter>
+<filter-mapping>
+	<filter-name>ConfigFilter</filter-name>
+	<url-pattern>/filemanager/scripts/*</url-pattern>
+</filter-mapping>
 +---+
 
-  Assuming the filemanager is installed in the <<</filemanager>>> folder of your webapp and the {{{./apidocs/codes/thischwa/c5c/ConnectorServlet.html}<<<codes.thischwa.c5c.ConnectorServlet>>>}}
-  has been given the name 'ConnectorServlet'.\
-  Now the {{{./apidocs/codes/thischwa/c5c/ConnectorServlet.html}<<<codes.thischwa.c5c.ConnectorServlet>>>}} uses the default implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
+  [Hint:] It must be ensured, that this filter will be initialized *after* the {{{./apidocs/codes/thischwa/c5c/ConnectorServlet.html}<<<codes.thischwa.c5c.ConnectorServlet>>>}}
+          (see the 'load-on-startup' tag).
+      
+  []
+  
+  Assuming the filemanager is installed in the <<</filemanager>>> folder of your webapp and the {{{./apidocs/codes/thischwa/c5c/FilemanagerConfigFilter.html}<<<codes.thischwa.c5c.FilemanagerConfigFilter>>>}}
+  has been given the name 'ConfigFilter'.\
+  Now the {{{./apidocs/codes/thischwa/c5c/FilemanagerConfigFilter.html}<<<codes.thischwa.c5c.FilemanagerConfigFilter>>>}} uses the default implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}
   to get the configuration. This will be transferred to JSON automatically.
   
   To see how to change the configuration by Java, see {{{./extending_filemanagerconfigbuilder.html}Extending the FilemanagerConfigBuilder}}.
   
-  [Hint:] To avoid interoperability issues with regular expressions (e.g. Excludes#unallowed_folders_REGEXP), all regex' have been moved to the {{{./config_c5connector.html}Configuration of C5Connector.Java}}.

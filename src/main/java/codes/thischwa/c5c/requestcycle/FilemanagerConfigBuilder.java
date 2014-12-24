@@ -19,7 +19,7 @@ import codes.thischwa.c5c.filemanager.FilemanagerConfig;
 /**
  * An interface to specify the configuration of the filemanager.<br/>
  * The implemented object has to fill the {@link FilemanagerConfig}. This configuration object is 
- * used by the implementation of the {@link Connector}.<br/>
+ * used to dispatch the configuration settings to the implementation of the {@link Connector}.<br/>
  * <br/>
  * <b>Hint:</b> You are free to implement this interface the way you need it, 
  * in other words your return values can be global, regardless of the request, or on a per-request basis. 

@@ -44,9 +44,7 @@ import codes.thischwa.c5c.util.StringUtils;
  * }
  * </pre>
  * 
- * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.<br/>
- * IMPORTANT: The 2nd and 3rd servlet-mapping is necessary only if this servlet should 'serve' the dynamic 
- * configuration of the filemanager.
+ * Assuming the filemanager is installed in the <code>/filemanager</code> folder in your webapp.
  */
 @MultipartConfig
 public class ConnectorServlet extends HttpServlet {
