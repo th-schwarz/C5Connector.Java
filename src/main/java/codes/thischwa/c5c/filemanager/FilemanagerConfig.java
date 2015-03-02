@@ -37,6 +37,8 @@ public class FilemanagerConfig {
 	private Edit edit = new Edit();
 	private Extras extras = new Extras();
 	private Icons icons = new Icons();
+	private CustomScrollbar customScrollbar = new CustomScrollbar();
+	private String url;
 
 	public String getComment() {
 		return comment;
@@ -84,5 +86,13 @@ public class FilemanagerConfig {
 
 	public Icons getIcons() {
 		return icons;
+	}
+	
+	public CustomScrollbar getCustomScrollbar() {
+		return customScrollbar;
+	}
+	
+	public String getUrl() {
+		return url;
 	}
 }

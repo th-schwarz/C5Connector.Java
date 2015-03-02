@@ -11,11 +11,13 @@
 package codes.thischwa.c5c.filemanager;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
  * Represents the type <code>upload</code> of the JSON configuration of the filemanager. 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Upload {
 
 	private boolean overwrite;
