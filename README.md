@@ -14,4 +14,4 @@ The project is in a beta state. It has to be tested with several servlet-contain
 
 Don't hesitate to inform the author if you was tested C5Container.Java with other servlet-environments successfully.
 
-The chaangelog can be found [here](https://github.com/th-schwarz/C5Connector.Java/blob/master/CHANGELOG.md).
+The changelog can be found [here](https://github.com/th-schwarz/C5Connector.Java/blob/master/CHANGELOG.md).
