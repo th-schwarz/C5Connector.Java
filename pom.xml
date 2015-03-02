@@ -195,7 +195,7 @@
 								<show>package</show>
 								<nohelp>true</nohelp>
 								<top><![CDATA[<h1>&nbsp;${project.name} ${project.version} - API</h1>]]></top>
-								<bottom><![CDATA[Copyright &#169; {inceptionYear}-{currentYear} <a href="http://www.thischwa.codes">Thilo Schwarz<a>. All rights reserved.]]></bottom>
+								<bottom><![CDATA[Copyright &#169; {inceptionYear}-{currentYear} <a href="http://www.thischwa.de">Thilo Schwarz<a>. All rights reserved.]]></bottom>
 								<links>
 									<link>http://docs.oracle.com/javase/7/docs/api/</link>
 								</links>
