@@ -1,5 +1,9 @@
 # changelog
 
+* 0.8-SNAPSHOT
+  * issue #30: filemanager.config.js.default isn't loaded
+  * issue #32: Adapt FilemanagerConfig to Filemanager 2.0
+
 * 0.7
   * issue #29: extend the shared-config with option#theme 
   * internal: global refactoring, refactored the upload code 
