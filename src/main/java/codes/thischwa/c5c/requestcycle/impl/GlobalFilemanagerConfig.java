@@ -31,8 +31,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Default implementation of {@link FilemanagerConfigBuilder}. It loads the 
- * common config file [filemanager-dir]/scripts/filemanager.config.js 
- * or the default one ([filemanager-dir]/scripts/filemanager.config.js.default).
+ * common config file [filemanager-dir]/scripts/filemanager.config.js. 
+ * If it isn't exists the default one ([filemanager-dir]/scripts/filemanager.config.js.default)
+ * will be loaded.
  * The configuration is globally available.<br/>
  * <br/>
  * The following defaults are set:
