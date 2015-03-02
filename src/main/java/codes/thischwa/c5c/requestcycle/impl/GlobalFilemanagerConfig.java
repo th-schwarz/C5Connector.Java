@@ -30,14 +30,10 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Default implementation of {@link FilemanagerConfigBuilder}. It tries to find the
- * relevant config files in a fixed order and loads the first file which is found.<br/>
- * The order of searching canfig files is the following:
- * <ol>
- * <li>[filemanager-dir]/scripts/filemanager.config.js</li>
- * <li>internal config file</li>
- * </ol>
- * The configuration is loaded globally.<br/>
+ * Default implementation of {@link FilemanagerConfigBuilder}. It loads the 
+ * common config file [filemanager-dir]/scripts/filemanager.config.js 
+ * or the default one ([filemanager-dir]/scripts/filemanager.config.js.default).
+ * The configuration is globally available.<br/>
  * <br/>
  * The following defaults are set:
  * <ul>
@@ -78,17 +74,18 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 		try {
 			File fmScriptDir = new File(context.getRealPath(PropertiesLoader.getFilemanagerPath()), "scripts");
 			
-			// 1. defined: filemanager/scripts/filemanager.config.js
+			// defined: filemanager/scripts/filemanager.config.js
 			File configFile = new File(fmScriptDir, BASE_FILE_NAME);
 			if(configFile.exists()) {
 				logger.info("Defined userConfig file found.");
 				in = new BufferedInputStream(new FileInputStream(configFile));
 			}
-			
-			// 2. lib-default
-			if(in == null) {
-				logger.info("Lib-default userConfig file found.");
-				in = PropertiesLoader.class.getResourceAsStream(BASE_FILE_NAME+".default");
+
+			// defined: filemanager/scripts/filemanager.config.js.default
+			configFile = new File(fmScriptDir, BASE_FILE_NAME+".default");
+			if(configFile.exists()) {
+				logger.info("Defined filemanagers default config file found.");
+				in = new BufferedInputStream(new FileInputStream(configFile));
 			}
 			
 			// load the object
