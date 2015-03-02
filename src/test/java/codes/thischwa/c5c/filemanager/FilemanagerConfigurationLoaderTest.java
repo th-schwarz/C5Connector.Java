@@ -32,7 +32,7 @@ public class FilemanagerConfigurationLoaderTest {
 
 		ObjectMapper mapper = new ObjectMapper(); 
 		String actual = mapper.writeValueAsString(conf);
-		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"theme\":null,\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"showTitleAttr\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"capabilities\":null,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":-1},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null},\"images\":{\"resize\":{\"enabled\":false,\"maxHeight\":0,\"maxWidth\":0},\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"edit\":{\"enabled\":false,\"lineNumbers\":false,\"lineWrapping\":false,\"codeHighlight\":false,\"theme\":null,\"editExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"_comment\":\"test\"}";
+		String expected = "{\"options\":{\"culture\":null,\"lang\":\"java\",\"theme\":null,\"defaultViewMode\":null,\"autoload\":false,\"showFullPath\":false,\"showTitleAttr\":false,\"browseOnly\":false,\"showConfirmation\":false,\"showThumbs\":false,\"generateThumbnails\":false,\"searchBox\":false,\"listFiles\":false,\"fileSorting\":null,\"dateFormat\":null,\"serverRoot\":false,\"fileRoot\":null,\"relPath\":false,\"logger\":false,\"capabilities\":null,\"plugins\":null,\"chars_only_latin\":false},\"security\":{\"uploadPolicy\":null,\"uploadRestrictions\":null},\"upload\":{\"overwrite\":false,\"imagesOnly\":false,\"fileSizeLimit\":-1},\"exclude\":{\"unallowed_files\":null,\"unallowed_dirs\":null},\"images\":{\"resize\":{\"enabled\":false,\"maxHeight\":0,\"maxWidth\":0},\"imagesExt\":null},\"videos\":{\"showVideoPlayer\":false,\"videosExt\":null,\"videosPlayerHeight\":0,\"videosPlayerWidth\":0},\"audios\":{\"showAudioPlayer\":false,\"audiosExt\":null},\"edit\":{\"enabled\":false,\"lineNumbers\":false,\"lineWrapping\":false,\"codeHighlight\":false,\"theme\":null,\"editExt\":null},\"extras\":{\"extra_js_async\":false,\"extra_js\":null},\"icons\":{\"path\":null,\"directory\":null,\"default\":null},\"customScrollbar\":{\"enabled\":false,\"button\":false,\"theme\":null},\"url\":null,\"_comment\":\"test\"}";
 		assertEquals(expected, actual);
 	}
 
@@ -58,7 +58,7 @@ public class FilemanagerConfigurationLoaderTest {
 		assertEquals("default.png", conf.getIcons().getDefaultIcon());
 		
 		assertTrue(conf.getOptions().getRelPath() instanceof Boolean);
-		assertFalse(conf.getOptions().isGenerateThumbnails());
+		assertTrue(conf.getOptions().isGenerateThumbnails());
 		assertEquals(Boolean.FALSE, conf.getOptions().getRelPath());
 		
 		assertEquals(5, conf.getOptions().getCapabilities().size());
