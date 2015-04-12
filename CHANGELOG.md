@@ -1,5 +1,8 @@
 # changelog
 
+* 0.9-SNAPSHOT
+  * issue #33: Implementation of 'version' property
+
 * 0.8
   * issue #30: filemanager.config.js.default isn't loaded
   * issue #32: Adapt FilemanagerConfig to Filemanager 2.0
