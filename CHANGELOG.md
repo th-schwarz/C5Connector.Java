@@ -1,6 +1,6 @@
 # changelog
 
-* 0.8-SNAPSHOT
+* 0.8
   * issue #30: filemanager.config.js.default isn't loaded
   * issue #32: Adapt FilemanagerConfig to Filemanager 2.0
 
