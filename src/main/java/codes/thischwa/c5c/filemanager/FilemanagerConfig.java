@@ -13,6 +13,7 @@ package codes.thischwa.c5c.filemanager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @see <a href="https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file">filemanager-wiki</a>
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FilemanagerConfig {
 	public static final Logger logger = LoggerFactory.getLogger(FilemanagerConfig.class);
 
@@ -39,6 +41,7 @@ public class FilemanagerConfig {
 	private Icons icons = new Icons();
 	private CustomScrollbar customScrollbar = new CustomScrollbar();
 	private String url;
+	private String version;
 
 	public String getComment() {
 		return comment;
@@ -94,5 +97,9 @@ public class FilemanagerConfig {
 	
 	public String getUrl() {
 		return url;
+	}
+	
+	public String getVersion() {
+		return version;
 	}
 }
