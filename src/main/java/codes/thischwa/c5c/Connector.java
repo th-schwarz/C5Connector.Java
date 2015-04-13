@@ -114,7 +114,7 @@ public interface Connector {
 	 * 
 	 * @param backendPath
 	 *            the requested file to delete, e.g. <code>/UserFiles/Image/logo.png</code>
-	 * @return <code>true</code> if the renamed file is a directory, otherwise <code>false</code>
+	 * @return <code>true</code> if the file or directory was deleted successful, otherwise <code>false</code>
 	 * @throws C5CException
 	 */
 	public boolean delete(String backendPath) throws C5CException;
