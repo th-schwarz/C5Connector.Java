@@ -38,7 +38,8 @@ import codes.thischwa.c5c.requestcycle.BackendPathBuilder;
  * {@link BackendPathBuilder}.<br/>
  * <br/>
  * <b>Hint for implementations:</b> For throwing known exceptions of the filemanager, the {@link FilemanagerException} must be used! Helpful
- * constructors are provided.
+ * constructors are provided.<br/>
+ * The implementation don't need to worry about restriction of single files or directories. This is done by the caller!
  */
 public interface Connector {
 
