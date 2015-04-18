@@ -168,7 +168,8 @@ public abstract class GenericConnector implements Connector {
 	 * 
 	 * @param name
 	 *            the name of the file
-	 * @param isProtected TODO
+	 * @param isProtected
+	 *            signals that the underlying file is protected
 	 * @param width
 	 *            the width of the image
 	 * @param height
