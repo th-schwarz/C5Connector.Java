@@ -40,6 +40,8 @@ public class FilemanagerException extends C5CException {
 		ErrorReplacingFile("ERROR_REPLACING_FILE"),
 		InvalidDirectoryOrFile("INVALID_DIRECTORY_OR_FILE"),
 		InvalidFileUpload("INVALID_FILE_UPLOAD"),
+		NotAllowed("NOT_ALLOWED"),
+		NotAllowedSystem("NOT_ALLOWED_SYSTEM"),
 		UploadFilesSmallerThan("UPLOAD_FILES_SMALLER_THAN"),
 		UploadImagesOnly("UPLOAD_IMAGES_ONLY"),
 		UploadImagesTypeJpegGifPng("UPLOAD_IMAGES_TYPE_JPEG_GIF_PNG"),

@@ -22,9 +22,11 @@ public interface IconResolver {
 
 	/** GenericResponse key to signal a directory */
 	public static final String key_directory = Type.directory.toString().toLowerCase();
+	public static final String key_directory_lock = key_directory + "_lock"; 
 
 	/** GenericResponse key to signal an unknown file. */
 	public static final String key_default = "unknown";
+	public static final String key_default_lock = "unknown_lock";
 
 	/**
 	 * Initialization of the context.

@@ -66,9 +66,9 @@ public interface Connector {
 	 *            Mainly for image files. <code>true</code> indicates that the dimension of the image should be set in the
 	 *            {@link GenericConnector.FileProperties}.
 	 * @return a list of {@link GenericConnector.FileProperties} objects prefilled with data of the files inside the requested folder. To
-	 *         initialize this object use {@link GenericConnector#buildForFile(String, long, java.util.Date)},
-	 *         {@link GenericConnector#buildForDirectory(String, java.util.Date)} or
-	 *         {@link GenericConnector#buildForImage(String, int, int, long, java.util.Date)}
+	 *         initialize this object use {@link GenericConnector#buildForFile(String, boolean, long, java.util.Date)},
+	 *         {@link GenericConnector#buildForDirectory(String, boolean, java.util.Date)} or
+	 *         {@link GenericConnector#buildForImage(String, boolean, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
 	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
@@ -218,4 +218,7 @@ public interface Connector {
 	 * @throws C5CException
 	 */
 	public void replace(String backendPath, InputStream in) throws C5CException;
+	
+	
+	public boolean isProtected(String backendPath);
 }

@@ -18,14 +18,14 @@ import codes.thischwa.c5c.Constants;
  * Helper object for building paths with or without a file. </br>
  * Without a path, a file always ends with '/'.
  */
-public class Path {
+public class PathBuilder {
 	
 	private StringBuilder sb;
 
 	/**
 	 * Instantiates a new path.
 	 */
-	public Path() {
+	public PathBuilder() {
 		sb = new StringBuilder();
 	}
 	
@@ -34,7 +34,7 @@ public class Path {
 	 *
 	 * @param folder the folder
 	 */
-	public Path(String folder) {
+	public PathBuilder(String folder) {
 		this();
 		String cleanedFolder = cleanPath(folder);
 		if(cleanedFolder.endsWith(Constants.defaultSeparator))
@@ -48,7 +48,7 @@ public class Path {
 	 * @param folder the folder
 	 * @return the path
 	 */
-	public Path addFolder(String folder) {
+	public PathBuilder addFolder(String folder) {
 		StringBuilder sb = new StringBuilder(cleanPath(folder));
 		if(sb.charAt(0) == Constants.defaultSeparatorChar)
 			sb.deleteCharAt(0);

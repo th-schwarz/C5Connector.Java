@@ -16,6 +16,7 @@ import java.awt.image.ImagingOpException;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +59,7 @@ public class LocalConnector extends GenericConnector {
 	
 	@Override
 	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException {
-		Path folder = buildAndCheckFolder(backendPath);
+		Path folder = buildRealPathAndCheck(backendPath);
 		return constructFromDirRequest(folder, needSize);
 	}
 	
@@ -99,7 +100,7 @@ public class LocalConnector extends GenericConnector {
 	
 	@Override
 	public void createFolder(String backendDirectory, String sanitizedFolderName) throws C5CException {
-		Path parentFolder = buildAndCheckFolder(backendDirectory);
+		Path parentFolder = buildRealPathAndCheck(backendDirectory);
 		Path newFolder = parentFolder.resolve(sanitizedFolderName);
 		try {
 			Files.createDirectories(newFolder);
@@ -112,13 +113,13 @@ public class LocalConnector extends GenericConnector {
 	}
 	
 	/**
-	 * Builds the and check folder.
+	 * Builds the folder and check it.
 	 *
 	 * @param backendPath the url path
 	 * @return the file
 	 * @throws FilemanagerException the known exception
 	 */
-	private Path buildAndCheckFolder(String backendPath) throws FilemanagerException {
+	private Path buildRealPathAndCheck(String backendPath) throws FilemanagerException {
 		Path parentFolder = buildRealPath(backendPath);
 		if(!Files.exists(parentFolder)) {
 			logger.error("Source file not found: {}", parentFolder.toAbsolutePath());
@@ -183,13 +184,14 @@ public class LocalConnector extends GenericConnector {
 			String fileName = path.getFileName().toString();
 			String ext = FilenameUtils.getExtension(fileName.toString());
 			long size = Files.size(path);
+			boolean isProtected = isProtected(path);
 			if(isImageExtension(ext)) {
 				imageIn = new BufferedInputStream(Files.newInputStream(path));
 				Dimension dim = UserObjectProxy.getDimension(imageIn);
-				fileProperties = buildForImage(fileName, dim.width, dim.height, size, lastModified);
+				fileProperties = buildForImage(fileName, isProtected, dim.width, dim.height, size, lastModified);
 			} else {
-				 fileProperties = (Files.isDirectory(path)) ? buildForDirectory(fileName, lastModified)
-						 : buildForFile(fileName, size, lastModified);
+				 fileProperties = (Files.isDirectory(path)) ? buildForDirectory(fileName, isProtected, lastModified)
+						 : buildForFile(fileName, isProtected, size, lastModified);
 			}
 			return fileProperties;
 		} catch (FileNotFoundException e) {
@@ -219,7 +221,8 @@ public class LocalConnector extends GenericConnector {
 				public boolean accept(Path entry) throws IOException {
 					return Files.isDirectory(entry) && checkFolderName(entry.getFileName().toString());
 				}})) {
-				FileProperties fp = buildForDirectory(d.getFileName().toString(), new Date(Files.getLastModifiedTime(d).toMillis()));
+				boolean isProtected =  isProtected(d);
+				FileProperties fp = buildForDirectory(d.getFileName().toString(), isProtected, new Date(Files.getLastModifiedTime(d).toMillis()));
 				props.add(fp);
 			}
 		} catch (IOException | SecurityException e) {
@@ -244,7 +247,7 @@ public class LocalConnector extends GenericConnector {
 	
 	@Override
 	public void upload(String urlDirectory, String sanitizedName, InputStream in) throws C5CException {
-		Path parentFolder = buildAndCheckFolder(urlDirectory);
+		Path parentFolder = buildRealPathAndCheck(urlDirectory);
 		Path fileToSave = parentFolder.resolve(sanitizedName);
 		try {
 			Files.deleteIfExists(fileToSave);
@@ -343,6 +346,7 @@ public class LocalConnector extends GenericConnector {
 			out = Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 			IOUtils.write(content, out, PropertiesLoader.getDefaultEncoding());
 		} catch (IOException e) {
+			logger.warn("Error while saving content of {}", backendPath);
 			throw new C5CException(FilemanagerAction.SAVEFILE, e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(out);
@@ -357,5 +361,15 @@ public class LocalConnector extends GenericConnector {
 		} catch (IOException e) {
 			throw new FilemanagerException(FilemanagerAction.REPLACE, FilemanagerException.Key.InvalidFileUpload, file.getFileName().toString());
 		}
+	}
+	
+	@Override
+	public boolean isProtected(String backendPath) {
+		return isProtected(buildRealPath(backendPath));
+	}
+	
+	private boolean isProtected(Path path) {
+		File file = path.toFile();
+		return !(file.canRead() && file.canWrite());
 	}
 }

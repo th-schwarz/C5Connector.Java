@@ -117,9 +117,15 @@ final class DispatcherPUT extends GenericDispatcher {
 				String backendPath = buildBackendPath(newFilePath);
 				Part uploadPart = req.getPart("fileR");
 				logger.debug("* replacefile -> urlPath: {}, backendPath: {}", newFilePath, backendPath);
+				
+				// check if backendPath is protected
+				boolean protect = connector.isProtected(backendPath);
+				if(protect) {
+					throw new FilemanagerException(FilemanagerAction.UPLOAD, FilemanagerException.Key.NotAllowedSystem, backendPath);
+				}
 
 				// check if file already exits
-				VirtualFile vf = new VirtualFile(backendPath);
+				VirtualFile vf = new VirtualFile(backendPath, false);
 				String fileName = vf.getName();
 				String uniqueName = getUniqueName(vf.getFolder(), fileName);
 				if(uniqueName.equals(fileName)) {
@@ -136,7 +142,7 @@ final class DispatcherPUT extends GenericDispatcher {
 				
 				connector.replace(backendPath, new BufferedInputStream(Files.newInputStream(tempPath)));
 				logger.debug("successful replaced {} bytes", uploadPart.getSize());
-				VirtualFile vfUrlPath = new VirtualFile(newFilePath);
+				VirtualFile vfUrlPath = new VirtualFile(newFilePath, false);
  				return new Replace(vfUrlPath.getFolder(), vfUrlPath.getName());
 			} case SAVEFILE: {
 				String urlPath = req.getParameter("path");

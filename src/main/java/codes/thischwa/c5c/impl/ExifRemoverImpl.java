@@ -34,14 +34,15 @@ public class ExifRemoverImpl implements ExifRemover {
 	private final List<String> allowed = Arrays.asList("jfif", "jpg", "jpeg");
 
 	@Override
-	public void removeExif(InputStream in, OutputStream out, String extension) throws IOException {
+	public boolean removeExif(InputStream in, OutputStream out, String extension) throws IOException {
 		if(!allowed.contains(extension)) {
 			logger.debug("Removing EXIF data for {} isn't necessary.", extension);
-			return;
+			return false;
 		}
 		
 		try {
 			new ExifRewriter().removeExifMetadata(in, out);
+			return true;
 		} catch (ImageReadException | ImageWriteException e) {
 			throw new IOException(e);
 		}

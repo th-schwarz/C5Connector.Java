@@ -78,6 +78,12 @@ final class DispatcherGET extends GenericDispatcher {
 			case FOLDER: {
 				String urlPath = req.getParameter("path");
 				String backendPath = buildBackendPath(urlPath);
+				if(connector.isProtected(backendPath)) {
+					FileInfo fi = new FileInfo(urlPath, true, true);
+					fi.setFileProperties(new GenericConnector.FileProperties(urlPath, true, null));
+					fi.setError(UserObjectProxy.getFilemanagerErrorMessage(Key.NotAllowedSystem), -1);
+					return fi;
+				}
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}", urlPath, backendPath, needSize);
 				List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize);
@@ -184,10 +190,10 @@ final class DispatcherGET extends GenericDispatcher {
 
 	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
 		FilemanagerConfig fConfig = UserObjectProxy.getFilemanagerConfig();
-		FileInfo fi = new FileInfo(urlPath, fp.isDir());
+		FileInfo fi = new FileInfo(urlPath, fp.isDir(), fp.isProtected());
 		fi.setFileProperties(fp);
 		setCapabilities(fi, urlPath);
-		VirtualFile vf = new VirtualFile(fp.getName(), fp.isDir());
+		VirtualFile vf = new VirtualFile(fp);
 		if(fConfig.getOptions().isShowThumbs() && vf.getType()==VirtualFile.Type.file && fConfig.getImages().getExtensions().contains(vf.getExtension())) {
 			// attention: urlPath can be with or without a file name!
 			HttpServletRequest req = RequestData.getContext().getServletRequest();

@@ -73,19 +73,20 @@ public abstract class GenericConnector implements Connector {
 	public static class FileProperties extends FileInfoProperties {
 
 		private boolean isDir;
-
-		FileProperties(String name, Date modified) {
-			super(name, modified);
+		
+		// constructors for directories
+		FileProperties(String name, boolean isProtected, Date modified) {
+			super(name, isProtected, modified);
 			isDir = true;
 		}
 
-		FileProperties(String name, long size, Date modified) {
-			super(name, size, modified);
+		FileProperties(String name, boolean isProtected, long size, Date modified) {
+			super(name, isProtected, size, modified);
 			isDir = false;
 		}
 
-		FileProperties(String name, int width, int height, long size, Date modified) {
-			super(name, width, height, size, modified);
+		FileProperties(String name, boolean isProtected, int width, int height, long size, Date modified) {
+			super(name, isProtected, width, height, size, modified);
 			isDir = false;
 		}
 
@@ -93,6 +94,7 @@ public abstract class GenericConnector implements Connector {
 		public boolean isDir() {
 			return isDir;
 		}
+		
 	}
 
 	/**
@@ -166,6 +168,7 @@ public abstract class GenericConnector implements Connector {
 	 * 
 	 * @param name
 	 *            the name of the file
+	 * @param isProtected TODO
 	 * @param width
 	 *            the width of the image
 	 * @param height
@@ -176,8 +179,8 @@ public abstract class GenericConnector implements Connector {
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected GenericConnector.FileProperties buildForImage(String name, int width, int height, long size, Date modified) {
-		return new GenericConnector.FileProperties(name, width, height, size, modified);
+	protected GenericConnector.FileProperties buildForImage(String name, boolean isProtected, int width, int height, long size, Date modified) {
+		return new GenericConnector.FileProperties(name, isProtected, width, height, size, modified);
 	}
 
 	/**
@@ -185,14 +188,16 @@ public abstract class GenericConnector implements Connector {
 	 * 
 	 * @param name
 	 *            the name of the file
+	 * @param isProtected
+	 *            signals that the underlying file is protected
 	 * @param size
 	 *            the absolute size of the file
 	 * @param modified
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected GenericConnector.FileProperties buildForFile(String name, long size, Date modified) {
-		return new GenericConnector.FileProperties(name, size, modified);
+	protected GenericConnector.FileProperties buildForFile(String name, boolean isProtected, long size, Date modified) {
+		return new GenericConnector.FileProperties(name, isProtected, size, modified);
 	}
 
 	/**
@@ -200,12 +205,14 @@ public abstract class GenericConnector implements Connector {
 	 * 
 	 * @param name
 	 *            the name of the file
+	 * @param isProtected
+	 *            signals that the underlying file is protected
 	 * @param modified
 	 *            the date the file was last modified
 	 * @return The initialized {@link FileInfoProperties}.
 	 */
-	protected GenericConnector.FileProperties buildForDirectory(String name, Date modified) {
-		return new GenericConnector.FileProperties(name, modified);
+	protected GenericConnector.FileProperties buildForDirectory(String name, boolean isProtected, Date modified) {
+		return new GenericConnector.FileProperties(name, isProtected, modified);
 	}
 
 	/**

@@ -42,7 +42,7 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import codes.thischwa.c5c.requestcycle.IconRequestResolver;
 import codes.thischwa.c5c.requestcycle.IconResolver;
 import codes.thischwa.c5c.requestcycle.RequestData;
-import codes.thischwa.c5c.util.Path;
+import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
@@ -290,11 +290,12 @@ public class UserObjectProxy {
 	 */
 	static String getDefaultIconPath(final VirtualFile vf) {
 		Icons icons = getFilemanagerConfig().getIcons();
-		Path fullIconPath = new Path(PropertiesLoader.getFilemanagerPath());
+		PathBuilder fullIconPath = new PathBuilder(PropertiesLoader.getFilemanagerPath());
 		String iconPath = fullIconPath.addFolder(icons.getPath()).toString();
 		IconRequestResolver iconRequestResolver = iconResolver.initRequest(iconPath, icons.getDefaultIcon(), icons.getDirectory());
-		String defaultIconPath = (vf.getType() == Type.directory) ? iconRequestResolver.getIconPathForDirectory() : iconRequestResolver
-				.getIconPath(vf.getExtension());
+		String defaultIconPath = (vf.getType() == Type.directory) 
+				? iconRequestResolver.getIconPathForDirectory(vf.isProtect()) 
+						: iconRequestResolver.getIconPath(vf.getExtension(), vf.isProtect());
 		return defaultIconPath;
 	}
 
@@ -458,8 +459,9 @@ public class UserObjectProxy {
 			String ext = FilenameUtils.getExtension(fileName);
 
 			java.nio.file.Path woExifPath = Paths.get(tempPath.toString()+"_woExif");
-			exifRemover.removeExif(Files.newInputStream(tempPath), Files.newOutputStream(woExifPath, StandardOpenOption.CREATE_NEW), ext);
-			return woExifPath;
+			boolean removed = exifRemover.removeExif(Files.newInputStream(tempPath), Files.newOutputStream(woExifPath, StandardOpenOption.CREATE_NEW), ext);
+			logger.debug("potential exif data removed: {}", removed);
+			return (removed) ? woExifPath : tempPath;
 		} catch (IOException e) {
 			logger.warn("Error while removing EXIF data.", e);
 			return tempPath;

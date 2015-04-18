@@ -2,6 +2,7 @@
 
 * 0.9-SNAPSHOT
   * issue #33: Implementation of 'version' property
+  * issue #34: Implementation of the 'protected' flag for get-responses
 
 * 0.8
   * issue #30: filemanager.config.js.default isn't loaded

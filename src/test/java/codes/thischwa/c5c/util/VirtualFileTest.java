@@ -20,7 +20,7 @@ public class VirtualFileTest {
 
 	@Test
 	public void testFile01() {
-		VirtualFile vf = new VirtualFile("/tmp/folder/img.png");
+		VirtualFile vf = new VirtualFile("/tmp/folder/img.png", false, false);
 		assertEquals("/tmp/folder/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
@@ -29,7 +29,7 @@ public class VirtualFileTest {
 
 	@Test
 	public void testFile02() {
-		VirtualFile vf = new VirtualFile("/img.png");
+		VirtualFile vf = new VirtualFile("/img.png", false, false);
 		assertEquals("/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
@@ -38,7 +38,7 @@ public class VirtualFileTest {
 
 	@Test
 	public void testFile03() {
-		VirtualFile vf = new VirtualFile("img.png");
+		VirtualFile vf = new VirtualFile("img.png", false, false);
 		assertEquals("/", vf.getFolder());
 		assertEquals("img.png", vf.getName());
 		assertEquals("png", vf.getExtension());
@@ -47,7 +47,7 @@ public class VirtualFileTest {
 
 	@Test
 	public void testDir01() {
-		VirtualFile vf = new VirtualFile("/tmp/folder/");
+		VirtualFile vf = new VirtualFile("/tmp/folder/", true, false);
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder", vf.getName());
 		assertNull(vf.getExtension());
@@ -56,7 +56,7 @@ public class VirtualFileTest {
 	
 	@Test
 	public void testDir02() {
-		VirtualFile vf = new VirtualFile("/tmp/folder", true);
+		VirtualFile vf = new VirtualFile("/tmp/folder", true, false);
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder", vf.getName());
 		assertNull(vf.getExtension());
@@ -65,10 +65,11 @@ public class VirtualFileTest {
 	
 	@Test
 	public void testDir03() {
-		VirtualFile vf = new VirtualFile("/tmp/folder.sub", true);
+		VirtualFile vf = new VirtualFile("/tmp/folder.sub", true, true);
 		assertEquals("/tmp/", vf.getFolder());
 		assertEquals("folder.sub", vf.getName());
 		assertNull(vf.getExtension());
 		assertEquals(VirtualFile.Type.directory, vf.getType());
+		assertTrue(vf.isProtect());
 	}
 }

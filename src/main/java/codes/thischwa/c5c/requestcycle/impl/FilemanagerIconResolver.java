@@ -24,7 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.requestcycle.IconRequestResolver;
 import codes.thischwa.c5c.requestcycle.IconResolver;
-import codes.thischwa.c5c.util.Path;
+import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 
 /**
@@ -55,25 +55,25 @@ public class FilemanagerIconResolver implements IconResolver {
 	private void buildCache(String iconPath, String defaultIcon, String directoryIcon) {		
 		this.defaultIcon = defaultIcon;
 		this.directoryIcon = directoryIcon;
-		Path fileSystemIconPath = new Path(iconPath);
+		PathBuilder fileSystemIconPath = new PathBuilder(iconPath);
 
 		java.nio.file.Path iconFolder = Paths.get(servletContext.getRealPath(fileSystemIconPath.toString()));
 		if(!Files.exists(iconFolder))
 			throw new RuntimeException(String.format("C5 file icons folder couldn't be found! (%s / %s)", PropertiesLoader.getFilemanagerPath(), iconFolder.toAbsolutePath().toString()));
 		
-		Path urlPath;
+		PathBuilder urlPath;
 		if(!StringUtils.isNullOrEmpty(servletContext.getContextPath())) {
-			urlPath = new Path(servletContext.getContextPath());
+			urlPath = new PathBuilder(servletContext.getContextPath());
 			urlPath.addFolder(fileSystemIconPath.toString());
 		}
 		else {
-			urlPath = new Path(fileSystemIconPath.toString());
+			urlPath = new PathBuilder(fileSystemIconPath.toString());
 		}
 
 		collectIcons(iconPath, iconFolder, urlPath);
 	}
 	
-	protected void collectIcons(String iconPath, java.nio.file.Path iconFolder, Path urlPath) {
+	protected void collectIcons(String iconPath, java.nio.file.Path iconFolder, PathBuilder urlPath) {
 		Map<String, String> iconsPerType = new HashMap<>();
 		try {
 			for(java.nio.file.Path icon : Files.newDirectoryStream(iconFolder, new DirectoryStream.Filter<java.nio.file.Path>() {
@@ -94,6 +94,8 @@ public class FilemanagerIconResolver implements IconResolver {
 		
 		iconsPerType.put(IconResolver.key_directory, urlPath.addFile(directoryIcon));
 		iconsPerType.put(IconResolver.key_default, urlPath.addFile(defaultIcon));
+		iconsPerType.put(IconResolver.key_directory_lock, urlPath.addFile("locked_" + directoryIcon));
+		iconsPerType.put(IconResolver.key_default_lock, urlPath.addFile("locked_" + defaultIcon));
 		
 		iconCache.put(iconPath, new IconRequestResolver(iconsPerType));
 	}

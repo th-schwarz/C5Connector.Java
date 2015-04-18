@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import codes.thischwa.c5c.MessageResolver;
 import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.exception.FilemanagerException;
-import codes.thischwa.c5c.util.Path;
+import codes.thischwa.c5c.util.PathBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,7 +50,7 @@ public class FilemanagerMessageResolver implements MessageResolver {
 
 	@Override
 	public void setServletContext(ServletContext servletContext) throws RuntimeException {
-		Path path = new Path(PropertiesLoader.getFilemanagerPath()).addFolder(langPath);
+		PathBuilder path = new PathBuilder(PropertiesLoader.getFilemanagerPath()).addFolder(langPath);
 		File msgFolder = new File(servletContext.getRealPath(path.toString()));
 		if(!msgFolder.exists())
 			throw new RuntimeException("C5 scripts folder couldn't be found!");

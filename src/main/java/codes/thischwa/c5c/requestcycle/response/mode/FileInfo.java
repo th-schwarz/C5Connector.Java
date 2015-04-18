@@ -17,7 +17,7 @@ import codes.thischwa.c5c.Constants;
 import codes.thischwa.c5c.FilemanagerAction;
 import codes.thischwa.c5c.requestcycle.FilemanagerCapability;
 import codes.thischwa.c5c.requestcycle.response.GenericResponse;
-import codes.thischwa.c5c.util.Path;
+import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
@@ -46,20 +46,23 @@ public final class FileInfo extends GenericResponse {
 
 	private String previewPath;
 
-	public FileInfo(String path, boolean isDir) {
+	private boolean isProtect;
+
+	public FileInfo(String path, boolean isDir, boolean isProtect) {
 		super(FilemanagerAction.INFO);
 		capabilities = new ArrayList<>();
 		virtualFile = new VirtualFile(path, isDir);
 		this.path = path;
 		if (isDir && !this.path.endsWith(Constants.defaultSeparator))
 			this.path += Constants.defaultSeparator;
+		this.isProtect = isProtect;
 	}
 
 	@JsonProperty("Path")
 	public String getPath() {
 		if(fileProperties == null)
 			throw new IllegalArgumentException("No properties are set.");
-		Path p = new Path(path);
+		PathBuilder p = new PathBuilder(path);
 		String path = p.toString();
 		if(path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
@@ -84,7 +87,7 @@ public final class FileInfo extends GenericResponse {
 		if (fileProperties.getType() == Type.directory)
 			return type_dir;
 		
-		VirtualFile vf = new VirtualFile(fileProperties.getName()); 
+		VirtualFile vf = new VirtualFile(fileProperties, isDir()); 
 		if (!StringUtils.isNullOrEmptyOrBlank(vf.getExtension()))
 			return vf.getExtension();
 		return type_unknown;
@@ -131,5 +134,10 @@ public final class FileInfo extends GenericResponse {
 	@JsonProperty("Capabilities")
 	public List<String> getCapabilities() {
 		return capabilities;
+	}
+
+	@JsonProperty("Protected")
+	public int isProtect() {
+		return (isProtect) ? 1 : 0;
 	}
 }

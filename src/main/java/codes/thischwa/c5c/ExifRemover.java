@@ -18,17 +18,22 @@ import java.io.OutputStream;
  * Interface to remove EXIF data from an image.
  */
 public interface ExifRemover {
-	
+
 	/**
 	 * Removes the EXIF data from an image. <br/>
-	 * Based on the 'extension' the implementation has to decide if the image can have EXIF data or not.
-	 * If not, the implementation should do nothing! 
+	 * Based on the 'extension' the implementation has to decide if the image type support EXIF data or not. If not, the implementation
+	 * should do nothing! Otherwise a new image file must be created.
 	 * 
-	 * @param in {@link InputStream} of the image
-	 * @param out {@link OutputStream} of the image without the EXIF data
-	 * @param extension the extension of the image file
-	 * @throws IOException 
+	 * @param in
+	 *            {@link InputStream} of the image
+	 * @param out
+	 *            {@link OutputStream} of the image without the EXIF data
+	 * @param extension
+	 *            the extension of the image file
+	 * @return <code>true</code> if a new file without EXIF data was created, otherwise <code>false</code>. A file shouldn't be created, if
+	 *         the file type doesn't support EXIF data!
+	 * @throws IOException
 	 */
-	public void removeExif(InputStream in, OutputStream out, String extension) throws IOException;
+	public boolean removeExif(InputStream in, OutputStream out, String extension) throws IOException;
 
 }

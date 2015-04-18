@@ -37,17 +37,17 @@ public class FileInfoProperties {
 	private Integer height = null;
 	private Integer width = null;
 	private Long size = null;
+	private boolean isProtected;
 
-	public FileInfoProperties(String name, int width, int height, long size, Date modified) {
-		this.name = name;
+	public FileInfoProperties(String name, boolean isProtected, int width, int height, long size, Date modified) {
+		this(name, isProtected, size, modified);
 		this.width = width;
-		this.height = height;
-		this.size = size;
-		this.modified = modified;
+		this.height = height;		
 	}
 
-	public FileInfoProperties(String name, long size, Date modified) {
+	public FileInfoProperties(String name, boolean isProtected, long size, Date modified) {
 		this.name = name;
+		this.isProtected = isProtected;
 		this.size = size;
 		this.modified = modified;
 	}
@@ -58,8 +58,9 @@ public class FileInfoProperties {
 	 * @param name
 	 * @param modified
 	 */
-	public FileInfoProperties(String name, Date modified) {
+	public FileInfoProperties(String name, boolean isProtected, Date modified) {
 		type = Type.directory;
+		this.isProtected = isProtected;
 		this.name = name;
 		this.modified = modified;
 	}
@@ -110,6 +111,11 @@ public class FileInfoProperties {
 
 	void setSize(long size) {
 		this.size = size;
+	}
+
+	@JsonIgnore
+	public boolean isProtected() {
+		return isProtected;
 	}
 	
 	private String getDate(Date date) {

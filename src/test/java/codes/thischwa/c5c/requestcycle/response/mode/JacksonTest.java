@@ -40,10 +40,10 @@ public class JacksonTest {
 
 	@Test
 	public void testAnnotation() throws JsonGenerationException, JsonMappingException, IOException {
-		FileInfo fileInfo = new FileInfo("/tmp", false);
+		FileInfo fileInfo = new FileInfo("/tmp", true, false);
 		fileInfo.setError("Test Error", 5);
-		fileInfo.setFileProperties(new FileInfoProperties("img.png", 200, 100, 30024, null));
-		String actual = "{\"Capabilities\":[],\"Code\":5,\"Error\":\"Test Error\",\"File Type\":\"png\",\"Filename\":\"img.png\",\"Path\":\"\\/tmp\\/img.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200}}";
+		fileInfo.setFileProperties(new FileInfoProperties("img.png", false, 200, 100, 30024, null));
+		String actual = "{\"Capabilities\":[],\"Code\":5,\"Error\":\"Test Error\",\"File Type\":\"png\",\"Filename\":\"img.png\",\"PathBuilder\":\"\\/tmp\\/img.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200},\"Protected\":0}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }

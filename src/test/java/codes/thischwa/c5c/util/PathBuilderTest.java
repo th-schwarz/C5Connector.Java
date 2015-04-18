@@ -14,22 +14,22 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import codes.thischwa.c5c.util.Path;
+import codes.thischwa.c5c.util.PathBuilder;
 
-public class PathTest {
+public class PathBuilderTest {
 
 	@Test
 	public void testPathString() {
-		assertEquals("/folder/sub/", new Path("/folder/sub").toString());
+		assertEquals("/folder/sub/", new PathBuilder("/folder/sub").toString());
 	
-		assertEquals("folder/sub/", new Path("folder/sub").toString());
+		assertEquals("folder/sub/", new PathBuilder("folder/sub").toString());
 	}
 
 	@Test
 	public void testAddFolder() {
-		assertEquals("folder/sub/", new Path().addFolder("folder").addFolder("sub").toString());
-		assertEquals("/folder/sub/", new Path("/folder/").addFolder("/sub").toString());
-		assertEquals("/folder/sub/", new Path("/folder").addFolder("/sub").toString());
+		assertEquals("folder/sub/", new PathBuilder().addFolder("folder").addFolder("sub").toString());
+		assertEquals("/folder/sub/", new PathBuilder("/folder/").addFolder("/sub").toString());
+		assertEquals("/folder/sub/", new PathBuilder("/folder").addFolder("/sub").toString());
 	}
 
 }

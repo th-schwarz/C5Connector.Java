@@ -27,7 +27,7 @@ public final class SaveFile extends GenericResponse {
 		this.fullPath = fullPath;
 	}
 	
-	@JsonProperty("Path")
+	@JsonProperty("Builder")
 	public String getFullPath() {
 		return fullPath;
 	}

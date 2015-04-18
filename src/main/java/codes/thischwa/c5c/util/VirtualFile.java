@@ -11,6 +11,8 @@
 package codes.thischwa.c5c.util;
 
 import codes.thischwa.c5c.Constants;
+import codes.thischwa.c5c.GenericConnector;
+import codes.thischwa.c5c.requestcycle.response.mode.FileInfoProperties;
 
 /**
  * A virtual file object which represents a file from the filemanager. 
@@ -35,8 +37,19 @@ public class VirtualFile {
 	private String extension;
 
 	private String name;
+	
+	private boolean protect; 
+	
+	public VirtualFile(GenericConnector.FileProperties fp) {
+		this(fp.getName(), fp.isDir(), fp.isProtected());
+	}
+	
+	public VirtualFile(FileInfoProperties fp, boolean isDir) {
+		this(fp.getName(), isDir, fp.isProtected());
+	}
 
-	public VirtualFile(String fullPath, boolean isDir) {
+	VirtualFile(String fullPath, boolean isDir, boolean protect) {
+		this.protect = protect;
 		this.fullPath = fullPath;
 		if(!fullPath.startsWith(Constants.defaultSeparator))
 			fullPath = Constants.defaultSeparator.concat(fullPath);
@@ -65,8 +78,9 @@ public class VirtualFile {
 		}
 	}
 
-	public VirtualFile(String fullPath) {
-		this(fullPath, false);
+	// for files
+	public VirtualFile(String fullPath, boolean protect) {
+		this(fullPath, false, protect);
 	}
 
 	public String getFullPath() {
@@ -87,5 +101,9 @@ public class VirtualFile {
 
 	public Type getType() {
 		return type;
+	}
+	
+	public boolean isProtect() {
+		return protect;
 	}
 }
