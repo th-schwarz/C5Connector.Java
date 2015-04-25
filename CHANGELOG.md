@@ -1,8 +1,11 @@
 # changelog
 
-* 0.9-SNAPSHOT
+* 0.9
   * issue #33: Implementation of 'version' property
   * issue #34: Implementation of the 'protected' flag for get-responses
+  * updated Jackson to 2.5.0
+  * updated slf4j to 1.7.12
+  * updated servlet-api to 3.1.0
 
 * 0.8
   * issue #30: filemanager.config.js.default isn't loaded

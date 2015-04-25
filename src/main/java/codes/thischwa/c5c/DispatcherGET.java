@@ -86,7 +86,7 @@ final class DispatcherGET extends GenericDispatcher {
 				}
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				logger.debug("* getFolder -> urlPath: {}, backendPath: {}, needSize: {}", urlPath, backendPath, needSize);
-				List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize);
+				Set<GenericConnector.FileProperties> props = connector.getFolder(backendPath, needSize);
 				resp = buildFolder(urlPath, props);
 				break;
 			}
@@ -175,13 +175,15 @@ final class DispatcherGET extends GenericDispatcher {
 		}
 	}
 
-	private FolderInfo buildFolder(String urlPath, List<GenericConnector.FileProperties> props) {
+	private FolderInfo buildFolder(String urlPath, Set<GenericConnector.FileProperties> fileProperties) {
 		FolderInfo folderInfo = buildFolderInfo();
-		if(props == null)
+		if(fileProperties == null)
 			return folderInfo;
+		List<GenericConnector.FileProperties> props = new ArrayList<>(fileProperties);
+		sortFileProperties(props, UserObjectProxy.getFilemanagerConfig().getOptions().getFileSorting());
 		List<FileInfo> infos = new ArrayList<>(props.size());
-		for(GenericConnector.FileProperties fileProperties : props) {
-			FileInfo fileInfo = buildFileInfo(urlPath, fileProperties);
+		for(GenericConnector.FileProperties fp : props) {
+			FileInfo fileInfo = buildFileInfo(urlPath, fp);
 			infos.add(fileInfo);
 			add(folderInfo, fileInfo);
 		}

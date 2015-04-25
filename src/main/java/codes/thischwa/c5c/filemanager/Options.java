@@ -24,11 +24,15 @@ public class Options {
 	public enum FILE_SORTING {
 		DEFAULT, NAME_ASC, NAME_DESC, TYPE_ASC, TYPE_DESC, MODIFIED_ASC, MODIFIED_DESC;
 	};
+	
+	public enum VIEW_MODE {
+		LIST, GRID;
+	}
 
 	private String culture;
 	private String lang;
 	private String theme;
-	private String defaultViewMode;
+	private VIEW_MODE defaultViewMode;
 	private boolean autoload;
 	private boolean showFullPath;
 	private boolean showTitleAttr;
@@ -78,12 +82,23 @@ public class Options {
 		this.theme = theme;
 	}
 
-	public String getDefaultViewMode() {
+	public VIEW_MODE getDefaultViewMode() {
 		return defaultViewMode;
 	}
 
-	public void setDefaultViewMode(String defaultViewMode) {
+	public void setDefaultViewMode(VIEW_MODE defaultViewMode) {
 		this.defaultViewMode = defaultViewMode;
+	}
+	
+	@JsonProperty("defaultViewMode")
+	public void setDefaultViewMode(String defaultViewMode) {
+		for(VIEW_MODE fs : VIEW_MODE.values()) {
+			if(fs.toString().equalsIgnoreCase(defaultViewMode)) {
+				this.defaultViewMode = fs;
+				return;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Unknown defaultViewMode value: %s", defaultViewMode));
 	}
 
 	public boolean isAutoload() {
@@ -167,14 +182,14 @@ public class Options {
 	}
 
 	@JsonProperty("fileSorting")
-	public void setFileSorting(String fsStr) {
+	public void setFileSorting(String fileSorting) {
 		for(FILE_SORTING fs : FILE_SORTING.values()) {
-			if(fs.toString().equalsIgnoreCase(fsStr)) {
-				fileSorting = fs;
+			if(fs.toString().equalsIgnoreCase(fileSorting)) {
+				this.fileSorting = fs;
 				return;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Unknown fileSorting value: %s", fsStr));
+		throw new IllegalArgumentException(String.format("Unknown fileSorting value: %s", fileSorting));
 	}
 
 	public boolean isCharsOnlyLatin() {

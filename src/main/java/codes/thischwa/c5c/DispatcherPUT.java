@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -237,7 +236,7 @@ final class DispatcherPUT extends GenericDispatcher {
 	}
 	
 	private String getUniqueName(String backendPath, String name) throws C5CException {
-		List<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false);
+		Set<GenericConnector.FileProperties> props = connector.getFolder(backendPath, false);
 		Set<String> existingNames = new HashSet<>();
 		for(GenericConnector.FileProperties fp : props) {
 			existingNames.add(fp.getName());

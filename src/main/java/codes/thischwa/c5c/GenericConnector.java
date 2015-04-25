@@ -12,7 +12,6 @@ package codes.thischwa.c5c;
 
 import java.io.InputStream;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -114,7 +113,7 @@ public abstract class GenericConnector implements Connector {
 	}
 
 	@Override
-	public abstract List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
+	public abstract Set<FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
 
 	@Override
 	public abstract GenericConnector.FileProperties getInfo(String backendPath, boolean needSize) throws C5CException;

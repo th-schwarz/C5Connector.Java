@@ -28,9 +28,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -58,7 +58,7 @@ import codes.thischwa.c5c.exception.FilemanagerException.Key;
 public class LocalConnector extends GenericConnector {
 	
 	@Override
-	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException {
+	public Set<FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException {
 		Path folder = buildRealPathAndCheck(backendPath);
 		return constructFromDirRequest(folder, needSize);
 	}
@@ -211,8 +211,8 @@ public class LocalConnector extends GenericConnector {
 	 * @return the folder info
 	 * @throws C5CException the connector exception
 	 */
-	private List<FileProperties> constructFromDirRequest(Path dir, boolean needSize) throws C5CException {
-		List<FileProperties> props = new ArrayList<>();
+	private Set<FileProperties> constructFromDirRequest(Path dir, boolean needSize) throws C5CException {
+		Set<FileProperties> props = new HashSet<>();
 		
 		// add dirs
 		try {

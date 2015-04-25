@@ -22,9 +22,9 @@ package codes.thischwa.c5c;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Set;
 
+import codes.thischwa.c5c.GenericConnector.FileProperties;
 import codes.thischwa.c5c.GenericConnector.StreamContent;
 import codes.thischwa.c5c.exception.C5CException;
 import codes.thischwa.c5c.exception.FilemanagerException;
@@ -59,7 +59,8 @@ public interface Connector {
 	public void setImageExtensions(Set<String> imageExtensions);
 
 	/**
-	 * Executes the 'getfolder'-method of the filemanager.
+	 * Executes the 'getfolder'-method of the filemanager. <br/>
+	 * The implementation shouldn't take care of the sorting of files and folders. This is done by the caller! 
 	 * 
 	 * @param backendPath
 	 *            the requested backend folder, e.g. <code>/UserFiles/Image/</code>
@@ -72,7 +73,7 @@ public interface Connector {
 	 *         {@link GenericConnector#buildForImage(String, boolean, int, int, long, java.util.Date)}
 	 * @throws C5CException
 	 */
-	public List<GenericConnector.FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
+	public Set<FileProperties> getFolder(String backendPath, boolean needSize) throws C5CException;
 
 	/**
 	 * Executes the 'getinfo'-method of the filemanager.
