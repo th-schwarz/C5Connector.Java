@@ -3,6 +3,7 @@
 * 0.9
   * issue #33: Implementation of 'version' property
   * issue #34: Implementation of the 'protected' flag for get-responses
+  * issue #35: Implement sorting files in 'getfolder'
   * updated Jackson to 2.5.0
   * updated slf4j to 1.7.12
   * updated servlet-api to 3.1.0
