@@ -134,9 +134,9 @@ public class FileInfoProperties {
 	}
 	
 	private String getDate(Date date) {
-		if(date == null)
-			return null;
 		Locale locale = RequestData.getLocale();
+		if(date == null || locale == null)
+			return null;
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		String dateStr = df.format(date);
 		return dateStr;

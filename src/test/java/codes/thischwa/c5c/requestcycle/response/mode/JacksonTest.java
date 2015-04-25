@@ -13,6 +13,7 @@ package codes.thischwa.c5c.requestcycle.response.mode;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,10 +41,12 @@ public class JacksonTest {
 
 	@Test
 	public void testAnnotation() throws JsonGenerationException, JsonMappingException, IOException {
+		//Sat Apr 25 00:00:00 CEST 2015
+		Date date = new Date(1429912800000l);
 		FileInfo fileInfo = new FileInfo("/tmp", true, false);
 		fileInfo.setError("Test Error", 5);
-		fileInfo.setFileProperties(new FileInfoProperties("img.png", false, 200, 100, 30024, null));
-		String actual = "{\"Capabilities\":[],\"Code\":5,\"Error\":\"Test Error\",\"File Type\":\"png\",\"Filename\":\"img.png\",\"PathBuilder\":\"\\/tmp\\/img.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200},\"Protected\":0}";
+		fileInfo.setFileProperties(new FileInfoProperties("img.png", false, 200, 100, 30024, date));
+		String actual = "{\"Capabilities\":[],\"Code\":5,\"Error\":\"Test Error\",\"File Type\":\"png\",\"Filename\":\"img.png\",\"Path\":\"\\/tmp\\/img.png\",\"Preview\":null,\"Properties\":{\"Date Created\":null,\"Date Modified\":null,\"Height\":100,\"Size\":30024,\"Width\":200},\"Protected\":0}";
 		assertEquals(actual, fileInfo.toString());
 	}
 }
