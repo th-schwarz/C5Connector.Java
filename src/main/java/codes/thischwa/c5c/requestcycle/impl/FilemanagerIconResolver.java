@@ -41,7 +41,7 @@ public class FilemanagerIconResolver implements IconResolver {
 	private Map<String, IconRequestResolver> iconCache = new HashMap<>();
 	
 	@Override
-	public void initContext(ServletContext servletContext) throws RuntimeException {
+	public void initContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
 	
