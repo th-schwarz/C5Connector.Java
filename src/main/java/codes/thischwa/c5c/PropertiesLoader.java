@@ -286,4 +286,13 @@ public class PropertiesLoader {
 	static String getExifRemoverImpl() {
 		return properties.getProperty("connector.exifRemoverImpl");
 	} 
+
+	/**
+	 * Gets the default configuration resolver impl.
+	 *
+	 * @return <code>connector.defaultConfigResolverImpl</code> property
+	 */
+	static String getDefaultConfigResolverImpl() {
+		return properties.getProperty("connector.defaultConfigResolverImpl");
+	} 
 }

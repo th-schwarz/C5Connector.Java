@@ -13,7 +13,6 @@ package codes.thischwa.c5c;
 import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -27,7 +26,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +46,6 @@ import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
 import codes.thischwa.jii.IDimensionProvider;
 import codes.thischwa.jii.exception.ReadException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * This object serves as proxy for configurable implementations of the following interfaces (user-objects):
@@ -211,7 +207,7 @@ public class UserObjectProxy {
 				throw new RuntimeException(msg, e);
 			}
 		}
-
+		
 		// try to read the dimension for thumbnails
 		Matcher dimMatcher = dimensionPattern.matcher(PropertiesLoader.getThumbnailDimension());
 		if(dimMatcher.matches()) {
@@ -233,24 +229,22 @@ public class UserObjectProxy {
 		}
 		tempDirectory = tempDir.toPath();
 		
-		// try to load the default configuration of the filemanager
-		File fmScriptDir = new File(UserObjectProxy.servletContext.getRealPath(PropertiesLoader.getFilemanagerPath()), "scripts");
-		String fmDefaultConfig = FilemanagerConfigBuilder.BASE_FILE_NAME.concat(".default");
-		File defaultConfig = new File(fmScriptDir, fmDefaultConfig);
-		if(!defaultConfig.exists())
-			throw new RuntimeException(String.format("Default config file doesn't exists: %s", defaultConfig.getAbsolutePath()));
-		InputStream configIn = null;
+		// try to instantiate the DefaultConfigResolver object and fetches the default configuration
+		className = PropertiesLoader.getDefaultConfigResolverImpl();
+		if(StringUtils.isNullOrEmptyOrBlank(className))
+			throw new RuntimeException("Empty DefaultConfigResolver implementation class name! Depending property must be set!");
 		try {
-			// load the object
-			configIn = new BufferedInputStream(new FileInputStream(defaultConfig));
-			ObjectMapper mapper = new ObjectMapper();
-			filemanagerDefaultConfig = mapper.readValue(configIn, FilemanagerConfig.class);
-			logger.info("Default configuration of the filemanager loaded successful.");
-		} catch (Exception e) {
-			logger.error("Error while loading the defaultConfig file!", e);
-			throw new RuntimeException(e);
-		} finally {
-			IOUtils.closeQuietly(configIn);
+			Class<?> clazz = Class.forName(className);
+			DefaultConfigResolver configResolver = (DefaultConfigResolver) clazz.newInstance();
+			configResolver.initContext(servletContext);
+			filemanagerDefaultConfig = configResolver.read();
+			logger.info("Default configuration of the filemanager successful fetched from {}", className);
+		} catch (Throwable e) {
+			String msg = String.format("DefaultConfigResolver implementation [%s] couldn't be instantiated.", className);
+			logger.error(msg);
+			if(e instanceof RuntimeException)
+				throw (RuntimeException) e;
+			throw new RuntimeException(msg, e);
 		}
 		
 		// build regex pattern
