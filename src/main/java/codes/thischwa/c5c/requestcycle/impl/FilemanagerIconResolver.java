@@ -38,7 +38,7 @@ public class FilemanagerIconResolver implements IconResolver {
 	protected String directoryIcon;
 	
 	// cache of icons <path, <ext, icon>>
-	private Map<String, IconRequestResolver> iconCache = new HashMap<>();
+	protected Map<String, IconRequestResolver> iconCache = new HashMap<>();
 	
 	@Override
 	public void initContext(ServletContext servletContext) {
