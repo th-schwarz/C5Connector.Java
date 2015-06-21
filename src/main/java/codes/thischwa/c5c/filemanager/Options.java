@@ -51,6 +51,7 @@ public class Options {
 	private boolean serverRoot;
 	private Object fileRoot;
 	private Object relPath;
+	private Object baseUrl;
 	private boolean logger;
 	private Set<String> capabilities;
 	private Set<String> plugins;
@@ -230,6 +231,14 @@ public class Options {
 
 	public void setRelPath(Object relPath) {
 		this.relPath = relPath;
+	}
+	
+	public Object getBaseUrl() {
+		return baseUrl;
+	}
+	
+	public void setBaseUrl(Object baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	public boolean isLogger() {
