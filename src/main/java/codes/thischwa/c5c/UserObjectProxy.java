@@ -57,6 +57,7 @@ import codes.thischwa.jii.exception.ReadException;
  * <li>{@link FilemanagerConfigBuilder}</li>
  * <li>{@link IDimensionProvider}</li>
  * <li>{@link ExifRemover}</li>
+ * <li>{@link DefaultConfigResolver}</li>
  * </ul>
  * To simplify the usage of these objects just wrapper methods to these user-objects are provided and not the user-objects itself. <br/>
  * A {@link RuntimeException} will be thrown if one of these implementation couldn't be instantiated.
