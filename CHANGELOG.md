@@ -1,7 +1,7 @@
 # changelog
 
 * 0.10
-  * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanger)
+  * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanager)
   * issue #37: Implementation of 'baseUrl' property
   * issue #38: Build a bundle with the filemanager source
 
