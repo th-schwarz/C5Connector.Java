@@ -1,5 +1,10 @@
 # changelog
 
+* 0.10
+  * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanger)
+  * issue #37: Implementation of 'baseUrl' property
+  * issue #38: Build a bundle with the filemanager source
+
 * 0.9
   * issue #33: Implementation of 'version' property
   * issue #34: Implementation of the 'protected' flag for get-responses
