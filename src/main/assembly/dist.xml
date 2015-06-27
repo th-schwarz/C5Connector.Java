@@ -11,4 +11,14 @@
 			<unpack>false</unpack>
 		</dependencySet>
 	</dependencySets>
+	<fileSets>
+        <fileSet>
+            <directory>src/filemanager</directory>
+            <outputDirectory>filemanager</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+    </fileSets>
 </assembly>

@@ -210,7 +210,7 @@
 			<plugin>
 				<!-- builds the distribution zip / it's bind to the package phase -->
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.5.5</version>
 				<configuration>
 					<descriptors>
 						<descriptor>src/main/assembly/dist.xml</descriptor>
