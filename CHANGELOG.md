@@ -4,6 +4,7 @@
   * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanager)
   * issue #37: Implementation of 'baseUrl' property
   * issue #38: Build a bundle with the filemanager source
+  * updated Jackson to 2.5.4
 
 * 0.9
   * issue #33: Implementation of 'version' property
