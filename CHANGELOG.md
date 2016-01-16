@@ -1,5 +1,8 @@
 # changelog
 
+* 0.11-SNAPSHOT
+  * issue #39: Adapt FilemanagerConfig to Filemanager 2.3.
+
 * 0.10
   * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanager)
   * issue #37: Implementation of 'baseUrl' property
