@@ -47,8 +47,8 @@ public class Options {
 	@JsonProperty("chars_only_latin")
 	private boolean charsOnlyLatin;
 
-	private int splitterWith;
-	private int splitterMinWith;
+	private int splitterWidth;
+	private int splitterMinWidth;
 	
 	private String dateFormat;
 	private boolean serverRoot;
@@ -204,20 +204,20 @@ public class Options {
 		this.charsOnlyLatin = charsOnlyLatin;
 	}
 
-	public int getSplitterWith() {
-		return splitterWith;
+	public int getSplitterWidth() {
+		return splitterWidth;
 	}
 
-	public void setSplitterWith(int splitterWith) {
-		this.splitterWith = splitterWith;
+	public void setSplitterWidth(int splitterWith) {
+		this.splitterWidth = splitterWith;
 	}
 
-	public int getSplitterMinWith() {
-		return splitterMinWith;
+	public int getSplitterMinWidth() {
+		return splitterMinWidth;
 	}
 
-	public void setSplitterMinWith(int splitterMinWith) {
-		this.splitterMinWith = splitterMinWith;
+	public void setSplitterMinWidth(int splitterMinWith) {
+		this.splitterMinWidth = splitterMinWith;
 	}
 
 	public String getDateFormat() {
