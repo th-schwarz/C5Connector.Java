@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
 import org.eclipse.jetty.testing.HttpTester;
 import org.junit.Test;
 
+
 public class RootGetRequestTest extends GenericRequestTest {
 
 	@Override

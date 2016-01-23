@@ -23,4 +23,6 @@ public interface Constants {
 	public final String defaultSeparator = String.valueOf(defaultSeparatorChar);
 	
 	public final String INDICATOR_PREVIEW = "preview";
+	
+	public final String REQUEST_PATH_TOIGNORE = "/filemanager/connectors/java";
 }

@@ -26,7 +26,7 @@ public abstract class GenericRequestTest {
 	@Before
 	public void setUp() throws Exception {
 		servletTester = new ServletTester();
-		servletTester.setResourceBase("src/test/resources/requesttest");
+		servletTester.setResourceBase("src/test/resources");
 		servletTester.getContext().getServer().getConnectors()[0].setMaxIdleTime(1000*60*10);
 		servletTester.getContext().setAttribute(ServletContext.TEMPDIR, new File(System.getProperty("java.io.tmpdir")));
 		servletTester.addServlet(ConnectorServlet.class, "/filemanager/connectors/java/*");
