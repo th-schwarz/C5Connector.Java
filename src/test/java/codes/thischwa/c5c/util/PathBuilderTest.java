@@ -32,4 +32,8 @@ public class PathBuilderTest {
 		assertEquals("/folder/sub/", new PathBuilder("/folder").addFolder("/sub").toString());
 	}
 
+	@Test
+	public void testAddFile() {
+		assertEquals("/folder/sub/file.ext", new PathBuilder("/folder").addFolder("/sub").addFile("file.ext"));
+	}
 }
