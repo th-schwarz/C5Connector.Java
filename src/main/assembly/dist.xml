@@ -13,7 +13,7 @@
 	</dependencySets>
 	<fileSets>
         <fileSet>
-            <directory>src/filemanager</directory>
+            <directory>src/resources/filemanager</directory>
             <outputDirectory>filemanager</outputDirectory>
             <includes>
                 <include>**</include>
