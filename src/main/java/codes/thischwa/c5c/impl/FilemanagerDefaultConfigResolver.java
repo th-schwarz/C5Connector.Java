@@ -27,7 +27,9 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * The default implementation of {@link DefaultConfigResolver}.
+ * This implementation of {@link DefaultConfigResolver} works like the default implementation {@link FilemanagerDefaultConfigLibResolver},
+ * but it uses the filemanager file from the local file system. 
+ * The base-folder of the filemanager is defined by the property 'connector.filemanagerPath'.
  */
 public class FilemanagerDefaultConfigResolver implements DefaultConfigResolver {
 	private ServletContext servletContext;
