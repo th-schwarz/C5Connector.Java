@@ -25,9 +25,9 @@ import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.util.PathBuilder;
 
 /**
- * The default implementation of the {@link MessageResolver} interface. It holds the messages 
- * provided by several javascript files located in the path 'scripts/languages' inside
- * the folder of filemanager.
+ * This implementation of the {@link MessageResolver} works like the default implementation {@link FilemanagerMessageLibResolver},
+ * but it uses the filemanager files from the local file system. 
+ * The base-folder of the filemanager is defined by the property 'connector.filemanagerPath'.
  */
 public class FilemanagerMessageResolver extends AbstractFilemanagerMessageResolver {
 

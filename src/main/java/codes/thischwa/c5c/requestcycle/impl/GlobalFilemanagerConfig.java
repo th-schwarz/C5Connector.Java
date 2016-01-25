@@ -13,6 +13,7 @@ package codes.thischwa.c5c.requestcycle.impl;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
@@ -80,15 +81,9 @@ public class GlobalFilemanagerConfig implements FilemanagerConfigBuilder {
 			if(configFile.exists()) {
 				logger.info("Defined userConfig file found.");
 				in = new BufferedInputStream(new FileInputStream(configFile));
-			}
+			} else 
+				throw new FileNotFoundException(configFile.getPath());
 
-			// defined: filemanager/scripts/filemanager.config.js.default
-			configFile = new File(fmScriptDir, BASE_FILE_NAME+".default");
-			if(configFile.exists()) {
-				logger.info("Defined filemanagers default config file found.");
-				in = new BufferedInputStream(new FileInputStream(configFile));
-			}
-			
 			// load the object
 			ObjectMapper mapper = new ObjectMapper();
 			userConfig = mapper.readValue(in, FilemanagerConfig.class);

@@ -23,7 +23,7 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 
 /**
  * Default implementation of {@link FilemanagerConfigBuilder}. It loads the 
- * the default configuration file ([filemanager-dir]/scripts/filemanager.config.js.default)
+ * the configuration file ([filemanager-dir]/scripts/filemanager.config.js)
  * from inside the resource folder.
  * The configuration is globally available.<br/>
  * <br/>
@@ -32,6 +32,9 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
  * <li><i>_comment</i>: Built by the C5Connector.Java</li>
  * <li><i>options</i>#lang: java</li>
  * </ul>
+ * Hint: A method hook is provided {@link #postLoadConfigFileHook()}, that  
+ * will be called after the successful loading of a userConfig file. 
+ * That's an easy point for inherited objects to change properties globally.
  */
 public class GlobalFilemanagerLibConfig implements FilemanagerConfigBuilder {
 

@@ -30,8 +30,9 @@ import codes.thischwa.c5c.PropertiesLoader;
 import codes.thischwa.c5c.util.PathBuilder;
 
 /**
- * This implementation of the {@link MessageResolver} works like the default implementation {@link FilemanagerMessageResolver},
- * but it uses the filemanager files inside the resource folder.
+ * This is the default implementation of the {@link MessageResolver},
+ * it holds the messages provided by several javascript files.
+ * This implementation uses the filemanager files inside the resource folder.
  */
 public class FilemanagerMessageLibResolver extends AbstractFilemanagerMessageResolver {
 

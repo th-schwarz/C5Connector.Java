@@ -28,8 +28,9 @@ import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 
 /**
- * The default implementation of {@link IconResolver} which resolves the icons from the c5 filemanager. 
- * It respects the file manager path settings from the properties.
+ * This implementation of {@link IconResolver} works like the default implementation {@link FilemanagerIconLibResolver}, 
+ * but it uses the filemanager files from the local file system. 
+ * The base-folder of the filemanager is defined by the property 'connector.filemanagerPath'.
  */
 public class FilemanagerIconResolver implements IconResolver {
 	

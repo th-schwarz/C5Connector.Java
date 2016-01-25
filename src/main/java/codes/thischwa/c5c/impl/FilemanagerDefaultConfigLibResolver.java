@@ -22,8 +22,8 @@ import codes.thischwa.c5c.DefaultConfigResolver;
 import codes.thischwa.c5c.filemanager.FilemanagerConfig;
 
 /**
- * This implementation of {@link DefaultConfigResolver} works like the default implementation {@link FilemanagerMessageResolver}
- * but uses the default configuration file inside the resource folder.
+ * This is the default implementation of {@link DefaultConfigResolver} reads the default configuration file
+ * of the filemanager from the resource folder.
  */
 public class FilemanagerDefaultConfigLibResolver implements DefaultConfigResolver {
 	
