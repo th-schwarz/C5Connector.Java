@@ -35,9 +35,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * This enables the request-based (user-based) configuration. The implementation of
  * {@link FilemanagerConfigBuilder} will be used to build the configuration.<br/>
  * <br/>
- * <strong>Important:</strong> It must be ensured, that this filter will be initialized
- * *after* the {@link ConnectorServlet} (see the 'load-on-startup' tag). <br/>
- * <br/>
  * To register it in the web.xml the following entries should be used:
  * 
  * <pre>
@@ -45,7 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <filter>
  * 	<filter-name>ConfigFilter</filter-name>
  * 	<filter-class>codes.thischwa.c5c.FilemanagerConfigFilter</filter-class>
- * 	<load-on-startup>2</load-on-startup>
  * </filter>
  * <filter-mapping>
  * 	<filter-name>ConfigFilter</filter-name>
