@@ -62,16 +62,19 @@ public final class FileInfo extends GenericResponse {
 	public String getPath() {
 		if(fileProperties == null)
 			throw new IllegalArgumentException("No properties are set.");
+		String baseName = fileProperties.getName();
+		
 		PathBuilder p = new PathBuilder(path);
 		String path = p.toString();
 		if(path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
-		if(!path.endsWith(fileProperties.getName()))
-			path = p.addFile(fileProperties.getName());
+		if(isDir()) {
+			return path.concat(Constants.defaultSeparator).concat(baseName).concat(Constants.defaultSeparator);
+		}
+		if(!path.endsWith(baseName))
+			path = p.addFile(baseName);
 		if(!getType().equals(type_dir) && path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
-		else if(getType().equals(type_dir) && !path.endsWith(Constants.defaultSeparator))
-			path += Constants.defaultSeparator;
 		return path;
 	}
 

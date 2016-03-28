@@ -180,4 +180,9 @@ public class FileInfoProperties {
 		return true;
 	}
 	
+	@JsonIgnore
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

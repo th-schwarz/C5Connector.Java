@@ -94,6 +94,11 @@ public abstract class GenericConnector implements Connector {
 			return isDir;
 		}
 		
+		@JsonIgnore
+		@Override
+		public String toString() {
+			return String.format("%s%s", (isDir) ? "DIR: " : "FILE: ", super.toString());
+		}
 	}
 
 	/**
