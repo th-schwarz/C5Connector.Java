@@ -1,0 +1,53 @@
+   ----------------------------
+   Get it 
+   ----------------------------
+
+Get It
+
+  Please read the topics in this guide from top to bottom.
+  
+  C5Connector.Java uses the state-of-the-art logging facade {{{http://www.slf4j.org}SLF4J}}.
+  You should read the corresponding manual, if you are not familiar with it!
+  
+  There are three ways to get the C5Connector.Java.
+  
+* Download
+
+  The current version can be downloaded	from {{{https://sourceforge.net/projects/c5connectorjava/files/}Sourceforge}}.
+  There is a zip file like <<<c5connector-java-[version]-bin.zip>>> which contains all binaries
+  of the project dependencies and the filemanger. Don't forget to add a preferred SLF4J binding!
+  
+* Manual Build
+
+  Download the source of the current release from {{{https://github.com/th-schwarz/C5Connector.Java/releases/}GitHub}}
+  and declare a preferred SLF4J binding in the dependencies section of your POM within 
+  the runtime scope and call the following command:
+  
++---+
+mvn clean package
++---+
+
+* Maven-Repository of the Author
+  
+  If you want to use the public maven-repository which is provided by the author, 
+  you have to add the following snippets to your pom:
+  
+
++------------------------------------------------------------------------------+
+	<repositories>
+		<repository>
+			<id>thischwa-repo</id>
+			<url>http://maven-repo.thischwa.codes/</url>
+		</repository>
+	</repositories>
++------------------------------------------------------------------------------+
+
+   To the dependencies add the following:
+
++------------------------------------------------------------------------------+
+	<dependency>
+		<groupId>codes.thischwa.c5c</groupId>
+		<artifactId>c5connector-java</artifactId>
+		<version>${c5connector.version}</version>
+	</dependency>
++------------------------------------------------------------------------------+  
