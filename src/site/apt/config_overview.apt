@@ -8,8 +8,8 @@ Overview
   
 * Plain Backend Configuration
   
-  This kind of configuration is applied to the backend only. It affects basic properties like
-  the path to the filemanager or several implementations of interfaces.
+  This kind of configuration is applied to the backend only. It affects basic settings like
+  several implementations of interfaces.
   
   A detailed description with all properties can be found in 
   {{{./config_c5connector.html}Configuration of C5Connector.Java}}.

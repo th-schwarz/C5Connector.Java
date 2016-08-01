@@ -59,19 +59,27 @@ Configuration properties
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.maxUploadSize	         | 10							      | any integer                						 | The maximum size for files that can be uploaded in MB (it's respected, if the filemanager config upload#fileSizeLimit='auto'). |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
-| connector.impl 					 | codes.thischwa.c5c.impl				  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. |
+| connector.impl 					 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}}. |
 |									 | .LocalConnector					  | {{{./apidocs/codes/thischwa/c5c/Connector.html}<<<codes.thischwa.c5c.Connector>>>}} implementation. | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.capabilities	         | select,delete,rename,download	  | One or more of the capabilities: 				 | Comma separated list with capabilities which are sent per default on each info request. This list is used by |
 |                                    |									  | select,delete,rename,download					 | {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapability.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}}. |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.filemanagerConfigImpl    | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder>>>}}. |
-| 									 | .GlobalFilemanagerConfig 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle
+| 									 | .GlobalFilemanagerLibConfig 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerConfigBuilder.html}<<<codes.thischwa.c5c.requestcycle
 |									 |									  | .FilemanagerConfigBuilder>>>}} implementation. 	 | 		|				
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.messageResolverImpl      | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/MessageResolver.html}<<<codes.thischwa.c5c.MessageResolver>>>}}. |
+| 									 | .FilemanagerMessageLibResolver 	  | {{{./apidocs/codes/thischwa/c5c/MessageResolver.html}
+|									 |									  | <<<codes.thischwa.c5c.MessageResolver>>>}} implementation. 	 | 		|				
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
+| connector.defaultConfigResolverImpl | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/DefaultConfigResolver.html}<<<codes.thischwa.c5c.DefaultConfigResolver>>>}}. |
+| 									 | .FilemanagerDefaultConfigLibResolver	  | {{{./apidocs/codes/thischwa/c5c/DefaultConfigResolver.html}
+|									 |									  | <<<codes.thischwa.c5c.DefaultConfigResolver>>>}} implementation. 	 | 		|				
+*------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.iconResolverImpl	     | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/IconResolver.html}<<<codes.thischwa.c5c.requestcycle.IconResolver>>>}}. |
-| 									 | .FilemanagerIconResolver 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/IconResolver.html}<<<codes.thischwa.c5c.requestcycle
-|									 | 									  | .IconResolver>>>}} implementation. 				 | 		|
+| 									 | .FilemanagerIconLibResolver 		  | {{{./apidocs/codes/thischwa/c5c/requestcycle/IconResolver.html}
+|									 | 									  | <<<codes.thischwa.c5c.requestcycle.IconResolver>>>}} implementation. 				 | 		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.fileCapabilityImpl	     | codes.thischwa.c5c.requestcycle.impl  | Any fully-qualified class name of a valid 		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle.FilemanagerCapability>>>}}. |
 |									 | .DefaultCapability				  | {{{./apidocs/codes/thischwa/c5c/requestcycle/FilemanagerCapability.html}<<<codes.thischwa.c5c.requestcycle |  |
@@ -82,8 +90,8 @@ Configuration properties
 |									 |									  | .BackendPathBuilder>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.exifRemoverImpl		 	 | codes.thischwa.c5c.impl			  | Any fully-qualified class name of a valid		 | The implementation of the {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c.ExifRemover>>>}}. |
-|									 | .ExifRemoverImpl					  | {{{./apidocs/codes/thischwa/c5c/ExifRemover.html}<<<codes.thischwa.c5c | 		|
-|									 |									  | .ExifRemover>>>}} implementation. 			 |		|
+|									 | .ExifRemoverImpl					  | {{{./apidocs/codes/thischwa/c5c/ExifRemover.html} | 		|
+|									 |									  | <<<codes.thischwa.c5c.ExifRemover>>>}} implementation. 			 |		|
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+
 | connector.thumbnail.dimension		 | 64x64						      | any string of the pattern [number]x[number] 	 | The dimension of thumbnails <<Should be untouched!>> |
 *------------------------------------+------------------------------------+--------------------------------------------------+-----------------------------------+

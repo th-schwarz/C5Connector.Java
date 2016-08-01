@@ -11,6 +11,7 @@
 		</head>
 		<menu name="Introduction">
 			<item name="About" href="/index.html" />
+			<item name="Get It" href="/intro_get-it.html"/>
 			<item name="Installation" href="/intro_installation.html"/>
 		</menu>
 		<menu name="Configuration">

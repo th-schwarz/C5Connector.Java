@@ -31,16 +31,12 @@ Shared Configuration
 <filter>
 	<filter-name>ConfigFilter</filter-name>
 	<filter-class>codes.thischwa.c5c.FilemanagerConfigFilter</filter-class>
-	<load-on-startup>2</load-on-startup>
 </filter>
 <filter-mapping>
 	<filter-name>ConfigFilter</filter-name>
 	<url-pattern>/filemanager/scripts/*</url-pattern>
 </filter-mapping>
 +---+
-
-  [Hint:] It must be ensured, that this filter will be initialized *after* the {{{./apidocs/codes/thischwa/c5c/ConnectorServlet.html}<<<codes.thischwa.c5c.ConnectorServlet>>>}}
-          (see the 'load-on-startup' tag).
       
   []
   
