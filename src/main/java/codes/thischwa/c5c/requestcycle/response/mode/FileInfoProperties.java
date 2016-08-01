@@ -40,8 +40,6 @@ public class FileInfoProperties {
 	private boolean isProtected;
 
 	private FileInfoProperties(VirtualFile.Type type, String name, boolean isProtected, Date modified) {
-		if(name == null || modified == null)
-			throw new IllegalArgumentException("Parameter 'name' or 'modified' shouldn't be null!");
 		this.type = type;
 		this.name = name;
 		this.isProtected = isProtected;
