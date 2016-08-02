@@ -2,6 +2,10 @@
 
 * 0.11-SNAPSHOT
   * issue #39: Adapt FilemanagerConfig to Filemanager 2.3.
+  * issue #40: Integrate the filemanager source into the jar file
+  * issue #41: New directory with name equals to Parent directory
+  * issue #42: updated filemanager to 2.4.0 
+  * issue #43: The default implementation of FilemanagerCapability should respect if a file is protected 
 
 * 0.10
   * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanager)
