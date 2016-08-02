@@ -10,6 +10,7 @@
  */
 package codes.thischwa.c5c.requestcycle;
 
+import codes.thischwa.c5c.requestcycle.response.mode.FileInfo;
 
 /**
  * An interface to control the capabilities used in a response of an info-request of the filemanager.
@@ -37,9 +38,9 @@ public interface FilemanagerCapability {
 	/**
 	 * Gets the capabilities for a desired context.
 	 * 
-	 * @param ctx
+	 * @param fi
 	 *            the {@link Context} of the request
 	 * @return the capabilities for the desired context.
 	 */
-	public Capability[] getCapabilities(final Context ctx);
+	public Capability[] getCapabilities(final FileInfo fi);
 }

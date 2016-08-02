@@ -143,4 +143,9 @@ public final class FileInfo extends GenericResponse {
 	public int isProtect() {
 		return (isProtect) ? 1 : 0;
 	}
+	
+	@JsonIgnore
+	public boolean protect() {
+		return isProtect;
+	}
 }

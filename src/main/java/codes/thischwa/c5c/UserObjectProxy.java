@@ -40,6 +40,7 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import codes.thischwa.c5c.requestcycle.IconRequestResolver;
 import codes.thischwa.c5c.requestcycle.IconResolver;
 import codes.thischwa.c5c.requestcycle.RequestData;
+import codes.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
@@ -309,15 +310,14 @@ public class UserObjectProxy {
 
 	/**
 	 * Retrieves the file capabilities for the desired file.
-	 * 
-	 * @param filePath
-	 *            the path of the file for which the capabilities have to retrieve
+	 * @param fi 
+	 * 			The {@link FileInfo}
 	 * 
 	 * @return the capabilities for the desired file
-	 * @see FilemanagerCapability#getCapabilities(Context)
+	 * @see FilemanagerCapability#getCapabilities(FileInfo)
 	 */
-	static FilemanagerCapability.Capability[] getC5FileCapabilities(String filePath) {
-		return fileCapability.getCapabilities(RequestData.getContext());
+	static FilemanagerCapability.Capability[] getC5FileCapabilities(FileInfo fi) {
+		return fileCapability.getCapabilities(fi);
 	}
 
 	/**

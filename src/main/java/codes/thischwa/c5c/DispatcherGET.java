@@ -248,7 +248,7 @@ final class DispatcherGET extends GenericDispatcher {
 	}
 	
 	private void setCapabilities(FileInfo fi, String urlPath) {
-		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(urlPath));
+		fi.setCapabilities(UserObjectProxy.getC5FileCapabilities(fi));
 	}
 	
 	private String encode(String str) {

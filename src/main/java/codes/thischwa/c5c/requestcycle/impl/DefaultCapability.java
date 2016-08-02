@@ -17,13 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import codes.thischwa.c5c.PropertiesLoader;
-import codes.thischwa.c5c.requestcycle.Context;
 import codes.thischwa.c5c.requestcycle.FilemanagerCapability;
+import codes.thischwa.c5c.requestcycle.response.mode.FileInfo;
 import codes.thischwa.c5c.util.StringUtils;
 
 /**
  * The default implementation of {@link FilemanagerCapability}. All capabilities
- * which set in the property <code>connector.capabilities</code> will be set for each files. 
+ * which set in the property <code>connector.capabilities</code> will be set for each files,
+ * but for the file or directory is protected. 
  */
 public class DefaultCapability implements FilemanagerCapability {
 	private static Logger logger = LoggerFactory.getLogger(DefaultCapability.class);
@@ -36,8 +37,8 @@ public class DefaultCapability implements FilemanagerCapability {
 	}
 	
 	@Override
-	public Capability[] getCapabilities(Context ctx) { // TODO add type based on extension
-		return defaultC5FileCapability;
+	public Capability[] getCapabilities(FileInfo fi) { 
+		return (fi.protect()) ? new Capability[0] : defaultC5FileCapability;
 	}
 
 	/**
