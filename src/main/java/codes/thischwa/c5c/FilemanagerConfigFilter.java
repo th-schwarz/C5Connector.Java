@@ -31,7 +31,7 @@ import codes.thischwa.c5c.requestcycle.FilemanagerConfigBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Filter for the configuration files of the filemanager.<br/>
+ * Filter for serving configuration files of the filemanager.<br/>
  * This enables the request-based (user-based) configuration. The implementation of
  * {@link FilemanagerConfigBuilder} will be used to build the configuration.<br/>
  * <br/>
@@ -63,11 +63,11 @@ public class FilemanagerConfigFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse resp = (HttpServletResponse)response;
 		String path = req.getServletPath();
-		if(path.contains("filemanager.config.js")) {
+		if(path.contains("filemanager.config")) {
 			// set some default headers 
 			ConnectorServlet.initResponseHeader(resp);
 			logger.debug("Filemanager config request: {}", path);
-			FilemanagerConfig config = (path.endsWith(".default")) ? UserObjectProxy.getFilemanagerDefaultConfig()
+			FilemanagerConfig config = (path.endsWith(".default.json")) ? UserObjectProxy.getFilemanagerDefaultConfig()
 					: UserObjectProxy.getFilemanagerUserConfig(req);
 
 			ObjectMapper mapper = new ObjectMapper();
