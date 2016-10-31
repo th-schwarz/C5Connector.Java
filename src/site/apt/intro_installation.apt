@@ -9,7 +9,8 @@ Installation Guide
   Below, we assume that you have read how to get the required binaries and files {{{./intro_get-it.html}Get It}}
   and all binaries are in your classpath (usually <<<WEB-INF/lib>>>).
   
-  [Hint:] Since version 0.11 the source files of the filemanager are integrated in the jar file of the C5Connector.Java.
+  [Hint:] Since version 0.11 the jar file of the C5Connector.Java contains the source of the filemanager.
+          To use it in your web-app, corresponding filters are provided.  We strongly recommend using this feature!
           The default implementations of the basic interfaces are adapted accordingly. This insures that 
           there aren't any issues between C5Connector.Java and the filemanager. 
           
@@ -39,11 +40,11 @@ Installation Guide
 </servlet-mapping>
 
 <filter>
-	<filter-name>ConfigFilter</filter-name>
+	<filter-name>FmConfigFilter</filter-name>
 	<filter-class>codes.thischwa.c5c.FilemanagerConfigFilter</filter-class>
 </filter>
 <filter-mapping>
-	<filter-name>ConfigFilter</filter-name>
+	<filter-name>FmConfigFilter</filter-name>
 	<url-pattern>/filemanager/scripts/*</url-pattern>
 </filter-mapping>
 
@@ -58,3 +59,7 @@ Installation Guide
 +---+
   
   Don't forget to adapt the location of the multipart-config!!
+  
+  The filter <<<FilemanagerConfigFilter>>> provides a request-based (user-based) configuration. 
+  For more details see {{{./config_shared.html}Shared Configuration}}.
+    

@@ -17,6 +17,5 @@ Overview
 * Shared Configuration  
   
   This kind of configuration is applied to the backend (the server-side C5Connector.Java) and the
-  frontend (the client-side javascript filemanager). For more details see 
-  {{{./config_shared.html}Shared Configuration}}.
+  frontend (the client-side javascript filemanager).
   

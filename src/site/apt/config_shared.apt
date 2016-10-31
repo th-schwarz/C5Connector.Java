@@ -4,7 +4,7 @@
    
 Shared Configuration
 
-  There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.js>>> copied from <<<[filemanager-dir]/scripts/filemanager.config.js.default>>>) for sharing
+  There is a JSON file (usually <<<[filemanager-dir]/scripts/filemanager.config.json>>> copied from <<<[filemanager-dir]/scripts/filemanager.config.json.default>>>) for sharing
   the configuration between the frontend (javascript filemanager) and the backend (C5Connector.Java). 
   It's important to understand the settings of the configuration file. Details about that can be found
   at the wiki page {{{https://github.com/simogeo/Filemanager/wiki/Filemanager-configuration-file}<<<Filemanager configuration file>>>}}.
@@ -15,7 +15,7 @@ Shared Configuration
     
   []
     
-  Changes on the configuration file (<<<[filemanager-dir]/scripts/filemanager.config.js>>>)
+  Changes on the configuration file (<<<[filemanager-dir]/scripts/filemanager.config.json>>>)
   are globally and for all users of your webapp!
   
 * Request-Based Configuration
@@ -46,4 +46,3 @@ Shared Configuration
   to get the configuration. This will be transferred to JSON automatically.
   
   To see how to change the configuration by Java, see {{{./extending_filemanagerconfigbuilder.html}Extending the FilemanagerConfigBuilder}}.
-  
