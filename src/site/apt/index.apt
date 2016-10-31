@@ -21,6 +21,8 @@ C5Connector.Java
           will try to extend it constantly. \
           Please be patient!
           
+          The Filemanager project is deprecated. This is why the future of this project is written in the stars.
+          
 Call to Action
 
   Help me to improve C5Connector.Java. If you find a bug or you miss certain features, don't hesitate to file a {{{https://github.com/th-schwarz/c5connector.java/issues}ticket}}.  
