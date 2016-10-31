@@ -24,18 +24,34 @@ public class ContextGetRequestsTest extends GenericRequestTest {
 	}
 
 	@Test
-	public void testGetFolder() throws Exception {
-		HttpTester request = buildInitialRequest();
-		request.setURI("/context/filemanager/connectors/java/filemanager.java?path=%2Ffilemanager%2Fuserfiles%2F&mode=getfolder&showThumbs=true&time=258");
+	public void testGetInfoFile() throws Exception {
+		HttpTester request = buildInitialRequest(); 
+		request.setURI("/context/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png&time=244");
 		String requestStr = request.generate();
 		
 		String responseStr = servletTester.getResponses(requestStr);
 		HttpTester response = new HttpTester();
 		response.parse(responseStr);
 		
-		assertEquals(HttpStatus.OK_200, response.getStatus());
+		assertEquals(200, response.getStatus());
 		String actual = cleanResponse(response.getContent());
-		String expected = cleanResponse("{\"\\/filemanager\\/userfiles\\/pic01.png\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=preview&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110},\"Protected\":0},\"\\/filemanager\\/userfiles\\/folder\\/\":{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"dir\",\"Filename\":\"folder\",\"Path\":\"\\/filemanager\\/userfiles\\/folder\\/\",\"Preview\":\"\\/filemanager\\/images\\/fileicons\\/_Open.png\",\"Properties\":{\"Date Created\":null,\"Height\":null,\"Size\":null,\"Width\":null},\"Protected\":0}}");
+		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"png\",\"Filename\":\"pic01.png\",\"Path\":\"\\/filemanager\\/userfiles\\/pic01.png\",\"Preview\":\"\\/context\\/filemanager\\/connectors\\/java?mode=preview&path=%2Ffilemanager%2Fuserfiles%2Fpic01.png\",\"Properties\":{\"Date Created\":null,\"Height\":70,\"Size\":2250,\"Width\":110},\"Protected\":0}");
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testGetInfoFolder() throws Exception {
+		HttpTester request = buildInitialRequest(); 
+		request.setURI("/context/filemanager/connectors/java/filemanager.java?mode=getinfo&path=%2Ffilemanager%2Fuserfiles%2F");
+		String requestStr = request.generate();
+		
+		String responseStr = servletTester.getResponses(requestStr);
+		HttpTester response = new HttpTester();
+		response.parse(responseStr);
+		
+		assertEquals(200, response.getStatus());
+		String actual = cleanResponse(response.getContent());
+		String expected = cleanResponse("{\"Capabilities\":[\"select\",\"delete\",\"rename\",\"download\",\"replace\"],\"Code\":0,\"Error\":\"\",\"File Type\":\"dir\",\"Filename\":\"userfiles\",\"Path\":\"\\/filemanager\\/userfiles\\/\",\"Preview\":\"\\/filemanager\\/images\\/fileicons\\/_Open.png\",\"Properties\":{\"Date Created\":null,\"Height\":null,\"Size\":null,\"Width\":null},\"Protected\":0}");
 		assertEquals(expected, actual);
 	}
 

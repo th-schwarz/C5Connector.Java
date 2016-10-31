@@ -96,7 +96,7 @@ final class DispatcherGET extends GenericDispatcher {
 				boolean needSize = Boolean.parseBoolean(req.getParameter("getsize"));
 				logger.debug("* getInfo -> urlPath: {}, backendPath {}, needSize: {}", urlPath, backendPath, needSize);
 				GenericConnector.FileProperties fp = connector.getInfo(backendPath, needSize);
-				resp = buildFileInfo(urlPath, fp);
+				resp = buildFileInfo(urlPath, fp, fp.isDir());
 				break;
 			}
 			case RENAME: {
@@ -191,8 +191,12 @@ final class DispatcherGET extends GenericDispatcher {
 	}
 
 	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp) {
+		return buildFileInfo(urlPath, fp, false);
+	}
+	
+	private FileInfo buildFileInfo(String urlPath, GenericConnector.FileProperties fp, boolean isInfoForFolder) {
 		FilemanagerConfig fConfig = UserObjectProxy.getFilemanagerConfig();
-		FileInfo fi = new FileInfo(urlPath, fp.isDir(), fp.isProtected());
+		FileInfo fi = new FileInfo(urlPath, fp.isDir(), fp.isProtected(), isInfoForFolder);
 		fi.setFileProperties(fp);
 		setCapabilities(fi, urlPath);
 		VirtualFile vf = new VirtualFile(fp);

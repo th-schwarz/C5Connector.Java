@@ -27,7 +27,7 @@ import codes.thischwa.c5c.filemanager.FilemanagerConfig;
  */
 public class FilemanagerDefaultConfigLibResolver implements DefaultConfigResolver {
 	
-	protected static String configFile = "/filemanager/scripts/filemanager.config.js.default";
+	protected static String configFile = "/filemanager/scripts/filemanager.config.default.json";
 
 	@Override
 	public void initContext(ServletContext servletContext) {

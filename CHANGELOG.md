@@ -6,6 +6,7 @@
   * issue #41: New directory with name equals to Parent directory
   * issue #42: updated filemanager to 2.4.0 
   * issue #43: The default implementation of FilemanagerCapability should respect if a file is protected 
+  * issue #45: wrong path in getinfo for folders 
 
 * 0.10
   * issue #36: Client and adapter tight coupling (refactored the fetching of the default configuration of the filemanager)

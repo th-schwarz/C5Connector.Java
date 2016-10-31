@@ -13,6 +13,10 @@ package codes.thischwa.c5c.requestcycle.response.mode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import codes.thischwa.c5c.Constants;
 import codes.thischwa.c5c.FilemanagerAction;
 import codes.thischwa.c5c.requestcycle.FilemanagerCapability;
@@ -21,10 +25,6 @@ import codes.thischwa.c5c.util.PathBuilder;
 import codes.thischwa.c5c.util.StringUtils;
 import codes.thischwa.c5c.util.VirtualFile;
 import codes.thischwa.c5c.util.VirtualFile.Type;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Holds the data for a FileInfo response.
@@ -47,8 +47,15 @@ public final class FileInfo extends GenericResponse {
 	private String previewPath;
 
 	private boolean isProtect;
+	
+	private boolean isInfoForFolder;
+	
 
 	public FileInfo(String path, boolean isDir, boolean isProtect) {
+		this(path, isDir, isProtect, false);
+	}
+
+	public FileInfo(String path, boolean isDir, boolean isProtect, boolean isInfoForFolder) {
 		super(FilemanagerAction.INFO);
 		capabilities = new ArrayList<>();
 		virtualFile = new VirtualFile(path, isDir);
@@ -56,6 +63,7 @@ public final class FileInfo extends GenericResponse {
 		if (isDir && !this.path.endsWith(Constants.defaultSeparator))
 			this.path += Constants.defaultSeparator;
 		this.isProtect = isProtect;
+		this.isInfoForFolder = isInfoForFolder;
 	}
 
 	@JsonProperty("Path")
@@ -69,7 +77,11 @@ public final class FileInfo extends GenericResponse {
 		if(path.endsWith(Constants.defaultSeparator))
 			path = path.substring(0, path.length()-1);
 		if(isDir()) {
-			return path.concat(Constants.defaultSeparator).concat(baseName).concat(Constants.defaultSeparator);
+			if(isInfoForFolder) {
+				return path.concat(Constants.defaultSeparator);
+			} else {
+				return path.concat(Constants.defaultSeparator).concat(baseName).concat(Constants.defaultSeparator);
+			}
 		}
 		if(!path.endsWith(baseName))
 			path = p.addFile(baseName);
