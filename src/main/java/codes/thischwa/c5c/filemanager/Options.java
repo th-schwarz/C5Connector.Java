@@ -42,6 +42,7 @@ public class Options {
 	private boolean generateThumbnails;
 	private boolean searchBox;
 	private boolean listFiles;
+	private boolean quickSelect;
 	private FILE_SORTING fileSorting;
 
 	@JsonProperty("chars_only_latin")
@@ -53,7 +54,6 @@ public class Options {
 	private String dateFormat;
 	private boolean serverRoot;
 	private Object fileRoot;
-	private Object relPath;
 	private Object baseUrl;
 	private boolean logger;
 	private Set<String> capabilities;
@@ -177,6 +177,13 @@ public class Options {
 		this.listFiles = listFiles;
 	}
 
+	public boolean isQuickSelect() {
+		return quickSelect;
+	}
+	public void setQuickSelect(boolean quickSelect) {
+		this.quickSelect = quickSelect;
+	}
+	
 	public FILE_SORTING getFileSorting() {
 		return fileSorting;
 	}
@@ -244,14 +251,6 @@ public class Options {
 		this.fileRoot = fileRoot;
 	}
 
-	public Object getRelPath() {
-		return relPath;
-	}
-
-	public void setRelPath(Object relPath) {
-		this.relPath = relPath;
-	}
-	
 	public Object getBaseUrl() {
 		return baseUrl;
 	}
