@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>codes.thischwa.c5c</groupId>
 	<artifactId>c5connector-java</artifactId>
-	<version>0.11-SNAPSHOT</version>
+	<version>0.11</version>
 	<description>The Java backend for the filemanager of corefive.</description>
 	<name>C5Connector.Java</name>
 	<url>http://c5connetor.thischwa.codes</url>
@@ -24,7 +24,7 @@
 		<url>https://github.com/th-schwarz/C5Connector.Java</url>
 		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>c5connector-java-0.11</tag>
 	</scm>
 
 	<properties>
