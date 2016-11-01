@@ -10,7 +10,7 @@ FilemanagerCapability
   
   The available capabilities are 'select', 'delete', 'rename', 'download'.
   
-  There is a ready-to-go implementation: {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapabilty.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapabilty>>>}},
+  There is a ready-to-go implementation: {{{./apidocs/codes/thischwa/c5c/requestcycle/impl/DefaultCapabiltiy.html}<<<codes.thischwa.c5c.requestcycle.impl.DefaultCapability>>>}},
   the default one. It just sends all capabilities defined in the property <connector.capabilities> for each file.
   
   If you want to change the capabilities for all <get> commands you just have to set the property <connector.capabilities> in your

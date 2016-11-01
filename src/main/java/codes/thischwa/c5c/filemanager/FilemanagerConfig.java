@@ -10,9 +10,6 @@
  */
 package codes.thischwa.c5c.filemanager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilemanagerConfig {
-	public static final Logger logger = LoggerFactory.getLogger(FilemanagerConfig.class);
 
 	@JsonProperty("_comment")
 	private String comment;

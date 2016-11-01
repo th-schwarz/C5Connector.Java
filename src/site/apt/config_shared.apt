@@ -22,7 +22,7 @@ Shared Configuration
 
   An outstanding feature of C5Connector.Java is the possibility of a request-based (user-based) configuration.
   For this purpose the filter <<<FilemanagerConfigFilter>>> is provided. It will be used to build and deliver the configuration 
-  based on {{{./apidocs/codes/thischwa/c5c/resource/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}. 
+  based on {{{./apidocs/codes/thischwa/c5c/filemanager/FilemanagerConfig.html}<<<codes.thischwa.c5c.filemanager.FilemanagerConfig>>>}}. 
   It is the corresponding object-oriented map of the shared configuration file. 
   
   Add the following lines to the <<<web.xml>>> to enable the filter: 

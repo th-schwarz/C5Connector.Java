@@ -60,6 +60,6 @@ Installation Guide
   
   Don't forget to adapt the location of the multipart-config!!
   
-  The filter <<<FilemanagerConfigFilter>>> provides a request-based (user-based) configuration. 
+  The filter <<<FilemanagerConfigFilter>>> enables a request-based (user-based) configuration. 
   For more details see {{{./config_shared.html}Shared Configuration}}.
     
