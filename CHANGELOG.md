@@ -1,6 +1,6 @@
 # changelog
 
-* 0.11-SNAPSHOT
+* 0.11
   * issue #39: Adapt FilemanagerConfig to Filemanager 2.3.
   * issue #40: Integrate the filemanager source into the jar file
   * issue #41: New directory with name equals to Parent directory
