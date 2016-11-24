@@ -1,11 +1,11 @@
 # changelog
 
-* 0.11-SNAPSHOT
-  * issue #39: Adapt FilemanagerConfig to Filemanager 2.3.
+* 0.11
+  * issue #39: Adapt FilemanagerConfig to Filemanager 2.5.
   * issue #40: Integrate the filemanager source into the jar file
   * issue #41: New directory with name equals to Parent directory
-  * issue #42: updated filemanager to 2.4.0 
   * issue #43: The default implementation of FilemanagerCapability should respect if a file is protected 
+  * issue #44: updated filemanager to 2.5.0 
   * issue #45: wrong path in getinfo for folders 
 
 * 0.10
