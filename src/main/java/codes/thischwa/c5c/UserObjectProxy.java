@@ -342,7 +342,7 @@ public class UserObjectProxy {
 	 * @return the {@link FilemanagerConfig} for the current request
 	 * @see FilemanagerConfigBuilder#getConfig(HttpServletRequest, ServletContext)
 	 */
-	static FilemanagerConfig getFilemanagerUserConfig(HttpServletRequest req) {
+	public static FilemanagerConfig getFilemanagerUserConfig(HttpServletRequest req) {
 		// we need the HttpServletRequest here because this breaks the request-cycle, see ConnctorServlet#doGet
 		return configBuilder.getConfig(req, servletContext);
 	}
