@@ -1,5 +1,8 @@
 # changelog
 
+* 0.12
+  * issue #46: UserObjectProxy: changed visibility of getFilemanagerUserConfig 
+
 * 0.11
   * issue #39: Adapt FilemanagerConfig to Filemanager 2.5.
   * issue #40: Integrate the filemanager source into the jar file
