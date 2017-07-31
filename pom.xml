@@ -22,7 +22,7 @@
 
 	<scm>
 		<url>https://github.com/th-schwarz/C5Connector.Java</url>
-		<connection>scm:git:git://github.com/th-schwarz/C5Connector.Java.git</connection>
+		<connection>scm:https:git://github.com/th-schwarz/C5Connector.Java.git</connection>
 		<!-- developerConnection>scm:git:git@github.com:th-schwarz/C5Connector.Java.git</developerConnection -->
 		<tag>c5connector-java-0.12</tag>
 	</scm>
