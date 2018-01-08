@@ -2,7 +2,7 @@ lannguage:  java
 jdk: oraclejdk8
 
 install: true
-script: ./mvn clean install
+script: ./mvnw clean install
 
 cache:
   directories:
