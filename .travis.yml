@@ -1,5 +1,5 @@
 lannguage:  java
-jdk: oraclejdk8
+jdk: openjdk7
 
 install: true
 script: mvn clean install
