@@ -34,7 +34,7 @@
 		<project.reporting.inputEncoding>UTF-8</project.reporting.inputEncoding>
 		<github.global.server>github</github.global.server>
 		<jii.version>1.0.1</jii.version>
-		<jackson.version>2.5.4</jackson.version>
+		<jackson.version>2.7.8</jackson.version>
 		<slf4j.version>1.7.12</slf4j.version>
 	</properties>
 
