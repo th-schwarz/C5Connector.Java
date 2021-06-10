@@ -16,4 +16,3 @@ Don't hesitate to inform the author if you was tested C5Container.Java with othe
 
 The changelog can be found [here](https://github.com/th-schwarz/C5Connector.Java/blob/master/CHANGELOG.md).
 
-[![Build Status](https://travis-ci.org/th-schwarz/C5Connector.Java.svg?branch=master)](https://travis-ci.org/th-schwarz/C5Connector.Java)
