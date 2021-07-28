@@ -1,4 +1,4 @@
-# C5Connector.Java
+# C5Connector.Java * deprecated *
 
 The Java backend for the [filemanager of corefive](http://github.com/simogeo/Filemanager).
 
